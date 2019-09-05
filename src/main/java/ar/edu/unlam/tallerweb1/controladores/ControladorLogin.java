@@ -50,7 +50,7 @@ public class ControladorLogin {
 			HttpSession session = request.getSession();
 			session.setAttribute("ROL", usuarioBuscado.getRol());
 			session.setAttribute("USER", usuarioBuscado);
-			return new ModelAndView("redirect:/torneo");
+			return new ModelAndView("redirect:/home");
 		} else {
 			// si el usuario no existe agrega un mensaje de error en el modelo.
 			model.put("error", "Usuario o clave incorrecta");

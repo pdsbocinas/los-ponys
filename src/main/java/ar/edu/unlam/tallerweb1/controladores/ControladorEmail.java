@@ -19,16 +19,16 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class ControladorEmail {
 
-    @Inject
+ /*   @Inject
     private ServicioTorneo servicioTorneo;
 
     @Inject
-    private ServicioEmail servicioEmail;
+    private ServicioEmail servicioEmail;*/
 
-    @RequestMapping(value = "/send-mail", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/send-mail", method = RequestMethod.POST)
     public ModelAndView sendMail (@ModelAttribute("torneo") Torneo torneo, HttpServletRequest request) {
 
-        ModelMap model = new ModelMap();
+       /* ModelMap model = new ModelMap();
 
         HttpSession session = request.getSession();
         Usuario userName = (Usuario) session.getAttribute("USER");
@@ -55,6 +55,6 @@ public class ControladorEmail {
         }
 
         return new ModelAndView("mail/succesful", model);
-    }
+    }*/
 
 }
