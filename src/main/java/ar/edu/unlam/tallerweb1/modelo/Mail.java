@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="Mail")
 public class Mail {
-
+    // @transient no se persiste
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
