@@ -3,8 +3,6 @@ package ar.edu.unlam.tallerweb1.modelo;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name="Pais")
 public class Pais {
 
     private String name;
