@@ -2,6 +2,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
+const WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 
 const extractStyles = new MiniCssExtractPlugin({
   filename: '[name].css',
@@ -22,7 +24,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './src/main/webapp/dist/'),
-    filename: 'js/[name]-[chunkhash:8].js',
+    filename: 'js/[name]-[hash].js',
+    chunkFilename: 'js/[id]-[chunkhash].js',
     publicPath: '/'
   },
   module: {
@@ -90,6 +93,8 @@ module.exports = {
     }
   },
   plugins: [
-    extractStyles
+    extractStyles,
+    new WebpackAssetsManifest(),
+    new WebpackCleanupPlugin()
   ]
 }

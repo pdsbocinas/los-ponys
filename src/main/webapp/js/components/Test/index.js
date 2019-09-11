@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const App = () => {
   console.log("soy axios", axios)
-  return <div>Hellooooooooooooooooooooooooooooooo React,Webpack 4 & Babel 7!</div>;
+  return <div>React,Webpack 4 & Babel 7!</div>;
 };
 
 ReactDOM.render(<App />, document.querySelector("#root"));
