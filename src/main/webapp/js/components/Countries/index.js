@@ -5,8 +5,7 @@ import axios from 'axios';
 const App = () => {
   return (
     <>
-      <h1>Hola Mundo!!</h1>
-      <div>Listoooo React,Webpack 44444444 & Babel 777777.999999999999!</div>
+      <h1>Soy los paises del Mundo!!</h1>
     </>
   )
 };
