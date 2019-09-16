@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.util.Arrays;
 import java.util.List;
 
 @Controller
 public class ControladorPais {
 
-  @RequestMapping(path = {"/paises"}, method = RequestMethod.GET)
+  @RequestMapping(path = {"/countries"}, method = RequestMethod.GET)
   public ModelAndView getPaises() {
+    ModelMap modelo = new ModelMap();
 
     RestTemplate restTemplate = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
@@ -28,11 +28,14 @@ public class ControladorPais {
 
     HttpEntity<Pais> entity = new HttpEntity<>(headers);
 
-    ResponseEntity<List<Pais>> respEntity = restTemplate.exchange("https://restcountries-v1.p.rapidapi.com/all", HttpMethod.GET, entity, new ParameterizedTypeReference<List<Pais>>() {
-    });
+    ResponseEntity<List<Pais>> respEntity = restTemplate
+        .exchange("https://restcountries-v1.p.rapidapi.com/all",
+            HttpMethod.GET,
+            entity,
+            new ParameterizedTypeReference<List<Pais>>() {}
+            );
 
     List<Pais> paises = respEntity.getBody();
-    ModelMap modelo = new ModelMap();
     modelo.put("paises", paises);
 
     return new ModelAndView("countries", modelo);

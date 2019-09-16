@@ -20,6 +20,9 @@ module.exports = {
     test: [
       './css/app.scss',
       './js/components/Test/index.js'
+    ],
+    login: [
+      './js/components/Login/index.js'
     ]
   },
   output: {
