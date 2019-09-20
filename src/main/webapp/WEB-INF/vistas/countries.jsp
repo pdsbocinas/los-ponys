@@ -12,6 +12,6 @@
     <h3 class="panel-title">${pais.getName()}</h3>
 </c:forEach>
 <script src="<c:url value="/js/jquery-1.11.3.min.js" />"></script>
-<script src="dist/<ex:getManifestAssets value="test.js"/>"></script>
+<script src="dist/<ex:getManifestAssets value="countries.js"/>"></script>
 </body>
 </html>

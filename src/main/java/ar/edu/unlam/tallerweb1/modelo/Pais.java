@@ -3,11 +3,16 @@ package ar.edu.unlam.tallerweb1.modelo;
 import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name="Pais")
 public class Pais {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column
     private String name;
+    @Column
     private String capital;
-    private List timezones;
 
     public String getName() {
         return name;
@@ -25,11 +30,4 @@ public class Pais {
         this.capital = capital;
     }
 
-    public List getTimezones() {
-        return timezones;
-    }
-
-    public void setTimezones(List timezones) {
-        this.timezones = timezones;
-    }
 }

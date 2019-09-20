@@ -17,7 +17,7 @@ module.exports = {
       'babel-polyfill',
       'axios'
     ],
-    test: [
+    countries: [
       './css/app.scss',
       './js/components/Countries/index.js'
     ],
