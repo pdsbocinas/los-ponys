@@ -1,33 +1,29 @@
-package ar.edu.unlam.tallerweb1.controladores;
+package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.dao.PaisesDao;
 import ar.edu.unlam.tallerweb1.modelo.Pais;
-import ar.edu.unlam.tallerweb1.servicios.ServicioPais;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
-@Controller
-public class ControladorPais {
+@Service("servicioPais")
+@Transactional
+public class ServicioPaisImpl implements ServicioPais {
+
   @Inject
-  ServicioPais servicioPais;
+  private PaisesDao paisesDao;
 
-  @RequestMapping(path = {"/countries"}, method = RequestMethod.GET)
-  public ModelAndView getPaises() {
+  @Override
+  public void guardarPaises() {
 
-    ModelMap modelo = new ModelMap();
-    // nose si funca esto
-    servicioPais.obtenerPaises();
-
-    // aca implementa obtenerPaises del servicio ServicioPais
+    // aca hacer la peticion y guardar en la base de datos
+    // este servicio se deberia disparar al comenzar la aplicacion
 
     RestTemplate restTemplate = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
@@ -43,11 +39,14 @@ public class ControladorPais {
             HttpMethod.GET,
             entity,
             new ParameterizedTypeReference<List<Pais>>() {}
-            );
+        );
 
     List<Pais> paises = respEntity.getBody();
-    modelo.put("paises", paises);
+    paisesDao.guardarPaises(paises);
+  }
 
-    return new ModelAndView("countries", modelo);
+  @Override
+  public List<Pais> obtenerPaises() {
+    return paisesDao.obtenerPaises();
   }
 }
