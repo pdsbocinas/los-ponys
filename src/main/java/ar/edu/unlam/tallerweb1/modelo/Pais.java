@@ -2,9 +2,9 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Entity
-@Table(name = "pais", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id")})
+@Table(name = "Pais")
 public class Pais {
 
     @Id
@@ -21,7 +21,7 @@ public class Pais {
 /*
     @Column(name = "timezones")
     private List timezones;
-*/
+
 
     //relacion con el objeto Border
     // Un pais puede tener varios paises limitrofes
@@ -30,9 +30,17 @@ public class Pais {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="border_id")
     private List<Border> borders;
-
+*/
     // Getters and Setters
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -57,7 +65,7 @@ public class Pais {
     public void setTimezones(List timezones) {
         this.timezones = timezones;
     }
-*/
+
     public List<Border> getBorders() {
         return borders;
     }
@@ -65,4 +73,6 @@ public class Pais {
     public void setBorders(List<Border> borders) {
         this.borders = borders;
     }
+    */
+
 }

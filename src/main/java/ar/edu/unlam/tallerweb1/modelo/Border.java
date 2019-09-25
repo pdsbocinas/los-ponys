@@ -4,8 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "border", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id")})
+@Table(name = "Border")
 public class Border
 {
 
@@ -14,17 +13,12 @@ public class Border
     @Column(name = "id", unique = true, nullable = false)
     private Integer accountId;
 
-    @Column(name = "borders", unique = true, nullable = false)
-    @ManyToOne
     private String borders;
 
     @ManyToOne
     private Pais pais;
 
-
-
     // Getters and Setters
-
 
     public Integer getAccountId() {
         return accountId;

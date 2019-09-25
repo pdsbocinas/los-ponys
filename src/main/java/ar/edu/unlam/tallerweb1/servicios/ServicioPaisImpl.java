@@ -11,16 +11,18 @@ import org.springframework.web.client.RestTemplate;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.PostConstruct;
 
 @Service("servicioPais")
-@Transactional
 public class ServicioPaisImpl implements ServicioPais {
 
   @Inject
   private PaisesDao paisesDao;
 
-  @Override
-  public void guardarPaises() {
+  // esta anotation se va a ejecutar cuando se restartee la aplicacion. Haciendo esto alimentamos (populamos) la base de datos
+  // y desp consumimos desde la base. EL primer request va tardar y desp ya no.
+  @PostConstruct
+  public void init() {
 
     // aca hacer la peticion y guardar en la base de datos
     // este servicio se deberia disparar al comenzar la aplicacion
