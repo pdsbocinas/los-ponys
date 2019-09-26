@@ -1,0 +1,6 @@
+target
+node_modules/
+dist/
+.idea
+src/.DS_Store
+src/src.iml
