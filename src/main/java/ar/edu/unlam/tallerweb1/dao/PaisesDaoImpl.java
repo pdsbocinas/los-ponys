@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.dao;
 
+import ar.edu.unlam.tallerweb1.modelo.Border;
 import ar.edu.unlam.tallerweb1.modelo.Pais;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -20,16 +21,11 @@ public class PaisesDaoImpl implements PaisesDao {
   private SessionFactory sessionFactory;
 
   @Override
-  public void guardarPaises(List<Pais> paises) {
+  public void guardarPaises(Pais pais) {
     // guardar los paises en la base de datos con hibernate Criteria
     Session session = sessionFactory.getCurrentSession();
     // Transaction tx = session.beginTransaction();
-
-    // La session guarda de a una instancia de la lista, por eso hay que iterarlo
-    for (Pais pais: paises) {
-      session.save(pais);
-    }
-
+    session.save(pais);
     // tx.commit();
     // session.close();
   }

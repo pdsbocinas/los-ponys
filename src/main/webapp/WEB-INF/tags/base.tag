@@ -1,18 +1,49 @@
 <%@ tag description="Overall Page template" pageEncoding="UTF-8"%>
 <%@ attribute name="header" fragment="true" %>
 <%@ attribute name="footer" fragment="true" %>
+<%@ attribute name="scripts" fragment="true" %>
+
 <html>
-<body>
-<div id="pageheader">
-    <p>Soy el header</p>
-    <jsp:invoke fragment="header"/>
-</div>
-<div id="body">
-    <jsp:doBody/>
-</div>
-<div id="pagefooter">
-    <p>Soy el footer</p>
-    <jsp:invoke fragment="footer"/>
-</div>
-</body>
+    <head>
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Bootstrap theme -->
+        <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="css/footer.css" rel="stylesheet">
+        <link href="css/header.css" rel="stylesheet">
+    </head>
+    <body>
+        <header id="pageheader">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Travel Ponies</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Mi perfil <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!--jsp:invoke fragment="header"/-->
+        </header>
+        <div id="body">
+            <jsp:doBody/>
+        </div>
+        <footer id="pagefooter">
+            <div class="container-fluid">
+                Never ponies travelling
+            </div>
+            <!--jsp:invoke fragment="footer"/-->
+        </footer>
+    </body>
 </html>

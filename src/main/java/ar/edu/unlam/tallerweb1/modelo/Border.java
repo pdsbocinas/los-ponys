@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,9 +15,11 @@ public class Border
     @Column(name = "id", unique = true, nullable = false)
     private Integer accountId;
 
-    private String borders;
+    @Column(name = "name")
+    private String name;
 
     @ManyToOne
+    @JsonIgnore // Esto ignora que se parsee el pais cuando se consume por json
     private Pais pais;
 
     // Getters and Setters
@@ -28,12 +32,12 @@ public class Border
         this.accountId = accountId;
     }
 
-    public String getBorders() {
-        return borders;
+    public String getName() {
+        return name;
     }
 
-    public void setBorders(String borders) {
-        this.borders = borders;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Pais getPais() {

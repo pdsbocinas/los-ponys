@@ -1,6 +1,12 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,21 +24,38 @@ public class Pais {
     @Column(name = "capital")
     private String capital;
 
-/*
+    /*
     @Column(name = "timezones")
     private List timezones;
 
-
+    */
     //relacion con el objeto Border
     // Un pais puede tener varios paises limitrofes
     // cierto grupo de paises corresponden a un pais limitrofe
     //EN DUDA
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="border_id")
-    private List<Border> borders;
-*/
-    // Getters and Setters
 
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="pais_id")
+    private List<Border> borders;
+
+    //@OneToMany
+
+    //public List<Border> borders = new ArrayList<Border>();
+
+    // Getters and Setters
+    @OneToMany(cascade=CascadeType.ALL)
+    // esto quiere decir que cuando te trae el pais te trae la colleccion de translations
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinColumn(name="pais_id")
+    private List<Translations> translations;
+
+    public List<Border> getBorders() {
+        return borders;
+    }
+
+    public void setBorders(List<Border> borders) {
+        this.borders = borders;
+    }
 
     public Long getId() {
         return id;
@@ -66,13 +89,14 @@ public class Pais {
         this.timezones = timezones;
     }
 
-    public List<Border> getBorders() {
-        return borders;
-    }
 
-    public void setBorders(List<Border> borders) {
-        this.borders = borders;
-    }
     */
 
+    public List<Translations> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(List<Translations> translations) {
+        this.translations = translations;
+    }
 }

@@ -38,20 +38,6 @@ class App extends React.Component {
           titulo="soy el boton"
           onSendToParent={this.getDataFromChild}
         />
-        <p>Lista simple</p>
-        {lista.map((v) => {
-          return (
-            <p>{v}</p>
-          )
-        })}
-        {listaDeObjetos.map(i => {
-          return (
-            <div>
-              <p>{i.nombre}</p>
-              <p>{i.edad}</p>
-            </div>
-          )
-        })}
       </>
     )
   }

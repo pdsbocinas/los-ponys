@@ -11,13 +11,14 @@ const extractStyles = new MiniCssExtractPlugin({
 });
 
 module.exports = {
+  mode: 'development',
   context: path.resolve(__dirname, './src/main/webapp/'),
   entry: {
     commons: [
       'babel-polyfill',
       'axios'
     ],
-    test: [
+    countries: [
       './css/app.scss',
       './js/components/Countries/index.js'
     ],

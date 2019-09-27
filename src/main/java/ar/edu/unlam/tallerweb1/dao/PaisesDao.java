@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface PaisesDao {
-  void guardarPaises(List<Pais> paises);
+  void guardarPaises(Pais pais);
   List<Pais> obtenerPaises();
   String obtenerCapital(Pais pais);
 }
