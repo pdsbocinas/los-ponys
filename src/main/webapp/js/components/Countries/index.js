@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import axios from 'axios';
 import 'babel-polyfill';
 import { myfunction, otherFunction } from './helpers.js'
+import { host } from '../host.js'
 
 // esto es una de las formas para hacer consumo de apis via json, mirar el Controller Pais, metodo getPaisesJson
 class App extends React.Component {
@@ -17,7 +18,7 @@ class App extends React.Component {
   componentDidMount () {
     // AXIOS es una libreria para hacer GET y POST a un endpoint cualquiera, devuelve lo que se llama una Promesa
     // con ese .then
-    axios.get(`http://localhost:8080/Los_Ponys_war/api/countries`)
+    axios.get(`${host}/api/countries`)
       .then(res => {
         // aca res es lon que me devuelve ese endpoint. Devuelve un json con varias cosas, a nosotros nos interesa el data
         // y lo seteamos con setState en el estado del componente
