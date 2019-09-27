@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import axios from 'axios';
 import 'babel-polyfill';
 import { myfunction, otherFunction } from './helpers.js'
-import { host } from '../host.js'
+import { host } from '../../host.js'
 
 // esto es una de las formas para hacer consumo de apis via json, mirar el Controller Pais, metodo getPaisesJson
 class App extends React.Component {
