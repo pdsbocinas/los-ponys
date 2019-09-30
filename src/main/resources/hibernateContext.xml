@@ -9,11 +9,15 @@
 	<bean id="dataSource"
 		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 		<property name="url" value="jdbc:mysql://localhost:3307/ludiTorneos_new" />
 =======
 		<property name="url" value="jdbc:mysql://localhost:3306/losponys" />
 >>>>>>> Stashed changes
+=======
+		<property name="url" value="jdbc:mysql://localhost:3307/losponys" />
+>>>>>>> 609473fbc5325414231e29a2ced2deeadd60b118
 		<property name="username" value="root" />
 		<property name="password" value="" />
 	</bean>
@@ -38,7 +42,7 @@
 				<!--create: lo crea siempre-->
 				<!--update: aplica cambios realizados-->
 				<!--none: no modifica nunca el esquema de datos-->
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
 			</props>
 		</property>
 		<!--Se configura qué paquetes debe escanear hibernate en busca de clases persistibles, es decir-->

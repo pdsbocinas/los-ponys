@@ -1,43 +1,53 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Pais;
+import ar.edu.unlam.tallerweb1.servicios.ServicioPais;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import java.util.Arrays;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
 public class ControladorPais {
 
+  @Inject
+  private ServicioPais servicioPais;
+
   @RequestMapping(path = {"/countries"}, method = RequestMethod.GET)
-  public ModelAndView getPaises() {
+  public ModelAndView obtenerPaises() {
+
     ModelMap modelo = new ModelMap();
 
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.set("x-rapidapi-host", "restcountries-v1.p.rapidapi.com");
-    headers.set("x-rapidapi-key", "80gNYJiI9Mmsh06oK3FV9320LjXhp1kPE8ujsnjl5SFk72EHGS");
+    // Obtiene los paises de la base de datos
+    List<Pais> result = servicioPais.obtenerPaises();
 
-    HttpEntity<Pais> entity = new HttpEntity<>(headers);
-
-    ResponseEntity<List<Pais>> respEntity = restTemplate
-        .exchange("https://restcountries-v1.p.rapidapi.com/all",
-            HttpMethod.GET,
-            entity,
-            new ParameterizedTypeReference<List<Pais>>() {}
-            );
-
-    List<Pais> paises = respEntity.getBody();
-    modelo.put("paises", paises);
+    modelo.put("paises", result);
 
     return new ModelAndView("countries", modelo);
+  }
+
+  @RequestMapping(path = {"/api/countries"}, method = RequestMethod.GET)
+  @ResponseBody
+  public List<Pais> obtenerPaisesJson(){
+    List<Pais> result = servicioPais.obtenerPaises();
+    return result;
+  }
+
+  @RequestMapping(path = "/countries/{pais}", method = RequestMethod.GET)
+  public ModelAndView obtenerPais(@PathVariable("pais") String pais, HttpServletRequest request) {
+    ModelMap modelo = new ModelMap();
+    modelo.put("country", pais);
+
+    return new ModelAndView("country", modelo);
   }
 }
