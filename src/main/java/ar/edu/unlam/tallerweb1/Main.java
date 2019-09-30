@@ -1,15 +1,21 @@
 package ar.edu.unlam.tallerweb1;
 
 import ar.edu.unlam.tallerweb1.modelo.Pais;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.*;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.*;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-    public static void main (String args[]) {
+    public static void main (String args[]) throws InterruptedException, ApiException, IOException {
         /*RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -26,5 +32,52 @@ public class Main {
         for (final Pais pais : paises) {
             System.out.println(pais.getName());
         }*/
+
+        GeoApiContext context = new GeoApiContext.Builder()
+            .apiKey("AIzaSyD8feo0IzBJZWjmAEhc2PIPRvBqWhBk2Jg")
+            .build();
+
+        // devuelve un json de resultado aleatorios
+        PlacesSearchResponse contextPlaceApi = new TextSearchRequest(context).query("pizzerias").await();
+
+
+        // esta peticion no me esta andando
+        // PlacesSearchResponse responseReuqest = new NearbySearchRequest(context).keyword("pizzeria").await();
+        // PlacesSearchResult[] placesResult = responseReuqest.results;
+
+
+        try {
+            PlaceDetails resultDetails = new PlaceDetailsRequest(context).placeId("ChIJRVY_etDX3IARGYLVpoq7f68").await();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+
+        DirectionsResult resultDirection = null;
+
+        try {
+            resultDirection = new DirectionsApiRequest(context).origin("El Cabildo").destination("Congreso de Buenos Aires").await();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+
+        GeocodingResult[] results = new GeocodingResult[0];
+
+        try {
+            results = GeocodingApi.geocode(context,
+                "Carabobo 3290 Villa Luzuriaga").await();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        // System.out.println(gson.toJson(results[0]));
+        System.out.println(gson.toJson(contextPlaceApi.results));
+        // System.out.println(gson.toJson(resultDetails.formattedAddress));
+        // System.out.println(gson.toJson(resultDirection.routes));
+        // System.out.println(responseReuqest);
     }
 }

@@ -22,6 +22,9 @@ module.exports = {
       './css/app.scss',
       './js/components/Countries/index.js'
     ],
+    travel: [
+      './js/components/Travel/index.js'
+    ],
     login: [
       './js/components/Login/index.js'
     ]

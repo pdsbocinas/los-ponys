@@ -12,18 +12,10 @@
 <t:base>
     <jsp:body>
         <div id="root"></div>
-<%--        <ul class="list-group">
-            <c:forEach var="pais" items="${paises}">
-                <li class="list-group-item">
-                    <a href="countries/${pais.getName()}">${pais.getName()}</a>
-                </li>
-            </c:forEach>
-        </ul>--%>
     </jsp:body>
 </t:base>
 
-<script src="<c:url value="/js/jquery-1.11.3.min.js" />"></script>
 <script src="dist/<ex:getManifestAssets value="commons.js"/>"></script>
-<script src="dist/<ex:getManifestAssets value="countries.js"/>"></script>
+<script src="dist/<ex:getManifestAssets value="travel.js"/>"></script>
 </body>
 </html>

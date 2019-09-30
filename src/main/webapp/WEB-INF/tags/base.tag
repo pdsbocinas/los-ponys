@@ -11,6 +11,7 @@
         <link href="css/bootstrap-theme.min.css" rel="stylesheet">
         <link href="css/footer.css" rel="stylesheet">
         <link href="css/header.css" rel="stylesheet">
+        <link href="css/banner.css" rel="stylesheet">
     </head>
     <body>
         <header id="pageheader">
@@ -32,13 +33,18 @@
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
+                    <ul>
+                        <a href="viajes" title="viaje">
+                            <img src="images/003-backpack.svg" width="30" height="auto" alt="crear viaje">
+                        </a>
+                    </ul>
                 </div>
             </nav>
             <!--jsp:invoke fragment="header"/-->
         </header>
-        <div id="body">
+        <main id="body">
             <jsp:doBody/>
-        </div>
+        </main>
         <footer id="pagefooter">
             <div class="container-fluid">
                 Never ponies travelling
