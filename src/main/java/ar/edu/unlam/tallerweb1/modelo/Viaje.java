@@ -13,6 +13,9 @@ public class Viaje {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
+    @Column(name = "titulo")
+    private String titulo;
+
     @Column(name = "fechaInicio")
     private Date fechaInicio;
 
@@ -47,5 +50,19 @@ public class Viaje {
         this.destino = destino;
     }
 
+    public String getTitulo() {
+        return titulo;
+    }
 
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

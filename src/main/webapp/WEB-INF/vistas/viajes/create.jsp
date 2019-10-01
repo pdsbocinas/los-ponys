@@ -11,9 +11,13 @@
 <body>
 <t:base>
     <jsp:body>
+        <p>${titulo}</p>
+        <p>${campo}</p>
+        <p>${campito}</p>
         <div id="root"></div>
     </jsp:body>
 </t:base>
+
 <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
 <c:set var="travel"><ex:getManifestAssets value="travel.js"/></c:set>
 <script src="<c:url value="${commons}"/>"></script>
