@@ -10,7 +10,8 @@ class App extends React.Component {
   state = {
     destination: [],
     keyword: '',
-    loading: true
+    loading: true,
+    selected: []
   }
 
   // este metodo de ciclo de vida de React se va a ejecutar cuando el componente se termine de cargar en el DOM
@@ -36,9 +37,14 @@ class App extends React.Component {
     }
   }
 
+  onSelect = (destin) => {
+    this.setState({
+      selected: this.state.selected.concat(destin)
+    })
+  }
+
   render () {
-    const { destination, keyword } = this.state;
-    console.log(destination)
+    const { destination, keyword, selected } = this.state;
     return (
       <>
         <form>
@@ -47,10 +53,26 @@ class App extends React.Component {
         <ul style={{ maxWidth: '600px', height: '350px', margin: '15px auto 40px', overflow: 'scroll' }} className="list-group">
           {destination.map((destin, i) => (
             <li key={`${i}-${destin.name}`} className="list-group-item">
-              <a href={`countries/${destin.name}`}>{destin.name}</a>
+              <a onClick={() => this.onSelect(destin)}>{destin.name}</a>
             </li>
           ))}
         </ul>
+        {selected.length !== 0 && (
+          <>
+          {selected.map(selected => {
+            <div className="container">
+              <div className="card" style={{ width: '18rem'}}>
+                <img src={selected.icon} className="card-img-top" alt={selected.name} />
+                <div className="card-body">
+                  <h5 className="card-title">{selected.name}</h5>
+                  <p className="card-text">{selected.formattedAddress}</p>
+                  <a href="#" className="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+            </div>
+          })}
+          </>
+        )}
       </>
     )
   }
