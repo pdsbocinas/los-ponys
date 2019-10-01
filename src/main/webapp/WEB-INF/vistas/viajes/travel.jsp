@@ -20,7 +20,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Crear viaje</h5>
                             <p class="card-text">Crea y comparti tu experiencia de viajar.</p>
-                            <a href="viajes/crear" class="btn btn-primary">Empezar</a>
+                            <a href="<c:url value="viajes/crear"/>" class="btn btn-primary">Empezar</a>
                         </div>
                     </div>
                 </div>

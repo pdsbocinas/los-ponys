@@ -42,7 +42,7 @@ public class WebpackTag extends SimpleTagSupport {
       );
       String js = (String) jsonObject.get(this.value);
       JspWriter out = getJspContext().getOut();
-      out.println(js);
+      out.println("/dist/" + js);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ParseException e) {

@@ -13,30 +13,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
 public class ControladorViaje {
 
-  @RequestMapping(path = {"/viajes"}, method = RequestMethod.GET)
+  @RequestMapping("/viajes")
   public ModelAndView homeViaje () {
-    return new ModelAndView("travel");
+    return new ModelAndView("viajes/travel");
   }
 
-  @RequestMapping(path = {"/viajes/crear"}, method = RequestMethod.GET)
+  @RequestMapping("/viajes/crear")
   public ModelAndView crearViaje () {
-    return new ModelAndView("create");
+    return new ModelAndView("viajes/create");
   }
 
   @RequestMapping(path = {"/api/queries"}, method = RequestMethod.GET)
   @ResponseBody
-  public Object obtenerStringJson(@RequestParam(value = "keyword") String keyword) throws InterruptedException, ApiException, IOException {
+  public Object obtenerStringJson(HttpServletRequest request,
+                                  HttpServletResponse response) throws InterruptedException, ApiException, IOException {
     GeoApiContext context = new GeoApiContext.Builder()
         .apiKey("AIzaSyD8feo0IzBJZWjmAEhc2PIPRvBqWhBk2Jg")
         .build();
+    String jsonString = request.getParameter("keyword");
 
     // devuelve un json de resultado aleatorios
-    PlacesSearchResponse contextPlaceApi = new TextSearchRequest(context).query(keyword).await();
+    PlacesSearchResponse contextPlaceApi = new TextSearchRequest(context).query(jsonString).await();
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     return gson.toJson(contextPlaceApi.results);
   }

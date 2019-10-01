@@ -38,13 +38,11 @@ public class Main {
             .build();
 
         // devuelve un json de resultado aleatorios
-        PlacesSearchResponse contextPlaceApi = new TextSearchRequest(context).query("pizzerias").await();
+        // PlacesSearchResponse contextPlaceApi = new TextSearchRequest(context).query("pizzerias").await();
 
-
+        // LatLng position = new LatLng(-34d,-58d);
         // esta peticion no me esta andando
-        // PlacesSearchResponse responseReuqest = new NearbySearchRequest(context).keyword("pizzeria").await();
-        // PlacesSearchResult[] placesResult = responseReuqest.results;
-
+        // PlacesSearchResponse responseReuqest = new NearbySearchRequest(context).location(position).keyword("pizzerias").await();
 
         try {
             PlaceDetails resultDetails = new PlaceDetailsRequest(context).placeId("ChIJRVY_etDX3IARGYLVpoq7f68").await();
@@ -75,9 +73,9 @@ public class Main {
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         // System.out.println(gson.toJson(results[0]));
-        System.out.println(gson.toJson(contextPlaceApi.results));
+        // System.out.println(gson.toJson(contextPlaceApi.results));
         // System.out.println(gson.toJson(resultDetails.formattedAddress));
         // System.out.println(gson.toJson(resultDirection.routes));
-        // System.out.println(responseReuqest);
+        // System.out.println(gson.toJson(responseReuqest.results));
     }
 }

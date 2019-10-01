@@ -19,25 +19,21 @@ class App extends React.Component {
     // con ese .then
   }
 
-  countriesFilter = (destination) => {
-    const { keyword } = this.state
-    return destination.name.indexOf(keyword) !== -1;
-  }
-
   onSearch = async (keyword) => {
     await this.setState({ keyword })
-    console.log(keyword)
-    axios.get(`${host}/api/queries`, {
-      params: {
-        keyword: this.state.destination
-      }
-    })
-      .then(res => {
+    if (keyword.length > 4) {
+      axios.get(`${host}/api/queries`, {
+        params: {
+          keyword: this.state.keyword
+        }
+      })
+      .then(async res => {
         // aca res es lon que me devuelve ese endpoint. Devuelve un json con varias cosas, a nosotros nos interesa el data
         // y lo seteamos con setState en el estado del componente
         const destination = res.data;
-        this.setState({ destination });
+        await this.setState({ destination });
       })
+    }
   }
 
   render () {
@@ -49,7 +45,7 @@ class App extends React.Component {
           <input class="form-control" style={{ maxWidth: '600px', height: '45px', margin: '15px auto 20px' }} type="text" value={keyword} onChange={ev => this.onSearch(ev.target.value)} placeholder='Buscar por destino' />
         </form>
         <ul style={{ maxWidth: '600px', height: '350px', margin: '15px auto 40px', overflow: 'scroll' }} className="list-group">
-          {destination.filter(this.countriesFilter).map((destin, i) => (
+          {destination.map((destin, i) => (
             <li key={`${i}-${destin.name}`} className="list-group-item">
               <a href={`countries/${destin.name}`}>{destin.name}</a>
             </li>
