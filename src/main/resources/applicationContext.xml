@@ -31,6 +31,9 @@
       </props>
     </property>
   </bean-->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:application.properties" />
+	</bean>
 
 	<context:component-scan base-package="ar.edu.unlam.tallerweb1.controladores" />
 	<context:component-scan base-package="ar.edu.unlam.tallerweb1.dao" />

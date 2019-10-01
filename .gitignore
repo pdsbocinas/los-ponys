@@ -5,3 +5,7 @@ dist/
 src/.DS_Store
 src/src.iml
 ./src/main/webapp/js/host.js
+
+application.properties
+*.properties
+application.properties
