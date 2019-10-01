@@ -23,7 +23,9 @@
 </t:base>
 
 <script src="<c:url value="/js/jquery-1.11.3.min.js" />"></script>
-<script src="dist/<ex:getManifestAssets value="commons.js"/>"></script>
-<script src="dist/<ex:getManifestAssets value="countries.js"/>"></script>
+<c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
+<c:set var="countries"><ex:getManifestAssets value="countries.js"/></c:set>
+<script src="<c:url value="${commons}"/>"></script>
+<script src="<c:url value="${countries}"/>"></script>
 </body>
 </html>

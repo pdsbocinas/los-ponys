@@ -38,7 +38,8 @@
 </t:base>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="js/bootstrap.min.js" type="text/javascript"></script>
-<script src="dist/<ex:getManifestAssets value="login.js"/>"></script>
+<c:set var="login"><ex:getManifestAssets value="login.js"/></c:set>
+<script src="<c:url value="${login}"/>"></script>
 <!-- Placed at the end of the document so the pages load faster -->
 <!--script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script-->
 </body>

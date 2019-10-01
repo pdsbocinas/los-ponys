@@ -2,16 +2,16 @@
 <%@ attribute name="header" fragment="true" %>
 <%@ attribute name="footer" fragment="true" %>
 <%@ attribute name="scripts" fragment="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
     <head>
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!-- Bootstrap theme -->
-        <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-        <link href="css/footer.css" rel="stylesheet">
-        <link href="css/header.css" rel="stylesheet">
-        <link href="css/banner.css" rel="stylesheet">
+        <link href="<c:url value="/css/bootstrap-theme.min.css"/>" rel="stylesheet">
+        <link href="<c:url value="/css/footer.css"/>" rel="stylesheet">
+        <link href="<c:url value="/css/banner.css"/>" rel="stylesheet">
     </head>
     <body>
         <header id="pageheader">
@@ -35,7 +35,7 @@
                     </ul>
                     <ul>
                         <a href="viajes" title="viaje">
-                            <img src="images/003-backpack.svg" width="30" height="auto" alt="crear viaje">
+                            <img src="<c:url value="/images/003-backpack.svg"/>" width="30" height="auto" alt="crear viaje">
                         </a>
                     </ul>
                 </div>
