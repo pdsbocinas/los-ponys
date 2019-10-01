@@ -1,18 +1,12 @@
 package ar.edu.unlam.tallerweb1;
 
-import ar.edu.unlam.tallerweb1.modelo.Pais;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.*;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 public class Main {
     public static void main (String args[]) throws InterruptedException, ApiException, IOException {
@@ -34,7 +28,9 @@ public class Main {
         }*/
 
         GeoApiContext context = new GeoApiContext.Builder()
-            .apiKey("AIzaSyD8feo0IzBJZWjmAEhc2PIPRvBqWhBk2Jg")
+        // Api Pablo : AIzaSyD8feo0IzBJZWjmAEhc2PIPRvBqWhBk2Jg
+        // Api Nico : AIzaSyBk95kpZ90NBtlkoHX3MrerMAzHVokLInc
+            .apiKey("AIzaSyBk95kpZ90NBtlkoHX3MrerMAzHVokLInc")
             .build();
 
         // devuelve un json de resultado aleatorios

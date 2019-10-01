@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Viaje")
@@ -18,8 +19,9 @@ public class Viaje {
     @Column(name = "fechaFin")
     private Date fechaFin;
 
-    @Column(name = "destino")
-    private String destino;
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="destino_id")
+    private List<Destino> destino;
 
     public Date getFechaInicio() {
         return fechaInicio;
@@ -37,11 +39,13 @@ public class Viaje {
         this.fechaFin = fechaFin;
     }
 
-    public String getDestino() {
+    public List<Destino> getDestino() {
         return destino;
     }
 
-    public void setDestino(String destino) {
+    public void setDestino(List<Destino> destino) {
         this.destino = destino;
     }
+
+
 }
