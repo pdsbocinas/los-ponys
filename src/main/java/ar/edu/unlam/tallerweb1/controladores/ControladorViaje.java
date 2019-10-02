@@ -84,7 +84,7 @@ public class ControladorViaje  {
   public Viaje guardarViaje(@RequestBody Viaje viaje) {
     viaje.setDestino(null);
     viaje.setFechaFin(null);
-    viaje.setFechaInicio(null);
+//    viaje.setFechaInicio(null);
     // List<Border> = pais.getBorders(); Esto hay que iterarlo supongo
     // aca haces la magia de guardar, El chango va mappear segun los campos que le mandemos del json que le mandamos del front
     // a la Clase Viaje. En este caso, solo le mando el titulo. Ver archivo Modal-Travel/index.js
