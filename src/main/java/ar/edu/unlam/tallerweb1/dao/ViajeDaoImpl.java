@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.dao;
 
 import ar.edu.unlam.tallerweb1.modelo.Viaje;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,10 @@ public class ViajeDaoImpl implements ViajeDao{
     }
 
     @Override
-    public List<Viaje> obtenerViaje() {
-        return null;
+    public List<Viaje> obtenerViajes() {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria cr = session.createCriteria(Viaje.class);
+        List results = cr.list();
+        return results;
     }
 }

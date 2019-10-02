@@ -15,18 +15,26 @@
         </div>
         <div class="container-fluid fix-padding">
             <div class="row">
-                <div class="col">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Crear viaje</h5>
-                            <p class="card-text">Crea y comparti tu experiencia de viajar.</p>
-                            <a href="<c:url value="viajes/crear"/>" class="btn btn-primary">Empezar</a>
+                <div class="col" style="display: flex;">
+                    <div id="root"></div>
+                    <c:forEach var="viaje" items="${viajes}">
+                        <div class="card" style="width: 18rem;" >
+                            <div class="card-body">
+                                <h5 class="card-title">${viaje.getTitulo()}</h5>
+                                <p class="card-text">Crea y comparti tu experiencia de viajar.</p>
+                                <a href="viajes/${viaje.getId()}">${viaje.getTitulo()}</a>
+                            </div>
                         </div>
-                    </div>
+                    </c:forEach>
+                </div>
                 </div>
             </div>
         </div>
     </jsp:body>
 </t:base>
+<c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
+<c:set var="modal"><ex:getManifestAssets value="modal.js"/></c:set>
+<script src="<c:url value="${commons}"/>"></script>
+<script src="<c:url value="${modal}"/>"></script>
 </body>
 </html>

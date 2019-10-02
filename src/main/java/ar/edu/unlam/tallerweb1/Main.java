@@ -30,7 +30,7 @@ public class Main {
         GeoApiContext context = new GeoApiContext.Builder()
         // Api Pablo : AIzaSyD8feo0IzBJZWjmAEhc2PIPRvBqWhBk2Jg
         // Api Nico : AIzaSyBk95kpZ90NBtlkoHX3MrerMAzHVokLInc
-            .apiKey("AIzaSyBk95kpZ90NBtlkoHX3MrerMAzHVokLInc")
+            .apiKey("AIzaSyD8feo0IzBJZWjmAEhc2PIPRvBqWhBk2Jg")
             .build();
 
         // devuelve un json de resultado aleatorios

@@ -23,7 +23,7 @@ class App extends React.Component {
   onSearch = async (keyword) => {
     await this.setState({ keyword })
     if (keyword.length > 4) {
-      axios.get(`${host}/api/queries`, {
+      axios.get(`${host}/api/getDestinations`, {
         params: {
           keyword: this.state.keyword
         }

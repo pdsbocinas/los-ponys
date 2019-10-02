@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 @Service("servicioViaje")
 public class ServicioViajeImpl implements ServicioViaje{
@@ -21,9 +22,11 @@ public class ServicioViajeImpl implements ServicioViaje{
 
     @Override
     public void guardarViaje(Viaje viaje) {
-
         viajeDao.guardarViaje(viaje);
     }
 
-
+    @Override
+    public List<Viaje> obtenerViajes () {
+        return viajeDao.obtenerViajes();
+    }
 }
