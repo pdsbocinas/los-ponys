@@ -14,10 +14,9 @@
 						http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
 	<import resource="classpath:hibernateContext.xml" />
 
-<<<<<<< HEAD
-=======
+
 	<!--Se indica que la configuracion del MVC se hara utilizando anotaciones-->
->>>>>>> 5663f2d9f7855bca0bb0adc8c95d51ee1bb689b7
+
 	<mvc:annotation-driven />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
@@ -39,11 +38,9 @@
 		<property name="location" value="classpath:application.properties" />
 	</bean>
 
-<<<<<<< HEAD
-=======
 	<!--Se indican que paquetes debe escanear Spring al levantar el contexto para encontrar componentes, -->
 	<!--esto es clases anotadas como @Controller, @Service o @Repository-->
->>>>>>> 5663f2d9f7855bca0bb0adc8c95d51ee1bb689b7
+
 	<context:component-scan base-package="ar.edu.unlam.tallerweb1.controladores" />
 	<context:component-scan base-package="ar.edu.unlam.tallerweb1.dao" />
 	<context:component-scan base-package="ar.edu.unlam.tallerweb1.servicios" />
