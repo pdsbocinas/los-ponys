@@ -12,13 +12,13 @@
 <t:base>
     <jsp:body>
         <div id="root"></div>
-<%--        <ul class="list-group">
-            <c:forEach var="pais" items="${paises}">
-                <li class="list-group-item">
-                    <a href="countries/${pais.getName()}">${pais.getName()}</a>
-                </li>
-            </c:forEach>
-        </ul>--%>
+        <%--        <ul class="list-group">
+                    <c:forEach var="pais" items="${paises}">
+                        <li class="list-group-item">
+                            <a href="countries/${pais.getName()}">${pais.getName()}</a>
+                        </li>
+                    </c:forEach>
+                </ul>--%>
     </jsp:body>
 </t:base>
 
