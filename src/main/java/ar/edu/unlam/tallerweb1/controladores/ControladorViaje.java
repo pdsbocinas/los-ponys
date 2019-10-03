@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.modelo.Pais;
-import ar.edu.unlam.tallerweb1.modelo.Viaje;
+import ar.edu.unlam.tallerweb1.modelo.*;
+import ar.edu.unlam.tallerweb1.servicios.ServicioDestino;
 import ar.edu.unlam.tallerweb1.servicios.ServicioViaje;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,8 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -25,8 +24,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @PropertySource(value= {"classpath:application.properties"})
@@ -34,6 +31,9 @@ public class ControladorViaje  {
 
   @Inject
   private ServicioViaje servicioViaje;
+
+  @Inject
+  private ServicioDestino servicioDestino;
 
   @Value("${datasource.apiKey}")
   private String apiKey;
@@ -89,11 +89,10 @@ public class ControladorViaje  {
 
   @RequestMapping(path = {"/guardarViaje"}, method = RequestMethod.POST)
   @ResponseBody
-  public Viaje guardarViaje(@RequestBody Viaje viaje) {
-    // List<Border> = pais.getBorders(); Esto hay que iterarlo supongo
-    // aca haces la magia de guardar, El chango va mappear segun los campos que le mandemos del json que le mandamos del front
-    // a la Clase Viaje. En este caso, solo le mando el titulo. Ver archivo Modal-Travel/index.js
-    servicioViaje.guardarViaje(viaje);
-    return viaje;
+  public ViajeDto crearViaje(@RequestBody ViajeDto viajeDto) throws InterruptedException, ApiException, IOException {
+
+    // todo agregar validaciones de los datos que vienen, por ejemplo que no sean null, cosas por el estilo
+    viajeDto.setId(servicioViaje.crearViaje(viajeDto.getTitulo(), viajeDto.getFechaInicio(), viajeDto.getFechaFin(), viajeDto.getDestinos(), viajeDto.getUsuarios()));
+    return viajeDto;
   }
 }
