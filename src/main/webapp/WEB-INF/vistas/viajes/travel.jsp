@@ -11,13 +11,18 @@
 <t:base>
     <jsp:body>
         <div class="banner">
-            <h1>Viajes</h1>
+            <h1 class="text-primary">Viajes</h1>
         </div>
         <div class="container-fluid fix-padding">
-            <div class="row">
-                <div class="col" style="display: flex;">
+            <div class="row justify-content-center mb-2">
+                <div class="col-4">
                     <div id="root"></div>
-                    <c:forEach var="viaje" items="${viajes}">
+                </div>
+            </div>
+
+            <div class="row">
+                <c:forEach var="viaje" items="${viajes}">
+                    <div class="col-4" style="display: flex;">
                         <div class="card" style="width: 18rem;" >
                             <div class="card-body">
                                 <h5 class="card-title">${viaje.getTitulo()}</h5>
@@ -25,10 +30,11 @@
                                 <a href="viajes/${viaje.getId()}">${viaje.getTitulo()}</a>
                             </div>
                         </div>
-                    </c:forEach>
-                </div>
-                </div>
+                    </div>
+                </c:forEach>
             </div>
+
+
         </div>
     </jsp:body>
 </t:base>
