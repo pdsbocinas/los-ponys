@@ -18,16 +18,19 @@ public class Destino {
     private String nombre;
 
     // normalizar
-    @ManyToOne
-    private Pais pais;
-
-    // normalizar
     @Column(name = "region")
     private String region;
 
     // normalizar
     @Column(name = "ciudad")
     private String ciudad;
+
+    // normalizar
+    @ManyToOne
+    private Pais pais;
+
+    @ManyToOne
+    private Viaje viaje;
 
     @ManyToOne
     @JsonIgnore
@@ -80,5 +83,13 @@ public class Destino {
 
     public void setReserva(Reserva reserva) {
         this.reserva = reserva;
+    }
+
+    public Viaje getViaje() {
+        return viaje;
+    }
+
+    public void setViaje(Viaje viaje) {
+        this.viaje = viaje;
     }
 }

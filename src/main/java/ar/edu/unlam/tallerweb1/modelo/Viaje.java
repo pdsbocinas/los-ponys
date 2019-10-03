@@ -25,12 +25,12 @@ public class Viaje {
     @Column(name = "fechaFin")
     private Date fechaFin;
 
-    @OneToMany(cascade=CascadeType.ALL)
+/*    @OneToMany(cascade=CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(name="destino_id")
-    private List<Destino> destinos;
+    private List<Destino> destinos;*/
 
-    @ManyToMany
+    @ManyToMany(cascade=CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name = "viaje_usuario",
         joinColumns = @JoinColumn(name = "viaje_id"),
@@ -52,14 +52,6 @@ public class Viaje {
 
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
-    }
-
-    public List<Destino> getDestinos() {
-        return destinos;
-    }
-
-    public void setDestinos(List<Destino> destinos) {
-        this.destinos = destinos;
     }
 
     public String getTitulo() {
