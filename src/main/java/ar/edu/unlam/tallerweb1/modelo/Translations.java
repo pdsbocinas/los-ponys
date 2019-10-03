@@ -19,9 +19,9 @@ public class Translations {
   @Column
   private String language;
 
-  @ManyToOne
+/*  @ManyToOne
   @JsonIgnore // Esto ignora que se parsee el pais cuando se consume por json
-  private Pais pais;
+  private Pais pais;*/
 
   public Long getId() {
     return id;
@@ -47,11 +47,4 @@ public class Translations {
     this.language = language;
   }
 
-  public Pais getPais() {
-    return pais;
-  }
-
-  public void setPais(Pais pais) {
-    this.pais = pais;
-  }
 }

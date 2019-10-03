@@ -9,6 +9,8 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.TextSearchRequest;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.PlacesSearchResponse;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +27,14 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@PropertySource(value= {"classpath:application.properties"})
 public class ControladorViaje  {
 
   @Inject
   private ServicioViaje servicioViaje;
+
+  @Value("${datasource.apiKey}")
+  private String apiKey;
 
 /*  @RequestMapping(value= "/viajesget", method = RequestMethod.GET) // agregar: consumes="application/json" si va por POST
   @ResponseBody
@@ -69,7 +75,7 @@ public class ControladorViaje  {
   public Object obtenerStringJson(HttpServletRequest request,
                                   HttpServletResponse response) throws InterruptedException, ApiException, IOException {
     GeoApiContext context = new GeoApiContext.Builder()
-        .apiKey("AIzaSyD8feo0IzBJZWjmAEhc2PIPRvBqWhBk2Jg")
+        .apiKey(apiKey)
         .build();
     String jsonString = request.getParameter("keyword");
 
@@ -82,9 +88,6 @@ public class ControladorViaje  {
   @RequestMapping(path = {"/guardarViaje"}, method = RequestMethod.POST)
   @ResponseBody
   public Viaje guardarViaje(@RequestBody Viaje viaje) {
-    viaje.setDestino(null);
-    viaje.setFechaFin(null);
-    viaje.setFechaInicio(null);
     // List<Border> = pais.getBorders(); Esto hay que iterarlo supongo
     // aca haces la magia de guardar, El chango va mappear segun los campos que le mandemos del json que le mandamos del front
     // a la Clase Viaje. En este caso, solo le mando el titulo. Ver archivo Modal-Travel/index.js

@@ -24,7 +24,14 @@ public class Viaje {
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="destino_id")
-    private List<Destino> destino;
+    private List<Destino> destinos;
+
+    @ManyToMany(fetch= FetchType.EAGER)
+    @JoinTable(name = "viaje_usuario",
+        joinColumns = @JoinColumn(name = "viaje_id"),
+        inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    private List<Usuario> usuarios;
 
     public Date getFechaInicio() {
         return fechaInicio;
@@ -42,12 +49,12 @@ public class Viaje {
         this.fechaFin = fechaFin;
     }
 
-    public List<Destino> getDestino() {
-        return destino;
+    public List<Destino> getDestinos() {
+        return destinos;
     }
 
-    public void setDestino(List<Destino> destino) {
-        this.destino = destino;
+    public void setDestinos(List<Destino> destinos) {
+        this.destinos = destinos;
     }
 
     public String getTitulo() {
@@ -64,5 +71,13 @@ public class Viaje {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 }

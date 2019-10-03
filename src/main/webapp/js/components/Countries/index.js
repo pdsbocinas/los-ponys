@@ -38,8 +38,6 @@ class App extends React.Component {
 
   render () {
     const { countries, keyword } = this.state;
-    console.log(myfunction(), otherFunction())
-    console.log(countries)
     return (
       <>
         <form>
