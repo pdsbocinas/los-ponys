@@ -45,6 +45,7 @@ public class DestinoDaoImpl implements DestinoDao {
         .apiKey(apiKey)
         .build();
     List<Destino> listaDestinos = new ArrayList<>();
+
     for (String destino : destinosId) {
       Destino dest = new Destino();
       PlaceDetails place = new PlaceDetailsRequest(context).placeId(destino).await();

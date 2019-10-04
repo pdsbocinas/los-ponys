@@ -59,7 +59,6 @@ public class ControladorViaje  {
   @RequestMapping("/viajes")
   public ModelAndView homeViaje () {
     // aca hay que mostrar si hay viajes creados
-
     ModelMap modelos = new ModelMap();
     List<Viaje> viajes = servicioViaje.obtenerViajes();
     modelos.put("viajes", viajes);
@@ -92,7 +91,18 @@ public class ControladorViaje  {
   public ViajeDto crearViaje(@RequestBody ViajeDto viajeDto) throws InterruptedException, ApiException, IOException {
 
     // todo agregar validaciones de los datos que vienen, por ejemplo que no sean null, cosas por el estilo
-    viajeDto.setId(servicioViaje.crearViaje(viajeDto.getTitulo(), viajeDto.getFechaInicio(), viajeDto.getFechaFin(), viajeDto.getDestinos(), viajeDto.getUsuarios()));
+    // ViajeDto es el modelo que me viene del Frontend, una clase DTO es para mapear un Json que no corresponde a mi modelo de negocio
+    // el servicio crearViaje me va devolver el id del viaje, por ende se lo seteo al controller
+    viajeDto.setId(
+        servicioViaje.crearViaje(
+            viajeDto.getTitulo(),
+            viajeDto.getFechaInicio(),
+            viajeDto.getFechaFin(),
+            viajeDto.getDestinos(),
+            viajeDto.getUsuarios()
+        )
+    );
+
     return viajeDto;
   }
 }
