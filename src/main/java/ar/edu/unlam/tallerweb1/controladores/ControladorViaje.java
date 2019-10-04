@@ -71,6 +71,12 @@ public class ControladorViaje  {
     return new ModelAndView("viajes/create");
   }
 
+  @RequestMapping(path = {"/viajes/recorridos"}, method = RequestMethod.GET)
+  public ModelAndView crearRecorrido (HttpServletRequest request) {
+
+    return new ModelAndView("viajes/recorridos");
+  }
+
   @RequestMapping(path = {"/api/getDestinations"}, method = RequestMethod.GET)
   @ResponseBody
   public Object obtenerStringJson(HttpServletRequest request,
