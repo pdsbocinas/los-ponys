@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from 'axios';
-import 'babel-polyfill';
 import { myfunction, otherFunction } from './helpers.js'
 import { host } from '../../host.js'
 
 // esto es una de las formas para hacer consumo de apis via json, mirar el Controller Pais, metodo getPaisesJson
 class App extends React.Component {
 
+  // aca inicializamos el State local del componente
   state = {
     countries: [],
     keyword: '',
@@ -38,8 +38,6 @@ class App extends React.Component {
 
   render () {
     const { countries, keyword } = this.state;
-    console.log(myfunction(), otherFunction())
-    console.log(countries)
     return (
       <>
         <form>

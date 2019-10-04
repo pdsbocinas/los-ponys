@@ -1,1 +1,1 @@
-export const host = "http://localhost:8081/Los_Ponys_war"
+export const host = `http://${window.location.host}/Los_Ponys_war`

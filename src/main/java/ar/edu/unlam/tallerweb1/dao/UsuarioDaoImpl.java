@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 // implelemtacion del DAO de usuarios, la anotacion @Repository indica a Spring que esta clase es un componente que debe
 // ser manejado por el framework, debe indicarse en applicationContext que busque en el paquete ar.edu.unlam.tallerweb1.dao
@@ -34,4 +36,16 @@ public class UsuarioDaoImpl implements UsuarioDao {
         .uniqueResult();
   }
 
+  @Override
+  public List<Usuario> obtenerTodosPorId(List<Integer> usuariosId) {
+    List<Usuario> usuarios = new ArrayList<>();
+    final Session session = sessionFactory.getCurrentSession();
+    for (Integer id : usuariosId) {
+      Usuario user = (Usuario) session.createCriteria(Usuario.class)
+          .add(Restrictions.eq("id", id))
+          .uniqueResult();
+      usuarios.add(user);
+    }
+    return usuarios;
+  }
 }

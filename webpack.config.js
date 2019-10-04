@@ -22,8 +22,14 @@ module.exports = {
       './css/app.scss',
       './js/components/Countries/index.js'
     ],
+    travel: [
+      './js/components/Travel/index.js'
+    ],
     login: [
       './js/components/Login/index.js'
+    ],
+    modal: [
+      './js/components/Modal-Travel/index.js'
     ]
   },
   output: {
