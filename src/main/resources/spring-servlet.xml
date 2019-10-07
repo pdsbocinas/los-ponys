@@ -18,11 +18,10 @@
         <property name="suffix" value=".jsp" />
         <!--De esta manera al devolver home como nombre de vista, resuelve /WEB-INF/vistas/home.jsp-->
     </bean>
-<<<<<<< HEAD
-=======
+
     <!--Excluye de las URL validas para Spring MVC los recursos estaticos de la aplicacion Web: estilos, java script y fuentes-->
     <!--Si se agregaran, por ejemplo, imagenes, es; es necesario agregar ese path aca-->
->>>>>>> 5663f2d9f7855bca0bb0adc8c95d51ee1bb689b7
+
     <mvc:resources mapping="/css/**" location="/css/" />
     <mvc:resources mapping="/images/**" location="/images/" />
     <mvc:resources mapping="/js/**" location="/js/" />
