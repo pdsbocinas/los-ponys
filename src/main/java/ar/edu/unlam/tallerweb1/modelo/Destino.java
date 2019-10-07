@@ -17,22 +17,21 @@ public class Destino {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToOne
-    @JsonIgnore
-    private Viaje viaje;
-
-    @Column(name = "pais")
-    private String pais;
-
+    // normalizar
     @Column(name = "region")
     private String region;
 
+    // normalizar
     @Column(name = "ciudad")
     private String ciudad;
 
-    @OneToOne
+    // normalizar
+    @ManyToOne
+    private Pais pais;
+
+    @ManyToOne
     @JsonIgnore
-    private Alojamiento alojamiento;
+    private Reserva reserva;
     // Getters and Setters
 
     public Integer getId() {
@@ -51,19 +50,11 @@ public class Destino {
         this.nombre = nombre;
     }
 
-    public Viaje getViaje() {
-        return viaje;
-    }
-
-    public void setViaje(Viaje viaje) {
-        this.viaje = viaje;
-    }
-
-    public String getPais() {
+    public Pais getPais() {
         return pais;
     }
 
-    public void setPais(String pais) {
+    public void setPais(Pais pais) {
         this.pais = pais;
     }
 
@@ -83,11 +74,12 @@ public class Destino {
         this.ciudad = ciudad;
     }
 
-    public Alojamiento getAlojamiento() {
-        return alojamiento;
+    public Reserva getReserva() {
+        return reserva;
     }
 
-    public void setAlojamiento(Alojamiento alojamiento) {
-        this.alojamiento = alojamiento;
+    public void setReserva(Reserva reserva) {
+        this.reserva = reserva;
     }
+
 }

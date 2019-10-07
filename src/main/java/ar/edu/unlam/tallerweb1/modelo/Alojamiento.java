@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "alojamiento")
@@ -16,15 +17,9 @@ public class Alojamiento {
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "checkin")
-    private String checkin;
+    @Column(name = "direccion")
+    private String direccion;
 
-    @Column(name = "checkout")
-    private String checkout;
-
-    @OneToOne
-    @JsonIgnore
-    private Destino destino;
 
     public Integer getId() {
         return id;
@@ -42,27 +37,12 @@ public class Alojamiento {
         this.nombre = nombre;
     }
 
-    public String getCheckin() {
-        return checkin;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setCheckin(String checkin) {
-        this.checkin = checkin;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
-    public String getCheckout() {
-        return checkout;
-    }
-
-    public void setCheckout(String checkout) {
-        this.checkout = checkout;
-    }
-
-    public Destino getDestino() {
-        return destino;
-    }
-
-    public void setDestino(Destino destino) {
-        this.destino = destino;
-    }
 }

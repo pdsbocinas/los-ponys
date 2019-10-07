@@ -1,5 +1,8 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +25,26 @@ public class Viaje {
     @Column(name = "fechaFin")
     private Date fechaFin;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="destino_id")
-    private List<Destino> destino;
+    @OneToMany(cascade=CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinColumn(name="viaje_id")
+    private List<Destino> destinos;
+
+    @ManyToMany(cascade=CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinTable(name = "viaje_usuario",
+        joinColumns = @JoinColumn(name = "viaje_id"),
+        inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    private List<Usuario> usuarios;
+
+    public Viaje(String titulo, Date fechaInicio, Date fechaFin, List<Destino> destinos, List<Usuario> usuarios) {
+        this.titulo = titulo;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.destinos = destinos;
+        this.usuarios = usuarios;
+    }
 
     public Date getFechaInicio() {
         return fechaInicio;
@@ -42,14 +62,6 @@ public class Viaje {
         this.fechaFin = fechaFin;
     }
 
-    public List<Destino> getDestino() {
-        return destino;
-    }
-
-    public void setDestino(List<Destino> destino) {
-        this.destino = destino;
-    }
-
     public String getTitulo() {
         return titulo;
     }
@@ -64,5 +76,21 @@ public class Viaje {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    public List<Destino> getDestinos() {
+        return destinos;
+    }
+
+    public void setDestinos(List<Destino> destinos) {
+        this.destinos = destinos;
     }
 }
