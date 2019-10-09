@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,4 +35,14 @@ public class ViajeDaoImpl implements ViajeDao{
         List results = cr.list();
         return results;
     }
+
+  @Override
+  public Viaje obtenerViajePorId(Long id) {
+    Session session = sessionFactory.getCurrentSession();
+    Viaje v = (Viaje) session.createCriteria(Viaje.class)
+        .add(Restrictions.eq("id", id))
+        .uniqueResult();
+    return v;
+
+  }
 }

@@ -32,29 +32,8 @@ public class ControladorViaje  {
   @Inject
   private ServicioViaje servicioViaje;
 
-  @Inject
-  private ServicioDestino servicioDestino;
-
   @Value("${datasource.apiKey}")
   private String apiKey;
-
-/*  @RequestMapping(value= "/viajesget", method = RequestMethod.GET) // agregar: consumes="application/json" si va por POST
-  @ResponseBody
-  public ModelAndView creaViaje(HttpServletRequest request){
-
-    String titulo = request.getParameter("titulo");
-
-    Viaje viaje = new Viaje();
-    viaje.setTitulo(titulo);
-
-    servicioViaje.guardarViaje(viaje);
-
-    ModelAndView modelAndView = new ModelAndView("viajes/create");
-
-    modelAndView.addObject("titulo", viaje.getTitulo());
-    return modelAndView;
-
-  }*/
 
   @RequestMapping("/viajes")
   public ModelAndView homeViaje () {
@@ -66,20 +45,20 @@ public class ControladorViaje  {
   }
 
   @RequestMapping(path = {"/viajes/{id}"}, method = RequestMethod.GET)
-  public ModelAndView crearViaje (@PathVariable("id") Integer id, HttpServletRequest request) {
+  public ModelAndView crearViajeView (@PathVariable("id") Integer id, HttpServletRequest request) {
 
     return new ModelAndView("viajes/create");
   }
 
-  @RequestMapping(path = {"/viajes/recorridos"}, method = RequestMethod.GET)
+  @RequestMapping(path = {"/viajes/{id}/recorridos"}, method = RequestMethod.GET)
   public ModelAndView crearRecorrido (HttpServletRequest request) {
 
     return new ModelAndView("viajes/recorridos");
   }
 
-  @RequestMapping(path = {"/api/getDestinations"}, method = RequestMethod.GET)
+  @RequestMapping(path = {"/api/destinos"}, method = RequestMethod.GET)
   @ResponseBody
-  public Object obtenerStringJson(HttpServletRequest request,
+  public Object obtenerDestinos(HttpServletRequest request,
                                   HttpServletResponse response) throws InterruptedException, ApiException, IOException {
     GeoApiContext context = new GeoApiContext.Builder()
         .apiKey(apiKey)
@@ -92,7 +71,7 @@ public class ControladorViaje  {
     return gson.toJson(contextPlaceApi.results);
   }
 
-  @RequestMapping(path = {"/guardarViaje"}, method = RequestMethod.POST)
+  @RequestMapping(path = {"/api/viajes"}, method = RequestMethod.POST)
   @ResponseBody
   public ViajeDto crearViaje(@RequestBody ViajeDto viajeDto) throws InterruptedException, ApiException, IOException {
 
@@ -110,5 +89,16 @@ public class ControladorViaje  {
     );
 
     return viajeDto;
+  }
+
+  @RequestMapping(path = {"/api/viajes/{id}/destinos"}, method = RequestMethod.POST)
+  @ResponseBody
+  public Long guardarDestinosPorViaje(@PathVariable Long id, @RequestBody DestinoDto destinosDto) throws InterruptedException, ApiException, IOException {
+
+    destinosDto.setId(
+        servicioViaje.guardarDestinosPorViaje(destinosDto.getId(), destinosDto.getDestinos())
+    );
+
+    return destinosDto.getId();
   }
 }

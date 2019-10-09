@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.modelo.Destino;
 import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import com.google.maps.errors.ApiException;
 
@@ -11,4 +12,7 @@ public interface ServicioViaje {
     String iniciarViaje(Date inicio, Date fin, String destino);
     List<Viaje> obtenerViajes();
     Long crearViaje(String titulo, Date fechaInicio, Date fechaFin, List<String> destinos, List<Integer> usuarios) throws InterruptedException, ApiException, IOException;
+    Viaje obtenerViajePorId(Long id);
+
+    Long guardarDestinosPorViaje(Long id, List<String> destinosId) throws InterruptedException, ApiException, IOException;
 }

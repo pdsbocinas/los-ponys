@@ -11,6 +11,8 @@ import java.util.List;
 @Table(name = "Viaje")
 public class Viaje {
 
+    public Viaje() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -37,14 +39,6 @@ public class Viaje {
         inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
     private List<Usuario> usuarios;
-
-    public Viaje(String titulo, Date fechaInicio, Date fechaFin, List<Destino> destinos, List<Usuario> usuarios) {
-        this.titulo = titulo;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.destinos = destinos;
-        this.usuarios = usuarios;
-    }
 
     public Date getFechaInicio() {
         return fechaInicio;

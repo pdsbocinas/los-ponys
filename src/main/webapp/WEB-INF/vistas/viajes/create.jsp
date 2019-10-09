@@ -11,9 +11,6 @@
 <body>
 <t:base>
     <jsp:body>
-        <p>${titulo}</p>
-        <p>${campo}</p>
-        <p>${campito}</p>
         <div id="root"></div>
     </jsp:body>
 </t:base>

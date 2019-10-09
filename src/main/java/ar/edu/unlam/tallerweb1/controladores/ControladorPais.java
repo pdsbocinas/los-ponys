@@ -24,7 +24,7 @@ public class ControladorPais {
   private ServicioPais servicioPais;
 
   @RequestMapping(path = {"/countries"}, method = RequestMethod.GET)
-  public ModelAndView obtenerPaises() {
+  public ModelAndView obtenerPaisesView() {
 
     ModelMap modelo = new ModelMap();
 
@@ -38,7 +38,7 @@ public class ControladorPais {
 
   @RequestMapping(path = {"/api/countries"}, method = RequestMethod.GET)
   @ResponseBody
-  public List<Pais> obtenerPaisesJson(){
+  public List<Pais> obtenerPaises(){
     List<Pais> result = servicioPais.obtenerPaises();
     return result;
   }
