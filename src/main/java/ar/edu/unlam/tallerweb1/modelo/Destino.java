@@ -29,11 +29,6 @@ public class Destino {
     @ManyToOne
     private Pais pais;
 
-    // normalizar
-    @ManyToOne
-    @JsonIgnore
-    private Viaje viaje;
-
     @ManyToOne
     @JsonIgnore
     private Reserva reserva;
@@ -85,13 +80,5 @@ public class Destino {
 
     public void setReserva(Reserva reserva) {
         this.reserva = reserva;
-    }
-
-    public Viaje getViaje() {
-        return viaje;
-    }
-
-    public void setViaje(Viaje viaje) {
-        this.viaje = viaje;
     }
 }

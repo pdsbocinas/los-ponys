@@ -42,7 +42,7 @@ class App extends React.Component {
   onSelect = async (destin) => {
     console.log(destin)
     await this.setState({
-      destinationSelected: [...this.state.destinationSelected, destin]
+      destinationSelected: [...this.state.destinationSelected].filter(v => v.placeId !== destin.placeId).concat(destin)
     })
   }
 
@@ -53,7 +53,6 @@ class App extends React.Component {
     const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
 
     axios.post(`${host}/api/viajes/${lastURLSegmentId}/destinos`, {
-      id: lastURLSegmentId,
       destinos: placeIds
     })
     .then(res => {

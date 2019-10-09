@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,10 +66,8 @@ public class ServicioViajeImpl implements ServicioViaje{
     public Long guardarDestinosPorViaje(Long id, List<String> destinosId) throws InterruptedException, ApiException, IOException {
         List<Destino> result = destinoDao.obtenerTodosPorId(destinosId);
         Viaje viaje = viajeDao.obtenerViajePorId(id);
-        for (Destino destino : result) {
-            destino.setViaje(viaje);
-        }
         viaje.setDestinos(result);
+        viajeDao.guardarViaje(viaje);
         return viaje.getId();
     }
 }

@@ -93,12 +93,8 @@ public class ControladorViaje  {
 
   @RequestMapping(path = {"/api/viajes/{id}/destinos"}, method = RequestMethod.POST)
   @ResponseBody
-  public Long guardarDestinosPorViaje(@PathVariable Long id, @RequestBody DestinoDto destinosDto) throws InterruptedException, ApiException, IOException {
-
-    destinosDto.setId(
-        servicioViaje.guardarDestinosPorViaje(destinosDto.getId(), destinosDto.getDestinos())
-    );
-
-    return destinosDto.getId();
+  public DestinoDto guardarOActualizarDestinosPorViaje(@PathVariable Long id, @RequestBody DestinoDto destinosDto) throws InterruptedException, ApiException, IOException {
+    servicioViaje.guardarDestinosPorViaje(id, destinosDto.getDestinos());
+    return destinosDto;
   }
 }

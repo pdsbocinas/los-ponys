@@ -23,7 +23,7 @@ public class ViajeDaoImpl implements ViajeDao{
         // guardar el viaje en la base de datos con hibernate Criteria
         Session session = sessionFactory.getCurrentSession();
         // Transaction tx = session.beginTransaction();
-        session.save(viaje);
+        session.saveOrUpdate(viaje);
         // tx.commit();
         // session.close();
     }
