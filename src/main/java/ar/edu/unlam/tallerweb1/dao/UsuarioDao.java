@@ -8,6 +8,7 @@ import java.util.List;
 public interface UsuarioDao {
 	
 	Usuario consultarUsuario (Usuario usuario);
-
+	Usuario consultarUsuarioPorMail(Usuario usuario);
+    void guardarUsuario(Usuario usuario);
   List<Usuario> obtenerTodosPorId(List<Integer> usuariosId);
 }

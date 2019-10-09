@@ -15,7 +15,9 @@ public class Usuario {
 	private Integer id;
 	// para el resto de los atributo no se usan anotaciones entonces se usa el default de hibernate: la columna se llama igual que
 	// el atributo, la misma admite nulos, y el tipo de dato se deduce del tipo de dato de java.
+
 	private String email;
+
 	private String password;
 
 	@Enumerated(EnumType.ORDINAL)
@@ -68,5 +70,13 @@ public class Usuario {
 
 		Usuario usuario = (Usuario) obj;
 		return this.id == usuario.id;
+	}
+
+	public Usuario(String email, String password){
+		this.email= email;
+		this.password = password;
+	}
+	public Usuario(){
+
 	}
 }

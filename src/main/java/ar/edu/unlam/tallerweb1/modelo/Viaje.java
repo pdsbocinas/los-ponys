@@ -45,6 +45,9 @@ public class Viaje {
         this.destinos = destinos;
         this.usuarios = usuarios;
     }
+    public Viaje() {
+
+    }
 
     public Date getFechaInicio() {
         return fechaInicio;
