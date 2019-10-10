@@ -10,4 +10,6 @@ public interface DestinoDao {
   void guardarDestinos(List<Destino> destinos);
 
   List<Destino> obtenerTodosPorId(List<String> destinosId) throws InterruptedException, ApiException, IOException;
+
+  List<Destino> obtenerDestinosDeViajes(Long id);
 }

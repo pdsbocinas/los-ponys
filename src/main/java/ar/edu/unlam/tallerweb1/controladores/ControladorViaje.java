@@ -97,4 +97,11 @@ public class ControladorViaje  {
     servicioViaje.guardarDestinosPorViaje(id, destinosDto.getDestinos());
     return destinosDto;
   }
+
+  @RequestMapping(path = {"/api/viajes/{id}/obtener-destinos"}, method = RequestMethod.GET)
+  @ResponseBody
+  public List<Destino> obtenerDestinosPorViaje(@PathVariable Long id){
+    List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(id);
+    return destinos;
+  }
 }

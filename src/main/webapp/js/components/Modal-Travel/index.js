@@ -55,12 +55,12 @@ class App extends React.Component {
   }
 
   onChangeFrom = async (date) =>{
-    this.setDate(date);
+    const newDate = this.setDate(date);
     await this.setState({ fechaInicio : newDate })
   }
 
   onChangeEnd = async (date) => {
-    this.setDate(date);
+    const newDate = this.setDate(date);
     await this.setState({ fechaFin : newDate })
   }
 
@@ -83,7 +83,7 @@ class App extends React.Component {
           <Modal.Body>
             <Form.Group controlId="titulo">
               <Form.Label>Titulo</Form.Label>
-              <Form.Control type="text" value={this.state.titulo} onChange={e => this.onChangeTitle(e)} placeholder="Ingresa un titulo" />
+              <Form.Control required type="text" value={this.state.titulo} onChange={e => this.onChangeTitle(e)} placeholder="Ingresa un titulo" />
             </Form.Group>
             <Form.Group controlId="compartir">
               <Form.Label>Comparti tu viaje con alguien mas:</Form.Label>

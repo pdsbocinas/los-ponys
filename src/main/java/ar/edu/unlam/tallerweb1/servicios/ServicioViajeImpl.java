@@ -70,4 +70,10 @@ public class ServicioViajeImpl implements ServicioViaje{
         viajeDao.guardarViaje(viaje);
         return viaje.getId();
     }
+
+    @Override
+    public List<Destino> obtenerDestinosPorViaje(Long id) {
+        List<Destino> destinos = destinoDao.obtenerDestinosDeViajes(id);
+        return destinos;
+    }
 }

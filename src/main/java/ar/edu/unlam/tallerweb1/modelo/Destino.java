@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.net.URL;
 import java.util.List;
 
 @Entity
@@ -21,9 +22,15 @@ public class Destino {
     @Column(name = "region")
     private String region;
 
+    @Column(name = "placeId")
+    private String placeId;
+
     // normalizar
     @Column(name = "ciudad")
     private String ciudad;
+
+    @Column(name = "icon")
+    private URL icon;
 
     // normalizar
     @ManyToOne
@@ -80,5 +87,21 @@ public class Destino {
 
     public void setReserva(Reserva reserva) {
         this.reserva = reserva;
+    }
+
+    public URL getIcon() {
+        return icon;
+    }
+
+    public void setIcon(URL icon) {
+        this.icon = icon;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 }

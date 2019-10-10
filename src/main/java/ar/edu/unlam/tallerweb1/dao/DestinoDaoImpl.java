@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.dao;
 
 import ar.edu.unlam.tallerweb1.modelo.Destino;
+import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
@@ -10,8 +11,10 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.PlaceDetails;
 import com.google.maps.model.PlacesSearchResponse;
 import com.google.maps.model.PlacesSearchResult;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +55,8 @@ public class DestinoDaoImpl implements DestinoDao {
       dest.setNombre(place.name);
       dest.setCiudad(place.formattedAddress);
       dest.setRegion(place.adrAddress);
+      dest.setIcon(place.icon);
+      dest.setPlaceId(place.placeId);
       listaDestinos.add(dest);
     }
 
@@ -61,5 +66,15 @@ public class DestinoDaoImpl implements DestinoDao {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     return gson.toJson(contextPlaceApi.results);*/
     return listaDestinos;
+  }
+
+  @Override
+  public List<Destino> obtenerDestinosDeViajes(Long id) {
+    Session session = sessionFactory.getCurrentSession();
+    Viaje v = (Viaje) session.createCriteria(Viaje.class)
+        .add(Restrictions.eq("id", id))
+        .uniqueResult();
+    List<Destino> results = v.getDestinos();
+    return results;
   }
 }

@@ -18,8 +18,19 @@ class App extends React.Component {
 
   // este metodo de ciclo de vida de React se va a ejecutar cuando el componente se termine de cargar en el DOM
   componentDidMount () {
+    const pageURL = window.location.href;
+    const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+    axios.get(`${host}/api/viajes/${lastURLSegmentId}/obtener-destinos`)
+      .then(async v => {
+        const data = v.data
+        await this.setState({
+          destinationSelected: data
+        })
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
-
 
 
   onSearch = async (keyword) => {
@@ -62,7 +73,7 @@ class App extends React.Component {
   }
 
   render () {
-    const { destination, keyword } = this.state;
+    const { destination, keyword, destinationSelected } = this.state;
     return (
       <Container>
         <Row className="justify-content-md-center">
@@ -89,7 +100,7 @@ class App extends React.Component {
             ))}
           </ul>
         )}
-        <List items={this.state.destinationSelected} />
+        <List items={destinationSelected} />
       </Container>
     )
   }
