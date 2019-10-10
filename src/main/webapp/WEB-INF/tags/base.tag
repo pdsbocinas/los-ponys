@@ -33,10 +33,13 @@
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
-                    <ul>
-                        <a href="viajes" title="viaje">
-                            <img src="<c:url value="/images/003-backpack.svg"/>" width="30" height="auto" alt="crear viaje">
-                        </a>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="viajes" title="viaje">
+                                <img src="<c:url value="/images/003-backpack.svg"/>" width="30" height="auto" alt="crear viaje">
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </nav>
