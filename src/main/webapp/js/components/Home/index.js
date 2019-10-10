@@ -6,7 +6,7 @@ import RegisterBox from './Components/RegisterBox.js';
 import Menu from "./Components/Menu";
 import divWithClassName from "react-bootstrap/utils/divWithClassName";
 import axios from "axios";
-
+import { host } from '../../host.js'
 
 class App extends React.Component{
 
@@ -43,13 +43,9 @@ class App extends React.Component{
 
     }
 
-    creaViaje = ()=>{
-        alert('ir a pagina creacion de viajes')
-    }
-
     cerrarSesion = ()=>{
         axios
-            .post("http://localhost:8081/Los_Ponys_war/cerrarSesion")
+            .post(`${host}/cerrarSesion`)
             .then(response =>{
                 console.log(response)
             }).catch(error =>{
@@ -183,10 +179,7 @@ class App extends React.Component{
 
                 <div>
                     <h2>Si sos pura sangre, viaja con nosotros!</h2>
-                    <button
-                        className={"btn btn-primary"}
-                        onClick ={this.creaViaje}
-                    >Creá tu viaje!</button>
+                    <a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a>
                 </div>
             </div>
 

@@ -84,7 +84,7 @@ public class ControladorLogin {
             session.setAttribute("ROL", usuarioBuscado.getRol());
             session.setAttribute("USER", usuarioBuscado);
             model.put("user", usuarioBuscado);
-//            return new ModelAndView("redirect:/home",model);
+//          return new ModelAndView("redirect:/home",model);
             return "correcto";
         } else {
             // si el usuario no existe agrega un mensaje de error en el modelo.

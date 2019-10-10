@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { host } from '../../../host.js'
 
 class Boton extends React.Component{
     constructor(props){
@@ -26,7 +27,7 @@ class Boton extends React.Component{
         if(this.props.titulo === "R"){
             this.props.validate;
             axios
-                .post("http://localhost:8081/Los_Ponys_war/guardarUsuario",data)
+                .post(`${host}/guardarUsuario`, data)
                 .then(response =>{
                     console.log(response)
                     // return window.location.href = `/Los_Ponys_war/home`;
@@ -41,7 +42,7 @@ class Boton extends React.Component{
             })
         }else{
             axios
-                .post("http://localhost:8081/Los_Ponys_war/validar-login2",data)//Devuelve "correcto" o error
+                .post(`${host}/validar-login2`, data)//Devuelve "correcto" o error
                 .then(response =>{
                     console.log(response);
                     if(response.data == "correcto"){

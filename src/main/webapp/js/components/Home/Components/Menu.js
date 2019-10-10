@@ -9,29 +9,29 @@ class Menu extends Component {
     state = {
         data:[ {
             "id": 1,
-            "titulo": "Hoteles",
+            "titulo": "hoteles",
             "icono": "hoteles.png"
         },
         {
             "id": 2,
-            "titulo": "Vuelos",
+            "titulo": "vuelos",
             "icono": "vuelos.png"
         },
         {
             "id": 3,
-            "titulo": "Autos",
+            "titulo": "autos",
             "icono": "autos.png"
         },
         {
             "id": 4,
-            "titulo": "Restaurantes",
+            "titulo": "restaurantes",
             "icono": "restaurantes.png"
         }]
     }
 
     ir = (lugar) =>{
         // alert("voy a ...."+lugar)
-        return window.location.href = "viajes/"+lugar;
+        return window.location.href = "viajes/" + lugar;
     }
 
     render() {
