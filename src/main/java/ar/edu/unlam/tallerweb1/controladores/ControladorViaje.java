@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioDestino;
 import ar.edu.unlam.tallerweb1.servicios.ServicioViaje;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
@@ -36,22 +37,35 @@ public class ControladorViaje  {
   private String apiKey;
 
   @RequestMapping("/viajes")
-  public ModelAndView homeViaje () {
-    // aca hay que mostrar si hay viajes creados
+  public ModelAndView homeViaje (HttpServletRequest request) {
     ModelMap modelos = new ModelMap();
+    ObjectMapper Obj = new ObjectMapper();
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
     List<Viaje> viajes = servicioViaje.obtenerViajes();
+
+    try {
+      String jsonStr = Obj.writeValueAsString(usuario);
+      modelos.put("usuario", jsonStr);
+      // Displaying JSON String
+      System.out.println(jsonStr);
+    }
+
+    catch (IOException e) {
+      e.printStackTrace();
+    }
     modelos.put("viajes", viajes);
     return new ModelAndView("viajes/travel", modelos);
   }
 
   @RequestMapping(path = {"/viajes/{id}"}, method = RequestMethod.GET)
   public ModelAndView crearViajeView (@PathVariable("id") Integer id, HttpServletRequest request) {
+    ModelMap modelos = new ModelMap();
 
     return new ModelAndView("viajes/create");
   }
 
   @RequestMapping(path = {"/viajes/{id}/recorridos"}, method = RequestMethod.GET)
-  public ModelAndView crearRecorrido (HttpServletRequest request) {
+  public ModelAndView crearRecorrido () {
 
     return new ModelAndView("viajes/recorridos");
   }

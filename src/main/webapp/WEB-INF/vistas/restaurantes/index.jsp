@@ -10,12 +10,8 @@
 <body>
 <t:base>
     <jsp:body>
-       <h1>Armá tu recorrido!!</h1>
+        <h1>Busca restaurantes!!</h1>
     </jsp:body>
 </t:base>
-<c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
-<c:set var="modal"><ex:getManifestAssets value="modal.js"/></c:set>
-<script src="<c:url value="${commons}"/>"></script>
-<script src="<c:url value="${modal}"/>"></script>
 </body>
 </html>

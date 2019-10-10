@@ -9,7 +9,7 @@ class Menu extends Component {
     state = {
         data:[ {
             "id": 1,
-            "titulo": "hoteles",
+            "titulo": "alojamientos",
             "icono": "hoteles.png"
         },
         {
@@ -31,7 +31,7 @@ class Menu extends Component {
 
     ir = (lugar) =>{
         // alert("voy a ...."+lugar)
-        return window.location.href = "viajes/" + lugar;
+        return window.location.href = lugar;
     }
 
     render() {

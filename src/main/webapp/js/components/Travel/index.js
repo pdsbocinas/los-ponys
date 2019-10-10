@@ -67,7 +67,8 @@ class App extends React.Component {
       destinos: placeIds
     })
     .then(res => {
-      return res.data;
+      const url =  window.location.href = `${host}/viajes/${lastURLSegmentId}/recorridos`
+      return url;
     })
     .catch(e => console.log(e))
   }

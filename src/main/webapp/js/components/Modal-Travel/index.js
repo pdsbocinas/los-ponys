@@ -66,7 +66,6 @@ class App extends React.Component {
 
   render () {
     const { show } = this.state
-
     return (
       <>
         <div className="card" style={{ width: '18rem' }}>
