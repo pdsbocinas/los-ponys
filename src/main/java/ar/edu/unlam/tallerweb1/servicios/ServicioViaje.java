@@ -17,4 +17,6 @@ public interface ServicioViaje {
     Long guardarDestinosPorViaje(Long id, List<String> destinosId) throws InterruptedException, ApiException, IOException;
 
   List<Destino> obtenerDestinosPorViaje(Long id);
+
+  List<Viaje> obtenerViajesPorUsuario(Integer userId);
 }

@@ -8,4 +8,6 @@ public interface ViajeDao {
   void guardarViaje(Viaje viaje);
   List<Viaje> obtenerViajes();
   Viaje obtenerViajePorId(Long id);
+
+  List<Viaje> obtenerViajesPorUsuario(Integer id);
 }

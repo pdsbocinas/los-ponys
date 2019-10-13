@@ -40,10 +40,23 @@ public class ControladorViaje  {
   public ModelAndView homeViaje (HttpServletRequest request) {
     ModelMap modelos = new ModelMap();
     ObjectMapper Obj = new ObjectMapper();
+    // List<Viaje> viajes = servicioViaje.obtenerViajes();
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
-    List<Viaje> viajes = servicioViaje.obtenerViajes();
 
-    try {
+    if (usuario != null) {
+      Integer userId = usuario.getId();
+      modelos.put("user_id", userId);
+      List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(userId);
+      modelos.put("viajes", viajes);
+      return new ModelAndView("viajes/travel", modelos);
+    } else {
+      modelos.put("user", null);
+      modelos.put("notFound", "Por favor logueate o registrate");
+    }
+
+    return new ModelAndView("redirect:/home", modelos);
+
+/*    try {
       String jsonStr = Obj.writeValueAsString(usuario);
       modelos.put("usuario", jsonStr);
       // Displaying JSON String
@@ -52,9 +65,8 @@ public class ControladorViaje  {
 
     catch (IOException e) {
       e.printStackTrace();
-    }
-    modelos.put("viajes", viajes);
-    return new ModelAndView("viajes/travel", modelos);
+    }*/
+
   }
 
   @RequestMapping(path = {"/viajes/{id}"}, method = RequestMethod.GET)
@@ -117,5 +129,14 @@ public class ControladorViaje  {
   public List<Destino> obtenerDestinosPorViaje(@PathVariable Long id){
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(id);
     return destinos;
+  }
+
+  @RequestMapping(path = {"/api/mis-viajes"}, method = RequestMethod.GET)
+  @ResponseBody
+  public List<Viaje> obtenerMisViajes(HttpServletRequest request){
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+    Integer userId = usuario.getId();
+    List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(userId);
+    return viajes;
   }
 }
