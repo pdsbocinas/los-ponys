@@ -37,7 +37,7 @@ class App extends React.Component {
       fechaInicio: this.state.fechaInicio,
       fechaFin: this.state.fechaFin,
       destinos: [],
-      usuarios: [...parseInt(user_id), email]
+      usuarios: []
     })
     .then(res => {
       const id = res.data.id;

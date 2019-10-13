@@ -33,6 +33,9 @@ module.exports = {
     ],
     modal: [
       './js/components/Modal-Travel/index.js'
+    ],
+    route: [
+      './js/components/route/index.js'
     ]
   },
   output: {

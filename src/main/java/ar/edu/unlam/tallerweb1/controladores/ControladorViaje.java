@@ -77,8 +77,8 @@ public class ControladorViaje  {
   }
 
   @RequestMapping(path = {"/viajes/{id}/recorridos"}, method = RequestMethod.GET)
+  @CrossOrigin
   public ModelAndView crearRecorrido () {
-
     return new ModelAndView("viajes/recorridos");
   }
 

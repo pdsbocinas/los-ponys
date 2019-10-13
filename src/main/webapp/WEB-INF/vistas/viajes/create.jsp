@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>Crea tu Viaje</title>
 </head>
 <body>
 <t:base>
