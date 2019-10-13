@@ -45,4 +45,14 @@ public class ViajeDaoImpl implements ViajeDao{
     return v;
 
   }
+
+  @Override
+  public List<Viaje> obtenerViajesPorUsuario(Integer id) {
+    Session session = sessionFactory.getCurrentSession();
+    Criteria cr = session.createCriteria(Viaje.class)
+        .createAlias("usuarios", "user")
+        .add(Restrictions.eq("user.id", id));
+    List<Viaje> results = cr.list();
+    return results;
+  }
 }

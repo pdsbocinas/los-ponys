@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 import ar.edu.unlam.tallerweb1.dao.PaisesDao;
 import ar.edu.unlam.tallerweb1.modelo.Border;
 import ar.edu.unlam.tallerweb1.modelo.Pais;
+import ar.edu.unlam.tallerweb1.modelo.PaisDto;
 import ar.edu.unlam.tallerweb1.modelo.Translations;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -38,20 +39,20 @@ public class ServicioPaisImpl implements ServicioPais {
     headers.set("x-rapidapi-host", "restcountries-v1.p.rapidapi.com");
     headers.set("x-rapidapi-key", "80gNYJiI9Mmsh06oK3FV9320LjXhp1kPE8ujsnjl5SFk72EHGS");
 
-    HttpEntity<PaisApi> entity = new HttpEntity<>(headers);
+    HttpEntity<PaisDto> entity = new HttpEntity<>(headers);
 
-    ResponseEntity<List<PaisApi>> respEntity = restTemplate
+    ResponseEntity<List<PaisDto>> respEntity = restTemplate
         .exchange("https://restcountries-v1.p.rapidapi.com/all",
             HttpMethod.GET,
             entity,
-            new ParameterizedTypeReference<List<PaisApi>>() {}
+            new ParameterizedTypeReference<List<PaisDto>>() {}
         );
 
     /* Clase que mapea el modelos de la API, en este caso no se mapea todo */
-    List<PaisApi> paisesApi = respEntity.getBody();
+    List<PaisDto> paisesApi = respEntity.getBody();
 
     // se itera y se va seteando nuestro modelo con los datos
-    for (PaisApi paisApi : paisesApi) {
+    for (PaisDto paisApi : paisesApi) {
       // aca convierto de ese modelo a nuestro modelo ---> https://www.oscarblancarteblog.com/2019/09/05/java-converter-pattern/ Investigar
       Pais pais = new Pais();
       // se setea tipo string

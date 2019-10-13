@@ -106,7 +106,8 @@ public class ControladorLogin {
                               @ModelAttribute("error") String error1,
                               @ModelAttribute("exito") String exito,
                               @ModelAttribute("errorLogin") String errorLogin,
-                              @ModelAttribute("login") String login) {
+                              @ModelAttribute("login") String login,
+                              @ModelAttribute("notFound") String notFound) {
 
       HttpSession session = request.getSession();
       Usuario user = (Usuario)session.getAttribute("USER");
@@ -114,6 +115,9 @@ public class ControladorLogin {
 
       ModelMap model = new ModelMap();
 
+      if (notFound != "") {
+        model.put("notFound",notFound);
+      }
       if(error1 != ""){
           model.put("error1",error1);
       }

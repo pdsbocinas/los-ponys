@@ -13,10 +13,13 @@
 	<jsp:body>
 
 <%--		<h2>Bienvenido ${email}</h2>--%>
+		<c:if test="${not empty notFound}">
+			<h4><span>${notFound}</span></h4>
+			<br>
+		</c:if>
 		<h3>${error1}</h3>
 		<h3>${exito}</h3>
 		<div id="root"></div>
-
 	</jsp:body>
 </t:base>
 <script>
