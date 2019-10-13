@@ -10,7 +10,7 @@
 <body>
 <t:base>
     <jsp:body>
-       Hola!!
+       <h1>Armá tu recorrido!!</h1>
     </jsp:body>
 </t:base>
 <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>

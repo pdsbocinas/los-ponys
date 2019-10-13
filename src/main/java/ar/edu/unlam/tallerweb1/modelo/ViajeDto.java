@@ -17,6 +17,8 @@ public class ViajeDto {
 
   private List<Integer> usuarios;
 
+  private String icon;
+
   public String getTitulo() {
     return titulo;
   }
@@ -63,5 +65,13 @@ public class ViajeDto {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getIcon() {
+    return icon;
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
   }
 }

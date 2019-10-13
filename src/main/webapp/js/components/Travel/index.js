@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from 'axios';
-import { host } from '../../host.js'
+import { host } from '../../host.js';
+import List from './components/List';
+import { Container, Row, Button } from 'react-bootstrap';
 
 // esto es una de las formas para hacer consumo de apis via json, mirar el Controller Pais, metodo getPaisesJson
 class App extends React.Component {
@@ -11,19 +13,30 @@ class App extends React.Component {
     destination: [],
     keyword: '',
     loading: true,
-    selected: []
+    destinationSelected: []
   }
 
   // este metodo de ciclo de vida de React se va a ejecutar cuando el componente se termine de cargar en el DOM
   componentDidMount () {
-    // AXIOS es una libreria para hacer GET y POST a un endpoint cualquiera, devuelve lo que se llama una Promesa
-    // con ese .then
+    const pageURL = window.location.href;
+    const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+    axios.get(`${host}/api/viajes/${lastURLSegmentId}/obtener-destinos`)
+      .then(async v => {
+        const data = v.data
+        await this.setState({
+          destinationSelected: data
+        })
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
+
 
   onSearch = async (keyword) => {
     await this.setState({ keyword })
     if (keyword.length > 4) {
-      axios.get(`${host}/api/getDestinations`, {
+      axios.get(`${host}/api/destinos`, {
         params: {
           keyword: this.state.keyword
         }
@@ -37,43 +50,59 @@ class App extends React.Component {
     }
   }
 
-  onSelect = (destin) => {
-    this.setState({
-      selected: this.state.selected.concat(destin)
+  onSelect = async (destin) => {
+    console.log(destin)
+    await this.setState({
+      destinationSelected: [...this.state.destinationSelected].filter(v => v.placeId !== destin.placeId).concat(destin)
     })
   }
 
+  onSaveDestination = () => {
+    const { destinationSelected } = this.state;
+    const placeIds = destinationSelected.map(v => { return (v.placeId)});
+    const pageURL = window.location.href;
+    const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+
+    axios.post(`${host}/api/viajes/${lastURLSegmentId}/destinos`, {
+      destinos: placeIds
+    })
+    .then(res => {
+      const url =  window.location.href = `${host}/viajes/${lastURLSegmentId}/recorridos`
+      return url;
+    })
+    .catch(e => console.log(e))
+  }
+
   render () {
-    const { destination, keyword, selected } = this.state;
+    const { destination, keyword, destinationSelected } = this.state;
     return (
-      <>
-        <form>
-          <input class="form-control" style={{ maxWidth: '600px', height: '45px', margin: '15px auto 20px' }} type="text" value={keyword} onChange={ev => this.onSearch(ev.target.value)} placeholder='Buscar por destino' />
-        </form>
-        <ul style={{ maxWidth: '600px', height: '350px', margin: '15px auto 40px', overflow: 'scroll' }} className="list-group">
-          {destination.map((destin, i) => (
-            <li key={`${i}-${destin.name}`} className="list-group-item">
-              <a onClick={() => this.onSelect(destin)}>{destin.name}</a>
-            </li>
-          ))}
-        </ul>
-        {selected.length !== 0 && (
-          <>
-          {selected.map(selected => {
-            <div className="container">
-              <div className="card" style={{ width: '18rem'}}>
-                <img src={selected.icon} className="card-img-top" alt={selected.name} />
-                <div className="card-body">
-                  <h5 className="card-title">{selected.name}</h5>
-                  <p className="card-text">{selected.formattedAddress}</p>
-                  <a href="#" className="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-            </div>
-          })}
-          </>
+      <Container>
+        <Row className="justify-content-md-center">
+          <form style={{
+            width: '53%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <input className="form-control" style={{maxWidth: '600px', height: '45px', margin: '0px'}} type="text" value={keyword} onChange={ev => this.onSearch(ev.target.value)} placeholder='Buscar por destino'/>
+            <Button style={{
+              width: '230px',
+              height: '45px',
+              margin: '0'
+            }} onClick={this.onSaveDestination} variant="primary">Guardar destinos</Button>
+          </form>
+        </Row>
+        {keyword.length > 4 && (
+          <ul style={{ maxWidth: '600px', height: '350px', margin: '15px auto 40px', overflow: 'scroll' }} className="list-group">
+            {destination.map((destin, i) => (
+              <li key={`${i}-${destin.name}`} className="list-group-item">
+                <a style={{ cursor: 'pointer'}} onClick={() => this.onSelect(destin)}>{destin.name}</a>
+              </li>
+            ))}
+          </ul>
         )}
-      </>
+        <List items={destinationSelected} />
+      </Container>
     )
   }
 }

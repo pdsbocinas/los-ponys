@@ -38,6 +38,9 @@
         </div>
     </jsp:body>
 </t:base>
+<script>
+  var user_id = "${user_id}";
+</script>
 <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
 <c:set var="modal"><ex:getManifestAssets value="modal.js"/></c:set>
 <script src="<c:url value="${commons}"/>"></script>

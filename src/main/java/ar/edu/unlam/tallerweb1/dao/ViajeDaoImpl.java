@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ public class ViajeDaoImpl implements ViajeDao{
         // guardar el viaje en la base de datos con hibernate Criteria
         Session session = sessionFactory.getCurrentSession();
         // Transaction tx = session.beginTransaction();
-        session.save(viaje);
+        session.saveOrUpdate(viaje);
         // tx.commit();
         // session.close();
     }
@@ -34,4 +35,24 @@ public class ViajeDaoImpl implements ViajeDao{
         List results = cr.list();
         return results;
     }
+
+  @Override
+  public Viaje obtenerViajePorId(Long id) {
+    Session session = sessionFactory.getCurrentSession();
+    Viaje v = (Viaje) session.createCriteria(Viaje.class)
+        .add(Restrictions.eq("id", id))
+        .uniqueResult();
+    return v;
+
+  }
+
+  @Override
+  public List<Viaje> obtenerViajesPorUsuario(Integer id) {
+    Session session = sessionFactory.getCurrentSession();
+    Criteria cr = session.createCriteria(Viaje.class)
+        .createAlias("usuarios", "user")
+        .add(Restrictions.eq("user.id", id));
+    List<Viaje> results = cr.list();
+    return results;
+  }
 }

@@ -14,6 +14,7 @@ class App extends React.Component {
       titulo: "",
       mails: [],
       fechaInicio: new Date(),
+      fechaFin: new Date(),
       hoy: new Date ()
     }
   }
@@ -30,16 +31,13 @@ class App extends React.Component {
 
   onSave = () => {
     //validacion
-
-    if (this.state.fechaInicio < this.state.hoy ) {
-      alert("error");
-      return;
-    }
-
     // solo le mando para que setee el titulo
-    axios.post(`${host}/guardarViaje`, {
+    axios.post(`${host}/api/viajes`, {
       titulo: this.state.titulo,
-      fechaInicio: this.state.fechaInicio
+      fechaInicio: this.state.fechaInicio,
+      fechaFin: this.state.fechaFin,
+      destinos: [],
+      usuarios: [...parseInt(user_id), email]
     })
     .then(res => {
       const id = res.data.id;
@@ -49,21 +47,25 @@ class App extends React.Component {
     })
   }
 
-  onChange = async (date) =>{
+  setDate = (date) =>{
     const day = date.getDate();
     const month = date.getMonth();
     const year = date.getFullYear();
-    const newDate = new Date ( year, month, day );
-    alert("dia"+day+"mes"+month+"año"+year);
-    alert(newDate);
-    await this.setState({ fechaInicio : date })
+    return new Date ( year, month, day );
   }
 
+  onChangeFrom = async (date) =>{
+    const newDate = this.setDate(date);
+    await this.setState({ fechaInicio : newDate })
+  }
 
+  onChangeEnd = async (date) => {
+    const newDate = this.setDate(date);
+    await this.setState({ fechaFin : newDate })
+  }
 
   render () {
     const { show } = this.state
-
     return (
       <>
         <div className="card" style={{ width: '18rem' }}>
@@ -80,7 +82,7 @@ class App extends React.Component {
           <Modal.Body>
             <Form.Group controlId="titulo">
               <Form.Label>Titulo</Form.Label>
-              <Form.Control type="text" value={this.state.titulo} onChange={e => this.onChangeTitle(e)} placeholder="Ingresa un titulo" />
+              <Form.Control required type="text" value={this.state.titulo} onChange={e => this.onChangeTitle(e)} placeholder="Ingresa un titulo" />
             </Form.Group>
             <Form.Group controlId="compartir">
               <Form.Label>Comparti tu viaje con alguien mas:</Form.Label>
@@ -89,8 +91,6 @@ class App extends React.Component {
                 <Badge variant="secondary">pds.gomez@gmail.com</Badge>
               </h5>
             </Form.Group>
-
-
             <Row>
               <Col>
                 <Form.Group controlId="fechaInicio">
@@ -105,7 +105,7 @@ class App extends React.Component {
               <Col>
                 <Form.Group controlId="fechaFin">
                   <Form.Label>Fin:</Form.Label>
-                  <Form.Control type="text" placeholder="DD/MM/AAAA" />
+                  <Form.Control type="text" value={this.state.fechaFin} placeholder="DD/MM/AAAA" />
                 </Form.Group>
               </Col>
             </Row>
@@ -113,14 +113,14 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Calendar
-                    onChange={this.onChange}
+                    onChange={this.onChangeFrom}
                     value={this.state.fechaInicio}
                 />
               </Col>
               <Col>
                 <Calendar
-                    // onChange={this.onChange}
-                    // value={this.state.date}
+                  onChange={this.onChangeEnd}
+                  value={this.state.fechaFin}
                 />
               </Col>
             </Row>

@@ -29,5 +29,4 @@ public class ServicioLoginImpl implements ServicioLogin {
 	public void setUsuarioDao (UsuarioDao uDao) {
 		servicioLoginDao = uDao;
 	}
-
 }

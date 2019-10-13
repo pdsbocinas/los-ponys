@@ -28,6 +28,9 @@ module.exports = {
     login: [
       './js/components/Login/index.js'
     ],
+    home: [
+      './js/components/Home/index.js'
+    ],
     modal: [
       './js/components/Modal-Travel/index.js'
     ]
