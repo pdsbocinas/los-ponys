@@ -85,7 +85,6 @@ class App extends React.Component {
     const { destination, keyword, destinationSelected } = this.state;
     return (
       <Container>
-          <h2>probandooooooo</h2>
         <Row className="justify-content-md-center">
           <form style={{
             width: '53%',

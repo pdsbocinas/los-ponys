@@ -11,7 +11,6 @@
 <body>
 <t:base>
     <jsp:body>
-        <h2>Desde la vista</h2>
         <div id="root"></div>
     </jsp:body>
 </t:base>
