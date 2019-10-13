@@ -16,6 +16,14 @@ class App extends React.Component {
     destinationSelected: []
   }
 
+  delete = (nombre) =>{
+    alert("Elimino el destino:" + nombre);
+    console.log(nombre);
+    const destinationSelectedCopy = Object.assign([], this.state.destinationSelected);
+    destinationSelectedCopy.splice(nombre, 1);
+    this.setState({destinationSelected: destinationSelectedCopy});
+}
+
   // este metodo de ciclo de vida de React se va a ejecutar cuando el componente se termine de cargar en el DOM
   componentDidMount () {
     const pageURL = window.location.href;
@@ -77,6 +85,7 @@ class App extends React.Component {
     const { destination, keyword, destinationSelected } = this.state;
     return (
       <Container>
+          <h2>probandooooooo</h2>
         <Row className="justify-content-md-center">
           <form style={{
             width: '53%',
@@ -101,7 +110,9 @@ class App extends React.Component {
             ))}
           </ul>
         )}
-        <List items={destinationSelected} />
+        <List
+            items={destinationSelected}
+            delete={(nombre)=>this.delete(nombre)}/>
       </Container>
     )
   }

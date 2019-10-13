@@ -1,10 +1,16 @@
 import React from "react";
 import { Col, Row } from 'react-bootstrap';
 
+const eliminar = (id, elimina) =>{
+  elimina;
+}
 const List = props => (
+
   <>
+
     {props.items.length !== 0 && (
       <>
+
         <p>Mis destinos:</p>
         <Row>
         {
@@ -17,6 +23,10 @@ const List = props => (
                     <h5 className="card-title">{s.name || s.nombre}</h5>
                     <p className="card-text">{s.formattedAddress || s.ciudad}</p>
                     <a href="#" className="btn btn-primary">Ir al mapa</a>
+                    <button
+                        className={"btn btn-danger"}
+                        onClick={() => eliminar(s.placeId, props.delete(s.placeId))}>Eliminar</button>
+
                   </div>
                 </div>
               </Col>
