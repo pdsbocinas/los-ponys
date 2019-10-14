@@ -1,7 +1,8 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
-import ar.edu.unlam.tallerweb1.servicios.ServicioDestino;
+import ar.edu.unlam.tallerweb1.servicios.ServicioEmail;
+import ar.edu.unlam.tallerweb1.servicios.ServicioRegistroUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioViaje;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -12,6 +13,7 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.PlacesSearchResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.*;
 
 import javax.inject.Inject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,6 +32,12 @@ public class ControladorViaje  {
 
   @Inject
   private ServicioViaje servicioViaje;
+
+  @Inject
+  private ServicioEmail servicioEmail;
+
+  @Inject
+  private ServicioRegistroUsuario servicioRegistroUsuario;
 
   @Value("${datasource.apiKey}")
   private String apiKey;
@@ -45,7 +51,9 @@ public class ControladorViaje  {
 
     if (usuario != null) {
       Integer userId = usuario.getId();
+      String email = usuario.getEmail();
       modelos.put("user_id", userId);
+      modelos.put("email", email);
       List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(userId);
       modelos.put("viajes", viajes);
       return new ModelAndView("viajes/travel", modelos);
@@ -67,6 +75,13 @@ public class ControladorViaje  {
       e.printStackTrace();
     }*/
 
+  }
+
+  @RequestMapping(path = "/eliminar-viaje", method = RequestMethod.GET)
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
+  public ModelAndView borrarViaje(@RequestParam(value = "id") Long viajeId, HttpServletResponse response) {
+    servicioViaje.borrarViaje(viajeId);
+    return new ModelAndView("redirect:/home");
   }
 
   @RequestMapping(path = {"/viajes/{id}"}, method = RequestMethod.GET)
@@ -109,10 +124,25 @@ public class ControladorViaje  {
             viajeDto.getTitulo(),
             viajeDto.getFechaInicio(),
             viajeDto.getFechaFin(),
+            viajeDto.getPrivacidad(),
             viajeDto.getDestinos(),
             viajeDto.getUsuarios()
         )
     );
+
+    for (String email : viajeDto.getUsuarios()) {
+      Mail mail = new Mail();
+      Usuario usuario = servicioRegistroUsuario.obtenerUsuarioPorMail(email);
+
+      if (usuario != null) {
+        mail.setUsuario(usuario);
+        mail.setPara(email);
+        mail.setContenido("te agregaron exitosamente");
+        mail.setAsunto("Anotado para viajar!!");
+        servicioEmail.mandarMail(mail);
+        servicioEmail.guardarEmail(mail);
+      }
+    }
 
     return viajeDto;
   }

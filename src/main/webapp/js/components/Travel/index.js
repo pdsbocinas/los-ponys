@@ -17,8 +17,6 @@ class App extends React.Component {
   }
 
   delete = (nombre) =>{
-    alert("Elimino el destino:" + nombre);
-    console.log(nombre);
     const destinationSelectedCopy = Object.assign([], this.state.destinationSelected);
     destinationSelectedCopy.splice(nombre, 1);
     this.setState({destinationSelected: destinationSelectedCopy});

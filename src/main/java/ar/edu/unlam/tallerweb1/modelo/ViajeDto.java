@@ -15,9 +15,11 @@ public class ViajeDto {
 
   private List<String> destinos;
 
-  private List<Integer> usuarios;
+  private List<String> usuarios;
 
   private String icon;
+
+  private String privacidad;
 
   public String getTitulo() {
     return titulo;
@@ -55,11 +57,11 @@ public class ViajeDto {
     return id;
   }
 
-  public List<Integer> getUsuarios() {
+  public List<String> getUsuarios() {
     return usuarios;
   }
 
-  public void setUsuarios(List<Integer> usuarios) {
+  public void setUsuarios(List<String> usuarios) {
     this.usuarios = usuarios;
   }
 
@@ -73,5 +75,13 @@ public class ViajeDto {
 
   public void setIcon(String icon) {
     this.icon = icon;
+  }
+
+  public String getPrivacidad() {
+    return privacidad;
+  }
+
+  public void setPrivacidad(String privacidad) {
+    this.privacidad = privacidad;
   }
 }

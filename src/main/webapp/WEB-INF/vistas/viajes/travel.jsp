@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ex" uri ="/WEB-INF/custom.tld" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -29,17 +30,20 @@
                                 <p class="card-text">Crea y comparti tu experiencia de viajar.</p>
                                 <a href="viajes/${viaje.getId()}">${viaje.getTitulo()}</a>
                             </div>
+                            <form:form action="eliminar-viaje" method="GET">
+                                <input type="hidden" name="id" value="${viaje.getId()}">
+                                <button type="submit">Borrar viaje</button>
+                            </form:form>
                         </div>
                     </div>
                 </c:forEach>
             </div>
-
-
         </div>
     </jsp:body>
 </t:base>
 <script>
   var user_id = "${user_id}";
+  var email = "${email}";
 </script>
 <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
 <c:set var="modal"><ex:getManifestAssets value="modal.js"/></c:set>

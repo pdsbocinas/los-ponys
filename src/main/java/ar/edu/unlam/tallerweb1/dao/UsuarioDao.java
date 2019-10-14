@@ -9,6 +9,7 @@ public interface UsuarioDao {
 	
 	Usuario consultarUsuario (Usuario usuario);
 	Usuario consultarUsuarioPorMail(Usuario usuario);
+  Usuario obtenerUsuarioPorMail(String email);
     void guardarUsuario(Usuario usuario);
-  List<Usuario> obtenerTodosPorId(List<Integer> usuariosId);
+  List<Usuario> obtenerTodosPorId(List<String> usuariosId);
 }

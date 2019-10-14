@@ -11,7 +11,7 @@ import java.util.List;
 public interface ServicioViaje {
     String iniciarViaje(Date inicio, Date fin, String destino);
     List<Viaje> obtenerViajes();
-    Long crearViaje(String titulo, Date fechaInicio, Date fechaFin, List<String> destinos, List<Integer> usuarios) throws InterruptedException, ApiException, IOException;
+    Long crearViaje(String titulo, Date fechaInicio, Date fechaFin, String privacidad, List<String> destinos, List<String> usuarios) throws InterruptedException, ApiException, IOException;
     Viaje obtenerViajePorId(Long id);
 
     Long guardarDestinosPorViaje(Long id, List<String> destinosId) throws InterruptedException, ApiException, IOException;
@@ -19,4 +19,6 @@ public interface ServicioViaje {
   List<Destino> obtenerDestinosPorViaje(Long id);
 
   List<Viaje> obtenerViajesPorUsuario(Integer userId);
+
+  void borrarViaje(Long id);
 }

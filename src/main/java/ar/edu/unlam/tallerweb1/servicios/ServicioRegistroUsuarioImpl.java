@@ -24,6 +24,7 @@ public class ServicioRegistroUsuarioImpl implements ServicioRegistroUsuario {
         return usuario.getId();
     }
 
+    // hacer refactor aca
     @Override
     public Boolean consultarUsuarioPorMail(Usuario usuario) {
         if(usuarioDao.consultarUsuarioPorMail(usuario) != null){
@@ -36,5 +37,12 @@ public class ServicioRegistroUsuarioImpl implements ServicioRegistroUsuario {
     @Override
     public void guardar(Usuario usuario) {
         usuarioDao.guardarUsuario(usuario);
+    }
+
+    // hacer refactor aca
+    @Override
+    public Usuario obtenerUsuarioPorMail(String email) {
+        Usuario usuario = usuarioDao.obtenerUsuarioPorMail(email);
+        return usuario;
     }
 }

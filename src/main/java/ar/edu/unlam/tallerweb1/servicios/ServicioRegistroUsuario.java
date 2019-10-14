@@ -9,4 +9,5 @@ public interface ServicioRegistroUsuario {
     void guardar(Usuario usuario);
     Integer crearUsuario(String email, String password) throws InterruptedException, ApiException, IOException;
     Boolean consultarUsuarioPorMail(Usuario usuario);
+    Usuario obtenerUsuarioPorMail(String email);
 }
