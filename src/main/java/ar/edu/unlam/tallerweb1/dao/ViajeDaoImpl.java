@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.dao;
 
+import ar.edu.unlam.tallerweb1.modelo.Destino;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -54,5 +56,15 @@ public class ViajeDaoImpl implements ViajeDao{
         .add(Restrictions.eq("user.id", id));
     List<Viaje> results = cr.list();
     return results;
+  }
+
+  @Override
+  public void borrarViaje(Long id) {
+    Session session = sessionFactory.getCurrentSession();
+    Viaje viaje = (Viaje) session.createCriteria(Viaje.class)
+        .add(Restrictions.eq("id", id))
+        .uniqueResult();
+
+    session.delete(viaje);
   }
 }

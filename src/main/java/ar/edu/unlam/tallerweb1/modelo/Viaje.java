@@ -2,6 +2,8 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -27,18 +29,22 @@ public class Viaje {
     @Column(name = "fechaFin")
     private Date fechaFin;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade = { CascadeType.PERSIST }, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(name="viaje_id")
     private List<Destino> destinos;
 
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany(cascade = { CascadeType.PERSIST })
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(name = "viaje_usuario",
+    @JoinTable(
+        name = "viaje_usuario",
         joinColumns = @JoinColumn(name = "viaje_id"),
         inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
     private List<Usuario> usuarios;
+
+    @Column(name = "privacidad")
+    private String privacidad;
 
     public Date getFechaInicio() {
         return fechaInicio;
@@ -86,5 +92,13 @@ public class Viaje {
 
     public void setDestinos(List<Destino> destinos) {
         this.destinos = destinos;
+    }
+
+    public String getPrivacidad() {
+        return privacidad;
+    }
+
+    public void setPrivacidad(String privacidad) {
+        this.privacidad = privacidad;
     }
 }

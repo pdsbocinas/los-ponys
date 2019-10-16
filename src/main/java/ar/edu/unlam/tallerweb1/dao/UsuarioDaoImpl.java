@@ -45,18 +45,26 @@ public class UsuarioDaoImpl implements UsuarioDao {
   }
 
   @Override
+  public Usuario obtenerUsuarioPorMail(String email) {
+    final Session session = sessionFactory.getCurrentSession();
+    return (Usuario) session.createCriteria(Usuario.class)
+        .add(Restrictions.eq("email", email))
+        .uniqueResult();
+  }
+
+  @Override
   public void guardarUsuario(Usuario usuario) {
     final Session session = sessionFactory.getCurrentSession();
     session.save(usuario);
   }
 
   @Override
-  public List<Usuario> obtenerTodosPorId(List<Integer> usuariosId) {
+  public List<Usuario> obtenerTodosPorId(List<String> usuariosId) {
     List<Usuario> usuarios = new ArrayList<>();
     final Session session = sessionFactory.getCurrentSession();
-    for (Integer id : usuariosId) {
+    for (String email : usuariosId) {
       Usuario user = (Usuario) session.createCriteria(Usuario.class)
-          .add(Restrictions.eq("id", id))
+          .add(Restrictions.eq("email", email))
           .uniqueResult();
       usuarios.add(user);
     }

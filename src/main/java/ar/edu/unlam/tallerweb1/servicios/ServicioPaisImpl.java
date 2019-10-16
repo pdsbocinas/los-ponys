@@ -25,7 +25,7 @@ public class ServicioPaisImpl implements ServicioPais {
 
   // esta anotation se va a ejecutar cuando se restartee la aplicacion. Haciendo esto alimentamos (populamos) la base de datos
   // y desp consumimos desde la base. EL primer request va tardar y desp ya no.
-  // @PostConstruct
+  @PostConstruct
   public void init() {
 
     // aca hacer la peticion y guardar en la base de datos

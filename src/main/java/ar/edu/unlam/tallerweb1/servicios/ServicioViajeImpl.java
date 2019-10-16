@@ -41,7 +41,7 @@ public class ServicioViajeImpl implements ServicioViaje{
     }
 
     @Override
-    public Long crearViaje(String titulo, Date fechaInicio, Date fechaFin, List<String> destinosId, List<Integer> usuariosId) throws InterruptedException, ApiException, IOException {
+    public Long crearViaje(String titulo, Date fechaInicio, Date fechaFin, String privacidad, List<String> destinosId, List<String> usuariosId) throws InterruptedException, ApiException, IOException {
 
         List<Destino> destinos = destinoDao.obtenerTodosPorId(destinosId);
         List<Usuario> usuarios = usuarioDao.obtenerTodosPorId(usuariosId);
@@ -52,6 +52,7 @@ public class ServicioViajeImpl implements ServicioViaje{
         viaje.setFechaFin(fechaFin);
         viaje.setDestinos(destinos);
         viaje.setUsuarios(usuarios);
+        viaje.setPrivacidad(privacidad);
         viajeDao.guardarViaje(viaje);
         return viaje.getId();
     }
@@ -81,5 +82,10 @@ public class ServicioViajeImpl implements ServicioViaje{
     public List<Viaje> obtenerViajesPorUsuario(Integer userId) {
         List<Viaje> viajes = viajeDao.obtenerViajesPorUsuario(userId);
         return viajes;
+    }
+
+    @Override
+    public void borrarViaje(Long id) {
+        viajeDao.borrarViaje(id);
     }
 }
