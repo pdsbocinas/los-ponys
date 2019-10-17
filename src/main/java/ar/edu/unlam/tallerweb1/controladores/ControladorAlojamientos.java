@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,5 +93,15 @@ public class ControladorAlojamientos {
     return new ModelAndView("alojamientos/index", model);
   }
 
+  @RequestMapping(path = {"/alojamientos/{id}"}, method = RequestMethod.GET)
+  public ModelAndView alojamientoView (@PathVariable("id") Integer id, HttpServletRequest request) {
+    ModelMap modelos = new ModelMap();
 
+    return new ModelAndView("alojamientos/detail");
+  }
+
+
+  public void setServicioAlojamiento(ServicioAlojamiento servicioAlojamiento) {
+    this.servicioAlojamiento = servicioAlojamiento;
+  }
 }

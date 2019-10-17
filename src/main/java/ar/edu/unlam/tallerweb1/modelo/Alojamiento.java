@@ -48,7 +48,7 @@ public class Alojamiento {
     @ManyToOne
     private TipoDeViaje tipo;
 
-    private Boolean bookeable;
+    private boolean bookeable;
 
     private Date desde;
 
@@ -152,11 +152,11 @@ public class Alojamiento {
         this.categoria = categoria;
     }
 
-    public Boolean getBookeable() {
+    public boolean getBookeable() {
         return bookeable;
     }
 
-    public void setBookeable(Boolean bookeable) {
+    public void setBookeable(boolean bookeable) {
         this.bookeable = bookeable;
     }
 

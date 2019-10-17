@@ -17,7 +17,9 @@
                     <div class="col-4" style="display: flex;">
                         <div class="card" style="width: 18rem;" >
                             <div class="card-body">
-                                <h5 class="card-title">${alojamiento.getNombre()}</h5>
+                                <a href="alojamientos/${alojamiento.getId()}">
+                                    <h5 class="card-title">${alojamiento.getNombre()}</h5>
+                                </a>
                             </div>
                             <div>Fecha desde: ${alojamiento.getDesde()}</div>
                             <div>Fecha hasta: ${alojamiento.getHasta()}</div>
