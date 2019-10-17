@@ -10,7 +10,25 @@
 <body>
 <t:base>
     <jsp:body>
-        <h1>Busca alojamientos!!</h1>
+        <div class="container">
+            <h1>Busca alojamientos!!</h1>
+            <div class="row">
+                <c:forEach var="alojamiento" items="${alojamientos}">
+                    <div class="col-4" style="display: flex;">
+                        <div class="card" style="width: 18rem;" >
+                            <div class="card-body">
+                                <h5 class="card-title">${alojamiento.getNombre()}</h5>
+                            </div>
+                            <div>Fecha desde: ${alojamiento.getDesde()}</div>
+                            <div>Fecha hasta: ${alojamiento.getHasta()}</div>
+                        </div>
+                    </div>
+                </c:forEach>
+                <c:if test="${empty alojamientos}">
+                    No se encontramos alojamientos!!
+                </c:if>
+            </div>
+        </div>
     </jsp:body>
 </t:base>
 </body>
