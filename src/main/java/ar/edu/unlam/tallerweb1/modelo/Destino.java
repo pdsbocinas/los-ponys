@@ -39,7 +39,31 @@ public class Destino {
     @ManyToOne
     @JsonIgnore
     private Reserva reserva;
+
+    @Column(name = "lat")
+    private Double lat;
+
+    @Column(name = "lng")
+    private Double lng;
+
     // Getters and Setters
+
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
 
     public Integer getId() {
         return id;

@@ -169,4 +169,23 @@ public class ControladorViaje  {
     List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(userId);
     return viajes;
   }
+
+  @RequestMapping(path = {"/api/viajes-publicos"}, method = RequestMethod.GET)
+  @ResponseBody
+  public List<Viaje> obtenerViajesPublicos(HttpServletRequest request){
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+    Integer userId = usuario.getId();
+    List<Viaje> viajes = servicioViaje.obtenerViajes();
+    return viajes;
+  }
+
+  @RequestMapping(path = {"/viajes/{id}/comentar"}, method = RequestMethod.GET)
+  @ResponseBody
+  public ModelAndView comentarViaje(HttpServletRequest request){
+    ModelMap modelos = new ModelMap();
+
+    return new ModelAndView("viajes/comentar");
+  }
+
+
 }

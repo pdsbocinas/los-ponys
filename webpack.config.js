@@ -36,6 +36,9 @@ module.exports = {
     ],
     route: [
       './js/components/route/index.js'
+    ],
+    route: [
+      './js/components/posteo/index.js'
     ]
   },
   output: {
