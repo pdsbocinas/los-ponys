@@ -6,6 +6,6 @@ public class viajeControllerTest {
 
   @Test
   public void creacionDeViajeExitosa () {
-      
+
   }
 }

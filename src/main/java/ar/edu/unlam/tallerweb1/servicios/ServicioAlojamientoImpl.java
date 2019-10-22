@@ -45,4 +45,9 @@ public class ServicioAlojamientoImpl implements ServicioAlojamiento {
   public List<Alojamiento> obtenerAquellosConDescuento(Integer descuento) {
     return alojamientoDao.obtenerAquellosConDescuento(descuento);
   }
+
+  @Override
+  public List<Alojamiento> obtenerAlojamientosParametrizados(Date desde, Date hasta, Integer precioDesde, Integer precioHasta, Integer rating, Boolean bookeable, Integer descuento, Integer offset, Integer size) {
+    return alojamientoDao.obtenerAlojamientosParametrizados(desde, hasta, precioDesde, precioHasta, rating, bookeable, descuento, offset, size);
+  }
 }

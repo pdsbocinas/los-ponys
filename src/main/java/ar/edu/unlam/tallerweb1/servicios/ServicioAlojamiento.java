@@ -12,4 +12,6 @@ public interface ServicioAlojamiento {
   List<Alojamiento> obtenerPorRating(Integer rating);
   List<Alojamiento> obtenerAquellosConReserva(Boolean bookeable);
   List<Alojamiento> obtenerAquellosConDescuento(Integer descuento);
+
+  List<Alojamiento> obtenerAlojamientosParametrizados(Date desde, Date hasta, Integer precioDesde, Integer precioHasta, Integer rating, Boolean bookeable, Integer descuento, Integer offset, Integer size);
 }

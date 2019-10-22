@@ -12,15 +12,10 @@ class Map extends Component {
         directions: null
     };
 
-    componentDidMount() {
+    direction = (origin, destination) => {
         const directionsService = new google.maps.DirectionsService();
-
-        // const origin = { lat: 40.756795, lng: -73.954298 };
-        // const destination = { lat: 41.756795, lng: -78.954298 };
-        const origin = { lat: -32.888943, lng: -68.844954 };
-        const destination = { lat: -31.534986, lng: -68.535594 };
-        
-        directionsService.route(
+        return (
+          directionsService.route(
             {
                 origin: origin,
                 destination: destination,
@@ -40,7 +35,19 @@ class Map extends Component {
                     console.error(`error fetching directions ${result}`);
                 }
             }
-        );
+          )
+        )
+
+    }
+
+    componentDidMount() {
+
+        // const origin = { lat: 40.756795, lng: -73.954298 };
+        // const destination = { lat: 41.756795, lng: -78.954298 };
+        const origin = { lat: -32.888943, lng: -68.844954 };
+        const destination = { lat: -31.534986, lng: -68.535594 };
+        const result = origin && destionation && this.direction(orgin, destination);
+
     }
 
     render() {

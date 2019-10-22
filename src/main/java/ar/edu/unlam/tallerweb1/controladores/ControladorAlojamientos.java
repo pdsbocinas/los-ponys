@@ -35,27 +35,17 @@ public class ControladorAlojamientos {
       @RequestParam(value="rating", required=false) Integer rating,
       @RequestParam(value="bookeable", required=false) Boolean bookeable,
       @RequestParam(value="descuento", required=false) Integer descuento,
+      @RequestParam(value="offset", required = false, defaultValue = "0") Integer offset,
+      @RequestParam(value="size", required= false, defaultValue = "10") Integer size,
       HttpServletRequest request
       ) {
-
-    /*ArrayList <Alojamiento> list = new ArrayList<>();
-
-    allParams.entrySet().stream().forEach(
-        pair -> {
-          if (pair.getKey() == "date") {
-            String[] values = pair.getValue().split(",",2);
-
-            List<Alojamiento> alojamientosPorFecha = servicioAlojamiento.obtenerPorFechas(values[0],values[1]);
-            list.addAll(alojamientosPorFecha);
-          }
-        }
-
-    );*/
 
     String queries = request.getQueryString();
 
     ArrayList <Alojamiento> alojamientos = new ArrayList<>();
     ModelMap model = new ModelMap();
+
+    List<Alojamiento> results = servicioAlojamiento.obtenerAlojamientosParametrizados(desde, hasta, precioDesde, precioHasta, rating, bookeable, descuento, offset, size);
 
     List<Alojamiento> todosLosAlojamientos = servicioAlojamiento.obtenerTodosLosAlojamientos();
 

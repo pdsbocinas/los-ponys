@@ -69,4 +69,44 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
         .add(Restrictions.eq("descuento", descuento))
         .list();
   }
+
+  @Override
+  public List<Alojamiento> obtenerAlojamientosParametrizados(Date desde, Date hasta, Integer precioDesde, Integer precioHasta, Integer rating, Boolean bookeable, Integer descuento, Integer offset, Integer size) {
+    Criteria criteria = this.objetoCriteria();
+
+    if (desde != null && hasta != null) {
+          criteria
+              .add(Restrictions.ge("desde", desde))
+             .add(Restrictions.le("hasta", hasta));
+       }
+
+     if (precioDesde != null && precioHasta != null) {
+        criteria
+            .add(Restrictions.ge("precio", precioDesde))
+            .add(Restrictions.le("precio", precioHasta));
+     }
+
+     if (rating != null) {
+       criteria
+           .add(Restrictions.eq("rating", rating));
+
+     }
+
+     if (bookeable != null) {
+       criteria
+           .add(Restrictions.eq("bookeable", bookeable));
+     }
+
+     if (descuento != null) {
+       criteria
+           .add(Restrictions.eq("descuento", descuento));
+
+     }
+
+     criteria.setFirstResult(offset).setFetchSize(size);
+
+    return criteria.list();
+  }
+
+
 }
