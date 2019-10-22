@@ -20,7 +20,7 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
   @Inject
   private SessionFactory sessionFactory;
 
-  public Criteria objetoCriteria () {
+  public Criteria objetoCriteria() {
     Session session = sessionFactory.getCurrentSession();
     Criteria criteria = session.createCriteria(Alojamiento.class);
     return criteria;
@@ -75,35 +75,35 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
     Criteria criteria = this.objetoCriteria();
 
     if (desde != null && hasta != null) {
-          criteria
-              .add(Restrictions.ge("desde", desde))
-             .add(Restrictions.le("hasta", hasta));
-       }
+      criteria
+        .add(Restrictions.ge("desde", desde))
+        .add(Restrictions.le("hasta", hasta));
+    }
 
-     if (precioDesde != null && precioHasta != null) {
-        criteria
-            .add(Restrictions.ge("precio", precioDesde))
-            .add(Restrictions.le("precio", precioHasta));
-     }
+    if (precioDesde != null && precioHasta != null) {
+      criteria
+        .add(Restrictions.ge("precio", precioDesde))
+        .add(Restrictions.le("precio", precioHasta));
+    }
 
-     if (rating != null) {
-       criteria
-           .add(Restrictions.eq("rating", rating));
+    if (rating != null) {
+      criteria
+        .add(Restrictions.eq("rating", rating));
 
-     }
+    }
 
-     if (bookeable != null) {
-       criteria
-           .add(Restrictions.eq("bookeable", bookeable));
-     }
+    if (bookeable != null) {
+      criteria
+        .add(Restrictions.eq("bookeable", bookeable));
+    }
 
-     if (descuento != null) {
-       criteria
-           .add(Restrictions.eq("descuento", descuento));
+    if (descuento != null) {
+      criteria
+        .add(Restrictions.eq("descuento", descuento));
 
-     }
+    }
 
-     criteria.setFirstResult(offset).setFetchSize(size);
+    criteria.setFirstResult(offset).setFetchSize(size);
 
     return criteria.list();
   }

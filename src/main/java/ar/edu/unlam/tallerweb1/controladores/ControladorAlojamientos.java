@@ -1,15 +1,13 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Alojamiento;
+import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlojamiento;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
@@ -26,8 +24,9 @@ public class ControladorAlojamientos {
   @Inject
   private ServicioAlojamiento servicioAlojamiento;
 
-  @RequestMapping(path = "/alojamientos", method = RequestMethod.GET)
-  public ModelAndView homeAlojamientos (
+  @RequestMapping(path = "/api/alojamientos", method = RequestMethod.GET)
+  @ResponseBody
+  public List<Alojamiento> homeAlojamientos (
       @RequestParam(value="desde", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date desde,
       @RequestParam(value="hasta", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date hasta,
       @RequestParam(value="precioDesde", required=false) Integer precioDesde,
@@ -40,47 +39,11 @@ public class ControladorAlojamientos {
       HttpServletRequest request
       ) {
 
-    String queries = request.getQueryString();
+    // String queries = request.getQueryString();
 
-    ArrayList <Alojamiento> alojamientos = new ArrayList<>();
-    ModelMap model = new ModelMap();
+    List<Alojamiento> alojamientos = servicioAlojamiento.obtenerAlojamientosParametrizados(desde, hasta, precioDesde, precioHasta, rating, bookeable, descuento, offset, size);
 
-    List<Alojamiento> results = servicioAlojamiento.obtenerAlojamientosParametrizados(desde, hasta, precioDesde, precioHasta, rating, bookeable, descuento, offset, size);
-
-    List<Alojamiento> todosLosAlojamientos = servicioAlojamiento.obtenerTodosLosAlojamientos();
-
-    if (desde != null && hasta != null) {
-      List<Alojamiento> alojamientosPorFecha = servicioAlojamiento.obtenerPorFechas(desde,hasta);
-      alojamientos.addAll(alojamientosPorFecha);
-    }
-
-    if (precioDesde != null && precioHasta != null) {
-      List<Alojamiento> alojamientosPorPrecio = servicioAlojamiento.obtenerPorPrecio(precioDesde, precioHasta);
-      alojamientos.addAll(alojamientosPorPrecio);
-    }
-
-    if (rating != null) {
-      List<Alojamiento> alojamientosPorRating = servicioAlojamiento.obtenerPorRating(rating);
-      alojamientos.addAll(alojamientosPorRating);
-    }
-
-    if (bookeable != null) {
-      List<Alojamiento> alojamientoConCancelacionGratuita = servicioAlojamiento.obtenerAquellosConReserva(bookeable);
-      alojamientos.addAll(alojamientoConCancelacionGratuita);
-    }
-
-    if (descuento != null) {
-      List<Alojamiento> alojamientosConDescuentos = servicioAlojamiento.obtenerAquellosConDescuento(descuento);
-      alojamientos.addAll(alojamientosConDescuentos);
-    }
-
-    if (queries == null) {
-      alojamientos.addAll(todosLosAlojamientos);
-    }
-
-    model.put("alojamientos", alojamientos);
-
-    return new ModelAndView("alojamientos/index", model);
+    return alojamientos;
   }
 
   @RequestMapping(path = {"/alojamientos/{id}"}, method = RequestMethod.GET)
