@@ -223,7 +223,7 @@ class App extends React.Component{
                 <Menu/>
 
                 <div>
-                    <h2>Si sos pura sangre, viaja con nosotros!</h2>
+                    <h2 className={"display-4"}>Viajá. Compartí. Recomendá</h2>
                     <a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a>
                 </div>
 

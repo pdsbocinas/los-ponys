@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
+import ar.edu.unlam.tallerweb1.servicios.ServicioComentario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioEmail;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistroUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioViaje;
@@ -38,6 +39,9 @@ public class ControladorViaje  {
 
   @Inject
   private ServicioRegistroUsuario servicioRegistroUsuario;
+
+  @Inject
+  private ServicioComentario servicioComentario;
 
   @Value("${datasource.apiKey}")
   private String apiKey;
@@ -181,11 +185,41 @@ public class ControladorViaje  {
 
   @RequestMapping(path = {"/viajes/{id}/comentar"}, method = RequestMethod.GET)
   @ResponseBody
-  public ModelAndView comentarViaje(HttpServletRequest request){
-    ModelMap modelos = new ModelMap();
+  public ModelAndView comentarViaje(@PathVariable("id") Long id, HttpServletRequest request) throws InterruptedException, ApiException, IOException {
+    ModelMap modelo = new ModelMap();
+    modelo.put("id",id);
 
-    return new ModelAndView("viajes/comentar");
+    Viaje viaje = servicioViaje.obtenerViajePorId(id);
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+
+    modelo.put("usuario_email", usuario.getEmail());
+    modelo.put("viaje_id",viaje.getId());
+    modelo.put("viaje_fechaInicio",viaje.getFechaInicio());
+    modelo.put("viaje_fechaFin",viaje.getFechaFin());
+    modelo.put("viaje_titulo",viaje.getTitulo());
+
+
+    return new ModelAndView("viajes/comentar", modelo);
   }
+
+    @RequestMapping(path = {"/viajes/comentar/enviar-comentario"}, method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView enviarComentario(@RequestBody Comentario comentario) {
+        ModelMap modelos = new ModelMap();
+        servicioComentario.guardarComentario(comentario);
+
+        return new ModelAndView("viajes/comentar");
+
+    }
+
+  @RequestMapping(path = {"/api/viajes/{id}/comentarios"}, method = RequestMethod.GET)
+  @ResponseBody
+  public List<Comentario> obtenerComentariosPorViajeId(@PathVariable("id") Long viaje_id, HttpServletRequest request) throws InterruptedException, ApiException, IOException {
+
+    List<Comentario> comentarios = servicioComentario.obtenerComentariosPorViajeId(viaje_id);
+    return comentarios;
+  }
+
 
 
 }

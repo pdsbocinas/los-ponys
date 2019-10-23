@@ -46,6 +46,8 @@ public class Viaje {
     @Column(name = "privacidad")
     private String privacidad;
 
+
+
     public Date getFechaInicio() {
         return fechaInicio;
     }

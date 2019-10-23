@@ -37,8 +37,8 @@ module.exports = {
     route: [
       './js/components/route/index.js'
     ],
-    route: [
-      './js/components/posteo/index.js'
+    posteo: [
+      './js/components/Posteo/index.js'
     ]
   },
   output: {

@@ -19,8 +19,14 @@
     </jsp:body>
 </t:base>
 <script>
-  <%--var user_id = "${user_id}";--%>
-  <%--var email = "${email}";--%>
+  <%--var viaje_id = "${id}";--%>
+  var usuario_email = "${usuario_email}";
+  var viaje = "${viaje}";
+  var viaje_id = "${viaje_id}";
+  var viaje_fechaInicio = "${viaje_fechaInicio}";
+  var viaje_fechaFin = "${viaje_fechaFin}";
+  var viaje_titulo = "${viaje_titulo}";
+
 </script>
 <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
 <c:set var="posteo"><ex:getManifestAssets value="posteo.js"/></c:set>
