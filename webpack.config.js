@@ -36,6 +36,9 @@ module.exports = {
     ],
     route: [
       './js/components/route/index.js'
+    ],
+    alojamientos: [
+      './js/components/Alojamientos/index.js'
     ]
   },
   output: {

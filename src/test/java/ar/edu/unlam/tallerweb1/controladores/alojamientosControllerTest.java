@@ -38,12 +38,10 @@ public class alojamientosControllerTest {
     sut.setServicioAlojamiento(servicioAlojamiento);
     when(servicioAlojamiento.obtenerPorPrecio(1000, 3000)).thenReturn(lista);
 
-    ModelAndView mav = sut.homeAlojamientos(null,null, 1000, 3000, null, null, null
-    , req);
+    List<Alojamiento> mav = sut.homeAlojamientos(null,null, 1000, 3000, null, null, null
+    , 1, 10, req);
 
-    assertThat(mav.getViewName()).isEqualTo("alojamientos/index");
-    assertThat(mav.getModel()).containsKey("alojamientos");
-    assertThat(mav.getModelMap().size()).isEqualTo(1);
+    assertThat(mav.size()).isEqualTo(1);
   }
 
 }

@@ -26,24 +26,31 @@ public class ControladorAlojamientos {
 
   @RequestMapping(path = "/api/alojamientos", method = RequestMethod.GET)
   @ResponseBody
-  public List<Alojamiento> homeAlojamientos (
-      @RequestParam(value="desde", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date desde,
-      @RequestParam(value="hasta", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date hasta,
-      @RequestParam(value="precioDesde", required=false) Integer precioDesde,
-      @RequestParam(value="precioHasta", required=false) Integer precioHasta,
-      @RequestParam(value="rating", required=false) Integer rating,
-      @RequestParam(value="bookeable", required=false) Boolean bookeable,
-      @RequestParam(value="descuento", required=false) Integer descuento,
-      @RequestParam(value="offset", required = false, defaultValue = "0") Integer offset,
-      @RequestParam(value="size", required= false, defaultValue = "10") Integer size,
+  public List<Alojamiento> homeAlojamientos(
+      @RequestParam(value = "desde", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date desde,
+      @RequestParam(value = "hasta", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date hasta,
+      @RequestParam(value = "precioDesde", required = false) Integer precioDesde,
+      @RequestParam(value = "precioHasta", required = false) Integer precioHasta,
+      @RequestParam(value = "rating", required = false) Integer rating,
+      @RequestParam(value = "bookeable", required = false) Boolean bookeable,
+      @RequestParam(value = "descuento", required = false) Integer descuento,
+      @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
+      @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
       HttpServletRequest request
-      ) {
+  ) {
 
     // String queries = request.getQueryString();
 
     List<Alojamiento> alojamientos = servicioAlojamiento.obtenerAlojamientosParametrizados(desde, hasta, precioDesde, precioHasta, rating, bookeable, descuento, offset, size);
 
     return alojamientos;
+  }
+
+  @RequestMapping(path = {"/alojamientos"}, method = RequestMethod.GET)
+  public ModelAndView alojamientoView (HttpServletRequest request) {
+    ModelMap modelos = new ModelMap();
+
+    return new ModelAndView("alojamientos/index");
   }
 
   @RequestMapping(path = {"/alojamientos/{id}"}, method = RequestMethod.GET)

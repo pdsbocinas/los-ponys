@@ -11,27 +11,13 @@
 <t:base>
     <jsp:body>
         <div class="container">
-            <h1>Busca alojamientos!!</h1>
-            <div class="row">
-                <c:forEach var="alojamiento" items="${alojamientos}">
-                    <div class="col-4" style="display: flex;">
-                        <div class="card" style="width: 18rem;" >
-                            <div class="card-body">
-                                <a href="alojamientos/${alojamiento.getId()}">
-                                    <h5 class="card-title">${alojamiento.getNombre()}</h5>
-                                </a>
-                            </div>
-                            <div>Fecha desde: ${alojamiento.getDesde()}</div>
-                            <div>Fecha hasta: ${alojamiento.getHasta()}</div>
-                        </div>
-                    </div>
-                </c:forEach>
-                <c:if test="${empty alojamientos}">
-                    No se encontramos alojamientos!!
-                </c:if>
-            </div>
+            <div id="root"></div>
         </div>
     </jsp:body>
 </t:base>
+<c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
+<c:set var="alojamientos"><ex:getManifestAssets value="alojamientos.js"/></c:set>
+<script src="<c:url value="${commons}"/>"></script>
+<script src="<c:url value="${alojamientos}"/>"></script>
 </body>
 </html>

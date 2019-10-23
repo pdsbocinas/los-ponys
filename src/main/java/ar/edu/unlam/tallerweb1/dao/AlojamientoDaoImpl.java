@@ -99,13 +99,14 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
 
     if (descuento != null) {
       criteria
-        .add(Restrictions.eq("descuento", descuento));
+        .add(Restrictions.ge("descuento", descuento));
 
     }
 
-    criteria.setFirstResult(offset).setFetchSize(size);
+    //criteria.setFirstResult(offset).setFetchSize(size);
+    List results = criteria.list();
 
-    return criteria.list();
+    return results;
   }
 
 
