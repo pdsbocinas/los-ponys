@@ -42,36 +42,7 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
   }
 
   @Override
-  public List<Alojamiento> obtenerPorPrecio(Integer desde, Integer hasta) {
-    return this.objetoCriteria()
-        .add(Restrictions.ge("precio", desde))
-        .add(Restrictions.le("precio", hasta))
-        .list();
-  }
-
-  @Override
-  public List<Alojamiento> obtenerPorRating(Integer rating) {
-    return this.objetoCriteria()
-        .add(Restrictions.eq("rating", rating))
-        .list();
-  }
-
-  @Override
-  public List<Alojamiento> obtenerAquellosConReserva(Boolean bookeable) {
-    return this.objetoCriteria()
-        .add(Restrictions.eq("bookeable", bookeable))
-        .list();
-  }
-
-  @Override
-  public List<Alojamiento> obtenerAquellosConDescuento(Integer descuento) {
-    return this.objetoCriteria()
-        .add(Restrictions.eq("descuento", descuento))
-        .list();
-  }
-
-  @Override
-  public List<Alojamiento> obtenerAlojamientosParametrizados(Date desde, Date hasta, Integer precioDesde, Integer precioHasta, Integer rating, Boolean bookeable, Integer descuento, Integer offset, Integer size) {
+  public List<Alojamiento> obtenerAlojamientosParametrizados(Date desde, Date hasta, Integer precioDesde, Integer precioHasta, Integer rating, Boolean ofertas, Integer descuento, Integer offset, Integer size) {
     Criteria criteria = this.objetoCriteria();
 
     if (desde != null && hasta != null) {
@@ -92,9 +63,9 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
 
     }
 
-    if (bookeable != null) {
+    if (ofertas != null) {
       criteria
-        .add(Restrictions.eq("bookeable", bookeable));
+        .add(Restrictions.eq("bookeable", ofertas));
     }
 
     if (descuento != null) {
@@ -103,7 +74,7 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
 
     }
 
-    //criteria.setFirstResult(offset).setFetchSize(size);
+    criteria.setFirstResult(offset).setFetchSize(size);
     List results = criteria.list();
 
     return results;

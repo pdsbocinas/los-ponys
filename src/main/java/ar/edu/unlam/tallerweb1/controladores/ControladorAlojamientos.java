@@ -32,7 +32,7 @@ public class ControladorAlojamientos {
       @RequestParam(value = "precioDesde", required = false) Integer precioDesde,
       @RequestParam(value = "precioHasta", required = false) Integer precioHasta,
       @RequestParam(value = "rating", required = false) Integer rating,
-      @RequestParam(value = "bookeable", required = false) Boolean bookeable,
+      @RequestParam(value = "ofertas", required = false) Boolean ofertas,
       @RequestParam(value = "descuento", required = false) Integer descuento,
       @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
       @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
@@ -41,7 +41,7 @@ public class ControladorAlojamientos {
 
     // String queries = request.getQueryString();
 
-    List<Alojamiento> alojamientos = servicioAlojamiento.obtenerAlojamientosParametrizados(desde, hasta, precioDesde, precioHasta, rating, bookeable, descuento, offset, size);
+    List<Alojamiento> alojamientos = servicioAlojamiento.obtenerAlojamientosParametrizados(desde, hasta, precioDesde, precioHasta, rating, ofertas, descuento, offset, size);
 
     return alojamientos;
   }

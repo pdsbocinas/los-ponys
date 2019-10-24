@@ -6,11 +6,15 @@ import { Row, Col, FormGroup, FormLabel, FormControl, FormCheck} from 'react-boo
 import Calendar from 'react-calendar';
 
 class App extends React.Component {
-
-  state = {
-    alojamientos: [],
-    params: {}
+  constructor (props) {
+    const urlParams = new URLSearchParams(window.location.search);
+    super(props);
+    this.state = {
+      alojamientos: [],
+      params: {}
+    }
   }
+
 
   getAlojamientos = () => {
     const { params } = this.state
@@ -30,21 +34,6 @@ class App extends React.Component {
 
   componentDidMount () {
     this.getAlojamientos();
-  }
-
-
-  onSearch = async (keyword) => {
-    await this.setState({ keyword })
-    if (keyword.length > 4) {
-      axios.get(`${host}/api/alojamientos`, {
-        params: {
-          keyword: 5
-        }
-      })
-      .then(async res => {
-        const destination = res.data;
-      })
-    }
   }
 
   onChangeFrom = async (e) => {
@@ -93,6 +82,18 @@ class App extends React.Component {
     await this.getAlojamientos();
   }
 
+  onChangeOffers = async (e) => {
+    let value = e.target && e.target.value
+    console.log(value)
+    await this.setState(prevState => ({
+      params: {
+        ...prevState.params,
+        ofertas: !this.state.params.ofertas
+      }
+    }))
+    await this.getAlojamientos();
+  }
+
   render () {
     const { alojamientos, params } = this.state
     console.log(params)
@@ -123,12 +124,17 @@ class App extends React.Component {
             </FormGroup>
             <FormGroup controlId="ofertas">
               <FormLabel>Ofertas</FormLabel>
-              <FormCheck type="checkbox" label="Con cancelacion gratuita" />
+              <FormCheck onChange={e => this.onChangeOffers(e)} checked={params.ofertas} value={params.ofertas} type="checkbox" label="Con cancelacion gratuita" />
             </FormGroup>
           </Col>
           <Col sm={10}>
             <Row>
               <Col>
+                <FormControl onChange={e => this.onChangeFrom(e)} type="text" placeholder="Desde:" />
+                <Calendar />
+              </Col>
+              <Col>
+                <FormControl onChange={e => this.onChangeTo(e)} type="text" placeholder="Hasta:" />
                 <Calendar />
               </Col>
             </Row>

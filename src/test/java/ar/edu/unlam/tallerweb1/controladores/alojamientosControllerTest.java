@@ -36,7 +36,8 @@ public class alojamientosControllerTest {
 
     ServicioAlojamiento servicioAlojamiento = mock(ServicioAlojamiento.class);
     sut.setServicioAlojamiento(servicioAlojamiento);
-    when(servicioAlojamiento.obtenerPorPrecio(1000, 3000)).thenReturn(lista);
+    when(servicioAlojamiento.obtenerAlojamientosParametrizados(null,null, 1000, 3000, null, null, null
+        , 1, 10)).thenReturn(lista);
 
     List<Alojamiento> mav = sut.homeAlojamientos(null,null, 1000, 3000, null, null, null
     , 1, 10, req);
