@@ -33,11 +33,11 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
 
   @Override
   public List<Alojamiento> obtenerPorFechas(Date desde, Date hasta) {
-    Session session = sessionFactory.getCurrentSession();
-    Criteria cr = session.createCriteria(Alojamiento.class)
+    Criteria criteria = this.objetoCriteria();
+      criteria
         .add(Restrictions.ge("desde", desde))
         .add(Restrictions.le("hasta", hasta));
-    List<Alojamiento> list = cr.list();
+    List<Alojamiento> list = criteria.list();
     return list;
   }
 
@@ -78,6 +78,15 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
     List results = criteria.list();
 
     return results;
+  }
+
+  @Override
+  public Alojamiento obtenerAlojamientoPorId(Integer id) {
+    Criteria criteria = this.objetoCriteria();
+    Alojamiento alojamiento = (Alojamiento) criteria.add(Restrictions.eq("id", id))
+        .uniqueResult();
+
+    return alojamiento;
   }
 
 

@@ -39,7 +39,7 @@ public class Alojamiento {
 
     private Integer descuento;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private Pais pais;
 
     @ManyToOne

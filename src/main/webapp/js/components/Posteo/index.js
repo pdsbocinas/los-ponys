@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from 'axios';
 import { host } from '../../host.js';
-import '../../../css/fontawesome/css/fontawesome.min.css';
 
 
 // esto es una de las formas para hacer consumo de apis via json, mirar el Controller Pais, metodo getPaisesJson
@@ -24,10 +23,8 @@ class App extends React.Component {
 
   onChange = (ev)=>{
     this.setState({
-            [ev.target.name] : ev.target.value
-
+      [ev.target.name] : ev.target.value
     })
-
   }
 
   enviarComentario = () => {

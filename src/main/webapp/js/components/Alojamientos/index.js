@@ -2,8 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from 'axios';
 import { host } from '../../host.js';
-import { Row, Col, FormGroup, FormLabel, FormControl, FormCheck} from 'react-bootstrap';
+import {Row, Col, FormGroup, FormLabel, FormControl, FormCheck, Container} from 'react-bootstrap';
 import Calendar from 'react-calendar';
+import List from './components/List';
 
 class App extends React.Component {
   constructor (props) {
@@ -11,7 +12,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       alojamientos: [],
-      params: {}
+      params: {},
+      active: ''
     }
   }
 
@@ -41,7 +43,8 @@ class App extends React.Component {
     await this.setState(prevState => ({
       params: {
         ...prevState.params,
-        precioDesde: value
+        precioDesde: value,
+        active: ""
       }
     }))
   }
@@ -51,7 +54,8 @@ class App extends React.Component {
     await this.setState(prevState => ({
       params: {
         ...prevState.params,
-        precioHasta: value
+        precioHasta: value,
+        active: ""
       }
     }))
   }
@@ -65,7 +69,8 @@ class App extends React.Component {
     await this.setState(prevState => ({
       params: {
         ...prevState.params,
-        rating: value
+        rating: value,
+        active: ""
       }
     }))
     await this.getAlojamientos();
@@ -76,7 +81,8 @@ class App extends React.Component {
     await this.setState(prevState => ({
       params: {
         ...prevState.params,
-        descuento: value
+        descuento: value,
+        active: ""
       }
     }))
     await this.getAlojamientos();
@@ -88,17 +94,55 @@ class App extends React.Component {
     await this.setState(prevState => ({
       params: {
         ...prevState.params,
-        ofertas: !this.state.params.ofertas
+        ofertas: !this.state.params.ofertas,
+        active: ""
+      }
+    }))
+    await this.getAlojamientos();
+  }
+
+  onChangeFromDate = async (e) => {
+    await this.setState({
+      active: "desde"
+    })
+  }
+
+  onChangeToDate = async (e) => {
+    await this.setState({
+      active: "hasta"
+    })
+  }
+
+  setFrom = async (date) => {
+    await this.setState(prevState => ({
+      params: {
+        ...prevState.params,
+        desde: new Date(date)
+      }
+    }))
+    await this.getAlojamientos();
+  }
+
+  setTo = async (date) => {
+    await this.setState(prevState => ({
+      params: {
+        ...prevState.params,
+        hasta: new Date(date)
       }
     }))
     await this.getAlojamientos();
   }
 
   render () {
-    const { alojamientos, params } = this.state
-    console.log(params)
+    const { alojamientos, params, active } = this.state
+
     return (
       <>
+        <Row>
+          <Col>
+            <h1>Busca hoteles al mejor precio</h1>
+          </Col>
+        </Row>
         <Row>
           <Col sm={2}>
             <FormGroup controlId="precio">
@@ -130,17 +174,28 @@ class App extends React.Component {
           <Col sm={10}>
             <Row>
               <Col>
-                <FormControl onChange={e => this.onChangeFrom(e)} type="text" placeholder="Desde:" />
-                <Calendar />
+                <FormControl onFocus={this.onChangeFromDate} type="text" value={params.desde} placeholder="Desde:" />
+                {active === 'desde' && (
+                  <Calendar
+                    onChange={this.setFrom}
+                    value={params.desde}
+                  />
+                )}
               </Col>
               <Col>
-                <FormControl onChange={e => this.onChangeTo(e)} type="text" placeholder="Hasta:" />
-                <Calendar />
+                <FormControl onFocus={this.onChangeToDate} type="text" value={params.hasta} placeholder="Hasta:" />
+                {active === 'hasta' && (
+                  <Calendar
+                    onChange={this.setTo}
+                    value={params.hasta}
+                  />
+                )}
               </Col>
             </Row>
             <Row>
-              <Col>col</Col>
-              <Col>col</Col>
+              <List
+                items={alojamientos}
+              />
             </Row>
           </Col>
         </Row>

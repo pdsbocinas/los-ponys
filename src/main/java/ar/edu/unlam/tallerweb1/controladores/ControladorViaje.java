@@ -202,15 +202,13 @@ public class ControladorViaje  {
     return new ModelAndView("viajes/comentar", modelo);
   }
 
-    @RequestMapping(path = {"/viajes/comentar/enviar-comentario"}, method = RequestMethod.POST)
-    @ResponseBody
-    public ModelAndView enviarComentario(@RequestBody Comentario comentario) {
-        ModelMap modelos = new ModelMap();
-        servicioComentario.guardarComentario(comentario);
-
-        return new ModelAndView("viajes/comentar");
-
-    }
+  @RequestMapping(path = {"/viajes/comentar/enviar-comentario"}, method = RequestMethod.POST)
+  @ResponseBody
+  public ModelAndView enviarComentario(@RequestBody Comentario comentario) {
+    ModelMap modelos = new ModelMap();
+    servicioComentario.guardarComentario(comentario);
+    return new ModelAndView("viajes/comentar");
+  }
 
   @RequestMapping(path = {"/api/viajes/{id}/comentarios"}, method = RequestMethod.GET)
   @ResponseBody
