@@ -4,7 +4,8 @@ import ReactDOM from "react-dom";
 import LoginBox from './Components/LoginBox.js';
 import RegisterBox from './Components/RegisterBox.js';
 import Menu from "./Components/Menu";
-import divWithClassName from "react-bootstrap/utils/divWithClassName";
+import TravelCard from './Components/TravelCard';
+
 import axios from "axios";
 import { host } from '../../host.js'
 
@@ -23,7 +24,9 @@ class App extends React.Component{
         registroUsuario:{
             mensaje:'',
             status:''
-        }
+        },
+        viajes:[],
+        viajesPublicos: []
     }
 
     showRegisterBox = () =>{
@@ -60,26 +63,63 @@ class App extends React.Component{
         })
     }
 
+    obtenerMisViajes =  () => {
+           if(this.state.viajes.length == 0){
+               axios.get(`${host}/api/mis-viajes`)
+                   .then( response =>{
+                       console.log(this.state)
+                       console.log("ANTES de setState")
+                       console.log(response)
+                       let data = response.data
+                       this.setState({
+                           viajes: data
+                       })
+                        console.log("DESPUES de setState")
+                        console.log(this.state)
+                   }).catch(error =>{
+                   console.log(error)
+               })
+
+           }else{
+               console.log('no logueado')
+           }
+        console.log(this.state);
+
+    }
+
+    // getViajes = async () => {
+    //     let res = await axios.get(`${host}/api/mis-viajes`);
+    //     let { data } = res.data;
+    //     this.setState({ viajes: data });
+    // };
+
+    obtenerViajes = () => {
+
+            if (this.state.viajesPublicos.length == 0) {
+                axios
+                    .get( `${host}/api/viajes-publicos`)
+                    .then(   response => {
+                      const viajes = response.data.filter((v) => {
+
+                            if (v.privacidad == "publico") {
+                                return true;
+                            }
+                        })
+                        this.setState({
+                            viajesPublicos: viajes
+                        })
+
+                        console.log(response)
+                    }).catch(error => {
+                    console.log(error)
+                })
+            } else {
+
+            }
+        console.log(this.state);
+    }
     componentDidMount() {
-        // if(typeof(email) != "undefined"){
-        //     if(email != ""){
-        //         this.setState({
-        //             session:{
-        //                 login: true,
-        //                 username: 'nombre',
-        //                 email: email
-        //             }
-        //         })
-        //     }
-        // }else{
-        //     this.setState({
-        //         session:{
-        //             login: false,
-        //             username: '',
-        //             email: ''
-        //         }
-        //     })
-        // }
+
 
         if(typeof(duplicado) != "undefined"){
             if(duplicado =="duplicado"){
@@ -119,12 +159,16 @@ class App extends React.Component{
         if(typeof(login) != "undefined" && login == "true"){
             this.setState({
                 session: {
+                    id: id,
                     login: true,
                     username: 'Un nombre',
                     email: email,
                     error: ''
                 }
             })
+            this.obtenerMisViajes()
+            this.obtenerViajes()
+            // getViajes()
         }
 
 
@@ -134,7 +178,8 @@ class App extends React.Component{
     render(){
 
         return(
-            <div>
+            <div className={""}>
+
                 {this.state.session.login==true?<h2>Bienvenido {this.state.session.email}</h2>:<h2>Por Favor inicia sesion</h2>}
                 {this.state.session.login==true?<button
                     className={"btn btn-danger"}
@@ -178,9 +223,59 @@ class App extends React.Component{
                 <Menu/>
 
                 <div>
-                    <h2>Si sos pura sangre, viaja con nosotros!</h2>
+                    <h2 className={"display-4"}>Viajá. Compartí. Recomendá</h2>
                     <a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a>
                 </div>
+
+                {this.state.session.login && <div className={"container"}>
+                    <h2 className={"display-3"}>
+                        Mis Viajes!
+                    </h2>
+                        <div className="row bg-light">
+
+                            {this.state.viajes.map((viaje,i) => (
+                                <div key={i} className="col-4">
+                                    <TravelCard
+                                        id={viaje.id}
+                                        titulo={viaje.titulo}
+                                        fechaInicio ={viaje.fechaInicio}
+                                        fechaFin ={viaje.fechaFin}
+                                        boton={"Editar"}
+                                        action={"viajes/"+ viaje.id}
+                                    />
+                                </div>
+                                )
+
+                            )}
+                        </div>
+                    </div>
+                }
+
+                {this.state.session.login && <div className={"container"}>
+                    <h2 className={"display-3"}>
+                        Otros Viajes!
+                    </h2>
+                    <div className="row bg-light">
+
+                        {this.state.viajesPublicos.map((viaje,i) => (
+                                <div key={i} className="col-4">
+                                    <TravelCard
+                                        titulo={viaje.titulo}
+                                        fechaInicio ={viaje.fechaInicio}
+                                        fechaFin ={viaje.fechaFin}
+                                        boton={"Ver"}
+                                        action ={"viajes/"+ viaje.id +"/comentar"}
+                                    />
+                                </div>
+                            )
+
+                        )}
+                    </div>
+                </div>}
+
+
+
+
             </div>
 
 

@@ -39,6 +39,9 @@ module.exports = {
     ],
     alojamientos: [
       './js/components/Alojamientos/index.js'
+    ],
+    posteo: [
+      './js/components/Posteo/index.js'
     ]
   },
   output: {
