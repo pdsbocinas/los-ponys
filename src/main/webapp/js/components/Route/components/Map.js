@@ -32,21 +32,21 @@ class Map extends Component {
       console.log(e)
     })
 
-    const origin = {
-      lat: this.state.destinationSelected[0].lat,
-      lng: this.state.destinationSelected[0].lng
-    }
-    const destination ={
-      lat: this.state.destinationSelected[this.state.destinationSelected.length-1].lat,
-      lng: this.state.destinationSelected[this.state.destinationSelected.length-1].lng
-    }
+    // const origin = {
+    //   lat: this.state.destinationSelected[0].lat,
+    //   lng: this.state.destinationSelected[0].lng
+    // }
+    // const destination ={
+    //   lat: this.state.destinationSelected[this.state.destinationSelected.length-1].lat,
+    //   lng: this.state.destinationSelected[this.state.destinationSelected.length-1].lng
+    // }
     const directionsService = new google.maps.DirectionsService();
 
     // const origin = "ChIJv3lRxD4JfpYROvoO0vZ4WiA";
     // const destination = "ChIJPdeaUuQ71JURRryKvYMe7l0";
-    // const origin = { lat: -32.888943, lng: -68.844954 };
-    // const destination = { lat: -31.534986, lng: -68.535594 };
-    //
+    const origin = { lat: -32.888943, lng: -68.844954 };
+    const destination = { lat: -31.534986, lng: -68.535594 };
+
     directionsService.route(
       {
         origin: origin,

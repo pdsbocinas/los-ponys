@@ -15,7 +15,8 @@ public class ServicioReservaImpl implements ServicioReserva {
   private ReservaDao reservaDao;
 
   @Override
-  public void crearReservaParaAlojamiento(Reserva reserva) {
+  public void crearReservaParaAlojamiento(Reserva reserva) throws Exception {
+    if(reserva.getAlojamiento() == null) throw new Exception("el alojamiento no puede ser null");
     reservaDao.crearReservaParaAlojamiento(reserva);
   }
 }

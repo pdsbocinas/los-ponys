@@ -30,6 +30,10 @@ public class ControladorAlojamientos {
   @Inject
   private ServicioReserva servicioReserva;
 
+  public void setServicioRegistroUsuario(ServicioRegistroUsuario servicioRegistroUsuario) {
+    this.servicioRegistroUsuario = servicioRegistroUsuario;
+  }
+
   @Inject
   private ServicioRegistroUsuario servicioRegistroUsuario;
 
@@ -74,7 +78,7 @@ public class ControladorAlojamientos {
   public ModelAndView submit(@ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) {
 
     HttpSession session = request.getSession();
-    Usuario usuario = (Usuario) session.getAttribute("USER");
+//    Usuario usuario = (Usuario) session.getAttribute("USER");
 
     BindingResult r = result;
 
@@ -91,15 +95,23 @@ public class ControladorAlojamientos {
     reserva.setCheckin(checkin);
     reserva.setCheckout(checkout);
     reserva.setUsuario(usuarioFound);
-    servicioReserva.crearReservaParaAlojamiento(reserva);
+    try {
+      servicioReserva.crearReservaParaAlojamiento(reserva);
+    } catch (Exception e) {
+      return new ModelAndView("error");
+    }
+    ModelMap modelo = new ModelMap();
+    modelo.put("reserva", reserva);
 
-    model.put("reserva", reserva);
-
-    return new ModelAndView("alojamientos/confirm", model);
+    return new ModelAndView("alojamientos/confirm", modelo);
   }
 
 
   public void setServicioAlojamiento(ServicioAlojamiento servicioAlojamiento) {
     this.servicioAlojamiento = servicioAlojamiento;
+  }
+
+  public void setServicioReserva(ServicioReserva servicioReserva) {
+    this.servicioReserva = servicioReserva;
   }
 }

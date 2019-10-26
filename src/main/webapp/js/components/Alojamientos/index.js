@@ -44,8 +44,8 @@ class App extends React.Component {
       params: {
         ...prevState.params,
         precioDesde: value,
-        active: ""
-      }
+      },
+      active: ""
     }))
   }
 
@@ -55,8 +55,8 @@ class App extends React.Component {
       params: {
         ...prevState.params,
         precioHasta: value,
-        active: ""
-      }
+      },
+      active: ""
     }))
   }
 
@@ -70,8 +70,8 @@ class App extends React.Component {
       params: {
         ...prevState.params,
         rating: value,
-        active: ""
-      }
+      },
+      active: ""
     }))
     await this.getAlojamientos();
   }
@@ -82,8 +82,8 @@ class App extends React.Component {
       params: {
         ...prevState.params,
         descuento: value,
-        active: ""
-      }
+      },
+      active: ""
     }))
     await this.getAlojamientos();
   }
@@ -95,8 +95,8 @@ class App extends React.Component {
       params: {
         ...prevState.params,
         ofertas: !this.state.params.ofertas,
-        active: ""
-      }
+      },
+      active: ""
     }))
     await this.getAlojamientos();
   }

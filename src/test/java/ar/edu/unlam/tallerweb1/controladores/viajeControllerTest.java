@@ -4,8 +4,11 @@ import org.junit.Test;
 
 public class viajeControllerTest {
 
+/*  @Test
+  public void creacionDeViajeExitosa () {
+  }
+
   @Test
   public void creacionDeViajeExitosa () {
-
-  }
+  }*/
 }

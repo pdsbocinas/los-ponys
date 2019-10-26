@@ -13,6 +13,7 @@
     <jsp:body>
         <p>Reserva Exitosa</p>
         <strong>Numero de reserva: </strong><p>${reserva.getId()}</p>
+        <a href="/home">Volver a la home</a>
     </jsp:body>
 </t:base>
 </body>
