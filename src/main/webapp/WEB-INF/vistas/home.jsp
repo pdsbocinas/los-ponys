@@ -11,14 +11,6 @@
 <body>
 <t:base>
 	<jsp:body>
-
-<%--		<h2>Bienvenido ${email}</h2>--%>
-		<c:if test="${not empty notFound}">
-			<h4><span>${notFound}</span></h4>
-			<br>
-		</c:if>
-		<h3>${error1}</h3>
-		<h3>${exito}</h3>
 		<div id="root"></div>
 	</jsp:body>
 </t:base>
@@ -27,16 +19,14 @@
     var email = "${email}";
     var duplicado = "${duplicado}";
     var registroError = "${error1}";
-    var registroExito = "${exito}";
 	var errorLogin = "${errorLogin}";
 	var login = "${login}";
 	var id = "${id}";
+	var notFound = "${notFound}"
+	var registroExito = "${exito}";
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="js/bootstrap.min.js" type="application/javascript"></script>
-<c:set var="home"><ex:getManifestAssets value="home.js"/></c:set>
-<script src="<c:url value="${home}"/>"></script>
-
 <!-- Placed at the end of the document so the pages load faster -->
 <!--script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script-->
 </body>

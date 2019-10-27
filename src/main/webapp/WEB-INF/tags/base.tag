@@ -3,6 +3,8 @@
 <%@ attribute name="footer" fragment="true" %>
 <%@ attribute name="scripts" fragment="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ex" uri ="/WEB-INF/custom.tld" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <html>
     <head>
@@ -16,7 +18,7 @@
     <body>
         <header id="pageheader">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Travel Ponies</a>
+                <a class="navbar-brand" href="home">Travel Ponies</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -26,13 +28,8 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="#">Mi perfil <span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                        </li>
                     </ul>
+                    <div id="login"></div>
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a href="viajes" title="viaje">
@@ -54,5 +51,21 @@
             </div>
             <!--jsp:invoke fragment="footer"/-->
         </footer>
+        <script>
+            <%--var mensaje = "[[${error}]]";--%>
+            var email = "${email}";
+            var duplicado = "${duplicado}";
+            var registroError = "${error1}";
+            var registroExito = "${exito}";
+            var errorLogin = "${errorLogin}";
+            var login = "${login}";
+            var id = "${id}";
+            var notFound = "${notFound}"
+            var registroExito = "${exito}";
+        </script>
+        <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
+        <c:set var="homeLogin"><ex:getManifestAssets value="homeLogin.js"/></c:set>
+        <script src="<c:url value="${commons}"/>"></script>
+        <script src="<c:url value="${homeLogin}"/>"></script>
     </body>
 </html>

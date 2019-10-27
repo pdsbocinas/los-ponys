@@ -16,7 +16,7 @@ module.exports = {
   entry: {
     commons: [
       'babel-polyfill',
-      'axios'
+      'axios',
     ],
     countries: [
       './css/app.scss',
@@ -28,8 +28,9 @@ module.exports = {
     login: [
       './js/components/Login/index.js'
     ],
-    home: [
-      './js/components/Home/index.js'
+    homeLogin: [
+      './js/components/Home/index.js',
+      './js/components/Login/index.js'
     ],
     modal: [
       './js/components/Modal-Travel/index.js'
@@ -95,8 +96,8 @@ module.exports = {
       chunks: 'async',
       minSize: 30000,
       maxSize: 0,
-      minChunks: 1,
-      maxAsyncRequests: 5,
+      minChunks: Infinity,
+      maxAsyncRequests: 20,
       maxInitialRequests: 3,
       automaticNameDelimiter: '~',
       automaticNameMaxLength: 30,

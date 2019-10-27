@@ -177,8 +177,6 @@ public class ControladorViaje  {
   @RequestMapping(path = {"/api/viajes-publicos"}, method = RequestMethod.GET)
   @ResponseBody
   public List<Viaje> obtenerViajesPublicos(HttpServletRequest request){
-    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
-    Integer userId = usuario.getId();
     List<Viaje> viajes = servicioViaje.obtenerViajes();
     return viajes;
   }
