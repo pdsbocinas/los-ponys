@@ -10,8 +10,14 @@
 <body>
 <t:base>
     <jsp:body>
-        <h1>Busca alojamientos!!</h1>
+        <div class="container">
+            <div id="root"></div>
+        </div>
     </jsp:body>
 </t:base>
+<c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
+<c:set var="alojamientos"><ex:getManifestAssets value="alojamientos.js"/></c:set>
+<script src="<c:url value="${commons}"/>"></script>
+<script src="<c:url value="${alojamientos}"/>"></script>
 </body>
 </html>

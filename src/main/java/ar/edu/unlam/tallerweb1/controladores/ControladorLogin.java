@@ -133,6 +133,7 @@ public class ControladorLogin {
 
       if (user != null) {
         model.put("email",user.getEmail());
+          model.put("id",user.getId());
           model.put("login","true");
         return new ModelAndView("home",model);
       }else{

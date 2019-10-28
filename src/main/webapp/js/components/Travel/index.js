@@ -108,8 +108,9 @@ class App extends React.Component {
           </ul>
         )}
         <List
-            items={destinationSelected}
-            delete={(nombre)=>this.delete(nombre)}/>
+          items={destinationSelected}
+          delete={(nombre)=>this.delete(nombre)}
+        />
       </Container>
     )
   }

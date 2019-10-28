@@ -17,6 +17,10 @@ public class Reserva {
   @JsonIgnore
   private Alojamiento alojamiento;
 
+  @OneToOne
+  @JsonIgnore
+  private Usuario usuario;
+
   @Column(name = "checkin")
   private Date checkin;
 
@@ -53,5 +57,13 @@ public class Reserva {
 
   public void setCheckout(Date checkout) {
     this.checkout = checkout;
+  }
+
+  public Usuario getUsuario() {
+    return usuario;
+  }
+
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
   }
 }
