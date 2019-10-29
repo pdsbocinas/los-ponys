@@ -1,5 +1,6 @@
 import React from 'react';
 import Boton from './Boton';
+
 class LoginBox extends React.Component{
     state={
         email: '',

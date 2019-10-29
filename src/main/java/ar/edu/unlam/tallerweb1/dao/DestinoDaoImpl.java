@@ -57,6 +57,8 @@ public class DestinoDaoImpl implements DestinoDao {
       dest.setRegion(place.adrAddress);
       dest.setIcon(place.icon);
       dest.setPlaceId(place.placeId);
+      dest.setLat(place.geometry.location.lat);
+      dest.setLng(place.geometry.location.lng);
       listaDestinos.add(dest);
     }
 

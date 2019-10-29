@@ -45,4 +45,10 @@ public class ServicioRegistroUsuarioImpl implements ServicioRegistroUsuario {
         Usuario usuario = usuarioDao.obtenerUsuarioPorMail(email);
         return usuario;
     }
+
+    @Override
+    public Usuario consultarUsuarioPorId(Integer id) {
+        Usuario usuario = usuarioDao.consultarUsuarioPorId(id);
+        return usuario;
+    }
 }
