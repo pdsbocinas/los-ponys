@@ -46,10 +46,11 @@ public class ComentarioDaoImpl implements ComentarioDao {
   @Override
   public List<Comentario> obtenerComentariosNoLeidos(Integer id) {
     Session session = sessionFactory.getCurrentSession();
-    Criteria criteria = session.createCriteria(Comentario.class)
-        .createAlias("usuario", "u")
-        .add(Restrictions.eq("u.id", id))
-        .add(Restrictions.eq("estado", "no leido"));
+    Criteria criteria = session.createCriteria(Comentario.class, "c")
+        .createAlias("c.viaje", "v")
+        .createAlias("v.usuarios", "vu")
+        .add(Restrictions.eq("vu.id", id))
+        .add(Restrictions.eq("c.estado", "no leido"));
 
     List<Comentario> list = criteria.list();
 
