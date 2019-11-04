@@ -25,7 +25,12 @@ public class ServicioComentarioImpl implements ServicioComentario {
   }
 
   @Override
-  public List<Comentario> obtenerComentariosPorViajeId(Long viaje_id) throws InterruptedException, ApiException, IOException {
+  public List<Comentario> obtenerComentariosPorViajeId(Long viaje_id) {
     return comentarioDao.obtenerComentariosPorViajeId(viaje_id);
+  }
+
+  @Override
+  public List<Comentario> obtenerComentariosNoLeidos(Integer id) {
+    return comentarioDao.obtenerComentariosNoLeidos(id);
   }
 }

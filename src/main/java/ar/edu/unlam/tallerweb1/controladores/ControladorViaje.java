@@ -12,6 +12,7 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.TextSearchRequest;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.PlacesSearchResponse;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -190,30 +191,71 @@ public class ControladorViaje  {
     Viaje viaje = servicioViaje.obtenerViajePorId(id);
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
 
-    modelo.put("usuario_email", usuario.getEmail());
-    modelo.put("viaje_id",viaje.getId());
-    modelo.put("viaje_fechaInicio",viaje.getFechaInicio());
-    modelo.put("viaje_fechaFin",viaje.getFechaFin());
-    modelo.put("viaje_titulo",viaje.getTitulo());
-
+    if (usuario != null) {
+      modelo.put("usuario_email", usuario.getEmail());
+      modelo.put("viaje_id",viaje.getId());
+      modelo.put("viaje_fechaInicio",viaje.getFechaInicio());
+      modelo.put("viaje_fechaFin",viaje.getFechaFin());
+      modelo.put("viaje_titulo",viaje.getTitulo());
+    } else {
+      return new ModelAndView("redirect:/home");
+    }
 
     return new ModelAndView("viajes/comentar", modelo);
   }
 
   @RequestMapping(path = {"/viajes/comentar/enviar-comentario"}, method = RequestMethod.POST)
   @ResponseBody
-  public ModelAndView enviarComentario(@RequestBody Comentario comentario) {
+  public ModelAndView enviarComentario(@RequestBody ComentarioDto comentarioDto) {
     ModelMap modelos = new ModelMap();
+
+    Comentario comentario = new Comentario();
+
+    Long viaje_id = comentarioDto.getViaje_id();
+    String email_usuario = comentarioDto.getUsuario_email();
+    String comment = comentarioDto.getTexto();
+    String estado = "no leido";
+
+    Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
+    Usuario usuario = servicioRegistroUsuario.obtenerUsuarioPorMail(email_usuario);
+
+    comentario.setTexto(comment);
+    comentario.setUsuario(usuario);
+    comentario.setViaje(viaje);
+    comentario.setEstado(estado);
+
     servicioComentario.guardarComentario(comentario);
     return new ModelAndView("viajes/comentar");
   }
 
-  @RequestMapping(path = {"/api/viajes/{id}/comentarios"}, method = RequestMethod.GET)
+  @RequestMapping(path = {"/api/viajes/{id}/comentarios"}, method = RequestMethod.POST)
   @ResponseBody
   public List<Comentario> obtenerComentariosPorViajeId(@PathVariable("id") Long viaje_id, HttpServletRequest request) throws InterruptedException, ApiException, IOException {
-
+    Long id = viaje_id;
     List<Comentario> comentarios = servicioComentario.obtenerComentariosPorViajeId(viaje_id);
     return comentarios;
+  }
+
+  @RequestMapping(path = {"/api/viajes/comentarios/no-leido"}, method = RequestMethod.GET)
+  @ResponseBody
+  public List<Comentario> obtenerComentariosNoLeidos(@RequestParam(value = "id") Integer userId, HttpServletRequest request) {
+//    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+//    Integer id = usuario.getId();
+    List<Comentario> comentarios = servicioComentario.obtenerComentariosNoLeidos(userId);
+    return comentarios;
+  }
+
+  @RequestMapping(path = {"/viajes/ver-comentarios"}, method = RequestMethod.GET)
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
+  public void cambiarEstadoDeComentariosNoLeidos(@RequestParam(value = "id") Integer id) {
+
+    List<Comentario> comentarios = servicioComentario.obtenerComentariosNoLeidos(id);
+
+    for (Comentario comentario : comentarios) {
+      String leido = "leido";
+      comentario.setEstado(leido);
+      servicioComentario.guardarComentario(comentario);
+    }
   }
 
 }

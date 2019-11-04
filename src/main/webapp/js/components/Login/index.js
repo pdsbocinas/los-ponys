@@ -13,6 +13,16 @@ const Wrapper = styled.section`
   top: 60px;
   right: 40px;
   z-index: 1;
+  
+  p {
+    margin-bottom: 0px;
+  }
+  
+  a {
+    display: block;
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
 `;
 
 class App extends React.Component {
@@ -22,7 +32,23 @@ class App extends React.Component {
       active: false,
       titulo: '',
       email: '',
-      password: ''
+      password: '',
+      reviews: []
+    }
+  }
+
+  componentDidMount() {
+    if (id !== '') {
+      axios.get(`${host}/api/viajes/comentarios/no-leido`, {
+        params: {
+          id: id
+        }
+      })
+      .then( async response => {
+        await this.setState({
+          reviews: [...this.state.reviews].concat(response.data)
+        })
+      })
     }
   }
 
@@ -74,25 +100,62 @@ class App extends React.Component {
     }
   }
 
-  onChangeActive = async (active) => {
+  onChangeActive = async (module) => {
     await this.setState({
-      active: !this.state.active
+      active: module
+    })
+  }
+
+  checkTravel = async (user_id, travel_id) => {
+
+    axios
+      .get(`${host}/viajes/ver-comentarios`, {
+        params: {
+          id: parseInt(user_id, 10)
+        }
+      })
+      .then(response =>{
+        console.log("response checkTravel", response);
+        return window.location.href = `viajes/${travel_id}/comentar`
+      }).catch(error =>{
+      console.log(error)
     })
   }
 
   render () {
-    const { active } = this.state;
-    console.log(notFound)
+    const { active, reviews } = this.state;
+    console.log('id',id)
+    console.log('reviews', reviews, reviews.length)
     return (
       <>
         <Button
           onChangeActive={this.onChangeActive}
+          cant={reviews.length}
+          id={id}
         />
-        {active && (
+        {active === 'forms' && (
           <Wrapper>
             <Form
               onSubmit={this.enviar}
             />
+          </Wrapper>
+        )}
+        {active === 'review' && id !== '' && (
+          <Wrapper>
+            {reviews.length !== 0 && (
+              <>
+              {reviews.map(v => {
+                return (
+                  <>
+                    <a onClick={() => this.checkTravel(id, v.viaje.id)}>
+                      <p><strong>Comentario: </strong>{v.texto}</p>
+                      <span><strong>Viaje: </strong>{v.viaje && v.viaje.titulo}</span>
+                    </a>
+                  </>
+                  )
+              })}
+              </>
+            )}
           </Wrapper>
         )}
       </>

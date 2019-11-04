@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlojamiento;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistroUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -78,7 +79,7 @@ public class ControladorAlojamientos {
   public ModelAndView submit(@ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) {
 
     HttpSession session = request.getSession();
-//    Usuario usuario = (Usuario) session.getAttribute("USER");
+//  Usuario usuario = (Usuario) session.getAttribute("USER");
 
     BindingResult r = result;
 

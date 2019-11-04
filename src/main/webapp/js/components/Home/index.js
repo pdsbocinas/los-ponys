@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from "react-dom";
-
-import LoginBox from './Components/LoginBox.js';
-import RegisterBox from './Components/RegisterBox.js';
-import Menu from "./Components/Menu";
 import TravelCard from './Components/TravelCard';
-import { Toast, Container } from 'react-bootstrap';
+import { Toast } from 'react-bootstrap';
 import styled from 'styled-components';
 import axios from "axios";
 import { host } from '../../host.js'
@@ -157,7 +153,6 @@ class App extends React.Component{
           status: "success"
         }
       })
-      $('#element').tooltip('show')
     }
 
     if(typeof(errorLogin) != "undefined" && errorLogin != ""){
@@ -300,7 +295,6 @@ class App extends React.Component{
                         </div>
                     </div>
                 }*/}
-
       </div>
 
     )
