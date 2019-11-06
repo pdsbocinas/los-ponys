@@ -21,6 +21,55 @@ class App extends React.Component {
     destinationSelectedCopy.splice(nombre, 1);
     this.setState({destinationSelected: destinationSelectedCopy});
 }
+  onChangeFrom = async (date) =>{
+    const newDate = this.setDate(date);
+    await this.setState({ fechaInicio : newDate })
+  }
+
+  onChangeEnd = async (date) => {
+    const newDate = this.setDate(date);
+    await this.setState({ fechaFin : newDate })
+  }
+  update = (fechaInicio, fechaFin,id) =>{
+    const destino = this.state.destinationSelected.filter((d)=>{
+      console.log("destino:"+ d)
+        if(d.id == id){
+            return true;
+        }
+    })
+   console.log(fechaInicio)
+    console.log(fechaFin)
+    console.log(id)
+
+
+   console.log("destino")
+    console.log(destino)
+
+    //const destinoBuscado = destino[0]
+    //console.log("destino buscado")
+    //console.log(destinoBuscado)
+    return;
+    const pageURL = window.location.href;
+    const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+    axios.post(`${host}/api/viajes/${lastURLSegmentId}/destino/4/guardar-fecha`, {
+        //destinoBuscado
+        id : destinoBuscado.id,
+        fechaInicio : destinoBuscado.fechaInicio,
+        fechaHasta: destinoBuscado.fechaHasta
+        //id: 4,
+        //fechaInicio: '2019-01-01',
+        //fechaHasta: '2019-12-01'
+
+    })
+        .then(res => {
+            console.log(res.data)
+            const destino_id = res.data
+          const url =  window.location.href = `${host}/viaje/${lastURLSegmentId}destino/${destino_id}/vista`
+          return url;
+        })
+        .catch(e => console.log(e))
+  }
+
 
   // este metodo de ciclo de vida de React se va a ejecutar cuando el componente se termine de cargar en el DOM
   componentDidMount () {
@@ -65,15 +114,34 @@ class App extends React.Component {
 
   onSaveDestination = () => {
     const { destinationSelected } = this.state;
-    const placeIds = destinationSelected.map(v => { return (v.placeId)});
+    console.log(destinationSelected);
+    const destination = destinationSelected.map((d)=>{
+      let obj = {}
+      obj["ciudad"] = d.name
+      obj["nombre"] = d.name
+      obj["placeId"] = d.placeId
+      obj["fechaInicio"] = ''
+      obj["fechaHasta"] = ''
+      obj["lat"] = d.geometry.location.lat
+      obj["lng"] = d.geometry.location.lng
+      return obj
+
+    })
+    console.log(destination)
+    const arrayDestination = [destination]
+
+    //const placeIds = destinationSelected.map(v => { return (v.placeId)});
     const pageURL = window.location.href;
     const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+    console.log(`${host}/api/viajes/${lastURLSegmentId}/guardarDestinos`);
 
-    axios.post(`${host}/api/viajes/${lastURLSegmentId}/destinos`, {
-      destinos: placeIds
-    })
+    axios.post(`${host}/api/viajes/${lastURLSegmentId}/guardarDestinos`,
+       //destinationSelected
+      destination
+
+    )
     .then(res => {
-      const url =  window.location.href = `${host}/viajes/${lastURLSegmentId}/recorridos`
+      const url =  window.location.href = `${host}/viajes/${lastURLSegmentId}/destino`
       return url;
     })
     .catch(e => console.log(e))
@@ -110,6 +178,8 @@ class App extends React.Component {
         <List
           items={destinationSelected}
           delete={(nombre)=>this.delete(nombre)}
+          onSelect={this.update}
+
         />
       </Container>
     )

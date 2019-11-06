@@ -28,7 +28,8 @@
                             <div class="card-body">
                                 <h5 class="card-title">${viaje.getTitulo()}</h5>
                                 <p class="card-text">Crea y comparti tu experiencia de viajar.</p>
-                                <a href="viajes/${viaje.getId()}">${viaje.getTitulo()}</a>
+<%--                                <a href="viajes/${viaje.getId()}">${viaje.getTitulo()}</a>--%>
+                                <a href="viajes/${viaje.getId()}/destino">Editá tu viaje</a>
                             </div>
                             <form:form action="eliminar-viaje" method="GET">
                                 <input type="hidden" name="id" value="${viaje.getId()}">
