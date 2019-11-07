@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from 'axios';
 import { host } from '../../host.js';
+import divWithClassName from "react-bootstrap/utils/divWithClassName";
 
 
 // esto es una de las formas para hacer consumo de apis via json, mirar el Controller Pais, metodo getPaisesJson
@@ -110,9 +111,13 @@ class App extends React.Component {
             <div className="row">
               <div className="col-12">
                 <h3>Destinos:</h3>
-                {this.state.destinos && this.state.destinos.map(v => {
+                {this.state.destinos && this.state.destinos.map(d => {
                   return(
-                      <p>{v.nombre}</p>
+                    <>
+                      <h4>{d.ciudad}</h4>
+                      <div>Desde: {d.fechaInicio} </div>
+                      <div>Hasta: {d.fechaHasta}</div>
+                    </>
                   )
 
                 })}

@@ -38,8 +38,23 @@ public class DestinoDaoImpl implements DestinoDao {
     final Session session = sessionFactory.getCurrentSession();
 
     for(Destino destino : destinos) {
-      session.save(destino);
+      session.saveOrUpdate(destino);
     }
+  }
+
+  @Override
+  public void guardarDestino(Destino destino) {
+    final Session session = sessionFactory.getCurrentSession();
+    session.save(destino);
+  }
+
+  @Override
+  public Destino obtenerDestinoPorId(Integer id) {
+    final Session session = sessionFactory.getCurrentSession();
+    Destino d = (Destino) session.createCriteria(Destino.class)
+            .add(Restrictions.eq("id", id))
+            .uniqueResult();
+    return d;
   }
 
   @Override
@@ -54,7 +69,7 @@ public class DestinoDaoImpl implements DestinoDao {
       PlaceDetails place = new PlaceDetailsRequest(context).placeId(destino).await();
       dest.setNombre(place.name);
       dest.setCiudad(place.formattedAddress);
-      dest.setRegion(place.adrAddress);
+      //dest.setRegion(place.adrAddress);
       dest.setIcon(place.icon);
       dest.setPlaceId(place.placeId);
       dest.setLat(place.geometry.location.lat);
@@ -78,5 +93,12 @@ public class DestinoDaoImpl implements DestinoDao {
         .uniqueResult();
     List<Destino> results = v.getDestinos();
     return results;
+  }
+
+  @Override
+  public void guardarFecha(Destino destino, Long destino_id) {
+    Session session = sessionFactory.getCurrentSession();
+
+    session.saveOrUpdate(destino);
   }
 }

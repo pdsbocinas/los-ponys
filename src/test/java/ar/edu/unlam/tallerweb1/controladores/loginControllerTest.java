@@ -15,9 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.*; //si o si para que funcione el mock, importa todos los metodos estaticos de la clase mockito
 
 public class loginControllerTest {
+
+    private ControladorLogin controladorLogin = new ControladorLogin();
 
     @Test
     public void validarLoginErroneo() {
@@ -26,7 +28,7 @@ public class loginControllerTest {
         Usuario usuario = null;
         HttpServletRequest request = null;
 
-        ServicioLogin servicioLogin = mock(ServicioLogin.class);
+        ServicioLogin servicioLogin = mock(ServicioLogin.class); //reemplaza el servicio real por uno falso
         sut.setServicioLogin(servicioLogin);
         when(servicioLogin.consultarUsuario(usuario)).thenReturn(null);
 
@@ -42,5 +44,30 @@ public class loginControllerTest {
     public void validarLoginExitoso() {
         // prueba de caja negra
         // pruebas de caja blanca para probar metodos con void
+        // private ControladorLogin controladorLogin = new ControladorLogin();
+    }
+
+    @Test
+    public void validarLoginSiUsuarioNoExisteDeberiaReedirigirALogin(){
+        //preparacion
+        Usuario usuario = new Usuario();
+        HttpServletRequest request = null;
+
+        ServicioLogin servicioLogin = mock(ServicioLogin.class);
+        controladorLogin.setServicioLogin(servicioLogin);
+        when(servicioLogin.consultarUsuario(usuario)).thenReturn(null);
+        //controladorLogin = new ControladorLogin(servicioLogin); //inyeccion de dependencia por constructor
+
+        //ejecucion
+        ModelAndView mav = controladorLogin.validarLogin(usuario, request);
+
+        //verificacion
+        assertThat(mav.getViewName()).isEqualTo("login");
+        assertThat(mav.getModel()).containsKey("error");
+        assertThat(mav.getModel().get("error")).isEqualTo("Usuario o clave incorrecta");
+
+
+        //prueba de caja blanca
+       // verify(session, times(1)).setAttribute("rol","as"); //el rol del usuario que devuelve el servicio
     }
 }

@@ -30,7 +30,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">${viaje.getTitulo()}</h5>
                                     <p class="card-text">Crea y comparti tu experiencia de viajar.</p>
-                                    <a href="${contextPath}/viajes/${viaje.getId()}">${viaje.getTitulo()}</a>
+                                    <a href="${contextPath}/viajes/${viaje.getId()}/destino">${viaje.getTitulo()}</a>
                                 </div>
                                 <input type="hidden" name="id" value="${viaje.getId()}" />
                                 <button type="submit">Borrar viaje</button>
