@@ -30,7 +30,7 @@
 
                 <div class="row mt-3">
                     <div class="col-4">
-                      <div class="card" style="width: 18rem;">
+                      <div class="card mb-2"  style="min-height: 290px; max-height: 290px">
                         <div class="card-body">
                           <h5 class="card-title">Elegí tu alojamiento <i class="fas fa-home"></i></h5>
                           <h6 class="card-subtitle mb-2 text-muted">Rápido antes que ocupen tu lugar</h6>
@@ -40,7 +40,7 @@
                       </div>
                     </div>
                   <div class="col-4">
-                    <div class="card" style="width: 18rem;">
+                    <div class="card mb-2" style="min-height: 290px; max-height: 290px">
                       <div class="card-body">
                         <h5 class="card-title">Tus momentos</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Compartí fotos de este destino para que los demás puedan comentar</h6>

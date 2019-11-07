@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Recorrido del viaje</title>
 </head>
 <body>
 <style>
@@ -24,7 +24,8 @@
 <t:base>
     <jsp:body>
       <h1 class="display-4">Aquí está tu recorrido</h1>
-      <div id="map"></div>
+      <div id="map" ></div>
+        <a href="./destino" class="btn btn-secondary">Volver</a>
       <script>
 
         function initMap() {
@@ -32,7 +33,7 @@
           var directionsRenderer = new google.maps.DirectionsRenderer();
           var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 7,
-            center: {lat: 41.85, lng: -87.65}
+            center: {placeId : '${origen}' }
           });
 
           directionsRenderer.setMap(map);
