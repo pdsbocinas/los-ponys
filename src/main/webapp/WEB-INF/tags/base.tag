@@ -26,17 +26,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Mi perfil <span class="sr-only">(current)</span></a>
+                            <div id="login"></div>
                         </li>
-                    </ul>
-                    <div id="login"></div>
-                    <ul class="navbar-nav">
                         <li class="nav-item">
                             <a href="viajes" title="viaje">
                                 <img src="<c:url value="/images/003-backpack.svg"/>" width="30" height="auto" alt="crear viaje">
                             </a>
                         </li>
-
                     </ul>
                 </div>
             </nav>

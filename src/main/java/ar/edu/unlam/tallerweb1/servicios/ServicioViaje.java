@@ -20,5 +20,5 @@ public interface ServicioViaje {
 
   List<Viaje> obtenerViajesPorUsuario(Integer userId);
 
-  void borrarViaje(Long id);
+  void borrarViaje(Viaje viaje);
 }

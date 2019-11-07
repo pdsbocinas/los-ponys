@@ -82,10 +82,12 @@ public class ControladorViaje  {
 
   }
 
-  @RequestMapping(path = "/eliminar-viaje", method = RequestMethod.GET)
+  @RequestMapping(path = "/eliminar-viaje", method = RequestMethod.POST)
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public ModelAndView borrarViaje(@RequestParam(value = "id") Long viajeId, HttpServletResponse response) {
-    servicioViaje.borrarViaje(viajeId);
+  public ModelAndView borrarViaje(@ModelAttribute("viaje") Viaje viaje, HttpServletResponse response) {
+    Long id = viaje.getId();
+    Viaje v = servicioViaje.obtenerViajePorId(id);
+    servicioViaje.borrarViaje(v);
     return new ModelAndView("redirect:/home");
   }
 

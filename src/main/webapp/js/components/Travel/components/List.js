@@ -5,12 +5,9 @@ const eliminar = (id, elimina) =>{
   elimina;
 }
 const List = props => (
-
   <>
-
     {props.items.length !== 0 && (
       <>
-
         <p>Mis destinos:</p>
         <Row>
         {
@@ -26,7 +23,6 @@ const List = props => (
                     <button
                         className={"btn btn-danger"}
                         onClick={() => eliminar(s.placeId, props.delete(s.placeId))}>Eliminar</button>
-
                   </div>
                 </div>
               </Col>
