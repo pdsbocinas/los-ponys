@@ -5,6 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ex" uri ="/WEB-INF/custom.tld" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
     <head>
@@ -16,24 +17,24 @@
         <link href="<c:url value="/css/banner.css"/>" rel="stylesheet">
     </head>
     <body>
-        <header id="pageheader">
+        <header class="row" id="pageheader">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="home">Travel Ponies</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <div id="login"></div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="viajes" title="viaje">
-                                <img src="<c:url value="/images/003-backpack.svg"/>" width="30" height="auto" alt="crear viaje">
-                            </a>
-                        </li>
-                    </ul>
+                <div class="col-sm-9">
+                    <a class="navbar-brand" href="${contextPath}/home">Travel Ponies</a>
+                </div>
+                <div class="col-sm-3">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <div id="login"></div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="viajes" title="viaje">
+                                    <img src="<c:url value="/images/003-backpack.svg"/>" width="30" height="auto" alt="crear viaje">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
             <!--jsp:invoke fragment="header"/-->

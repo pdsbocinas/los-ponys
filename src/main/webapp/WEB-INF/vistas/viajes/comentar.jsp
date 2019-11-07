@@ -14,7 +14,6 @@
         <div class="banner">
             <h1 class="text-primary">Comentar Viaje</h1>
         </div>
-
         <div id="root"></div>
     </jsp:body>
 </t:base>
