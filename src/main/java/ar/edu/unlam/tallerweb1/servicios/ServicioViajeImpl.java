@@ -84,8 +84,8 @@ public class ServicioViajeImpl implements ServicioViaje {
     }
 
     @Override
-    public void borrarViaje(Long id) {
-        viajeDao.borrarViaje(id);
+    public void borrarViaje(Viaje viaje) {
+        viajeDao.borrarViaje(viaje);
     }
 
     @Override

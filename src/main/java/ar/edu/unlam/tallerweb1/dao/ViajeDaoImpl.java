@@ -59,12 +59,11 @@ public class ViajeDaoImpl implements ViajeDao{
   }
 
   @Override
-  public void borrarViaje(Long id) {
+  public void borrarViaje(Viaje viaje) {
     Session session = sessionFactory.getCurrentSession();
-    Viaje viaje = (Viaje) session.createCriteria(Viaje.class)
-        .add(Restrictions.eq("id", id))
-        .uniqueResult();
+    if (viaje != null) {
+      session.delete(viaje);
 
-    session.delete(viaje);
+    }
   }
 }

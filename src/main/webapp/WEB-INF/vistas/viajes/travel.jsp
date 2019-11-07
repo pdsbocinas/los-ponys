@@ -3,6 +3,7 @@
 <%@ taglib prefix="ex" uri ="/WEB-INF/custom.tld" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
 <head>
@@ -24,18 +25,17 @@
             <div class="row">
                 <c:forEach var="viaje" items="${viajes}">
                     <div class="col-4" style="display: flex;">
-                        <div class="card" style="width: 18rem;" >
-                            <div class="card-body">
-                                <h5 class="card-title">${viaje.getTitulo()}</h5>
-                                <p class="card-text">Crea y comparti tu experiencia de viajar.</p>
-<%--                                <a href="viajes/${viaje.getId()}">${viaje.getTitulo()}</a>--%>
-                                <a href="viajes/${viaje.getId()}/destino">Editá tu viaje</a>
-                            </div>
-                            <form:form action="eliminar-viaje" method="GET">
-                                <input type="hidden" name="id" value="${viaje.getId()}">
+                        <form:form action="eliminar-viaje" method="POST" modelAttribute="viaje">
+                            <div class="card" style="width: 18rem;" >
+                                <div class="card-body">
+                                    <h5 class="card-title">${viaje.getTitulo()}</h5>
+                                    <p class="card-text">Crea y comparti tu experiencia de viajar.</p>
+                                    <a href="${contextPath}/viajes/${viaje.getId()}/destino">${viaje.getTitulo()}</a>
+                                </div>
+                                <input type="hidden" name="id" value="${viaje.getId()}" />
                                 <button type="submit">Borrar viaje</button>
-                            </form:form>
-                        </div>
+                            </div>
+                        </form:form>
                     </div>
                 </c:forEach>
             </div>

@@ -10,6 +10,7 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.TextSearchRequest;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.PlacesSearchResponse;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -87,10 +88,12 @@ public class ControladorViaje  {
 
   }
 
-  @RequestMapping(path = "/eliminar-viaje", method = RequestMethod.GET)
+  @RequestMapping(path = "/eliminar-viaje", method = RequestMethod.POST)
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public ModelAndView borrarViaje(@RequestParam(value = "id") Long viajeId, HttpServletResponse response) {
-    servicioViaje.borrarViaje(viajeId);
+  public ModelAndView borrarViaje(@ModelAttribute("viaje") Viaje viaje, HttpServletResponse response) {
+    Long id = viaje.getId();
+    Viaje v = servicioViaje.obtenerViajePorId(id);
+    servicioViaje.borrarViaje(v);
     return new ModelAndView("redirect:/home");
   }
 
@@ -234,37 +237,80 @@ public class ControladorViaje  {
     Viaje viaje = servicioViaje.obtenerViajePorId(id);
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
 
-    modelo.put("usuario_email", usuario.getEmail());
-    modelo.put("viaje_id",viaje.getId());
-    modelo.put("viaje_fechaInicio",viaje.getFechaInicio());
-    modelo.put("viaje_fechaFin",viaje.getFechaFin());
-    modelo.put("viaje_titulo",viaje.getTitulo());
-
+    if (usuario != null) {
+      modelo.put("usuario_email", usuario.getEmail());
+      modelo.put("viaje_id",viaje.getId());
+      modelo.put("viaje_fechaInicio",viaje.getFechaInicio());
+      modelo.put("viaje_fechaFin",viaje.getFechaFin());
+      modelo.put("viaje_titulo",viaje.getTitulo());
+    } else {
+      return new ModelAndView("redirect:/home");
+    }
 
     return new ModelAndView("viajes/comentar", modelo);
   }
 
   @RequestMapping(path = {"/viajes/comentar/enviar-comentario"}, method = RequestMethod.POST)
   @ResponseBody
-  public ModelAndView enviarComentario(@RequestBody Comentario comentario) {
+  public ModelAndView enviarComentario(@RequestBody ComentarioDto comentarioDto) {
     ModelMap modelos = new ModelMap();
+
+    Comentario comentario = new Comentario();
+
+    Long viaje_id = comentarioDto.getViaje_id();
+    String email_usuario = comentarioDto.getUsuario_email();
+    String comment = comentarioDto.getTexto();
+    String estado = "no leido";
+
+    Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
+    Usuario usuario = servicioRegistroUsuario.obtenerUsuarioPorMail(email_usuario);
+
+    comentario.setTexto(comment);
+    comentario.setUsuario(usuario);
+    comentario.setViaje(viaje);
+    comentario.setEstado(estado);
+
     servicioComentario.guardarComentario(comentario);
     return new ModelAndView("viajes/comentar");
   }
 
-  @RequestMapping(path = {"/api/viajes/{id}/comentarios"}, method = RequestMethod.GET)
+  @RequestMapping(path = {"/api/viajes/{id}/comentarios"}, method = RequestMethod.POST)
   @ResponseBody
   public List<Comentario> obtenerComentariosPorViajeId(@PathVariable("id") Long viaje_id, HttpServletRequest request) throws InterruptedException, ApiException, IOException {
-
+    Long id = viaje_id;
     List<Comentario> comentarios = servicioComentario.obtenerComentariosPorViajeId(viaje_id);
     return comentarios;
   }
 
+  @RequestMapping(path = {"/api/viajes/comentarios/no-leido"}, method = RequestMethod.GET)
+  @ResponseBody
+  public List<Comentario> obtenerComentariosNoLeidos(@RequestParam(value = "id") Integer userId, HttpServletRequest request) {
+//    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+//    Integer id = usuario.getId();
+    List<Comentario> comentarios = servicioComentario.obtenerComentariosNoLeidos(userId);
+    return comentarios;
+  }
+
+  @RequestMapping(path = {"/viajes/ver-comentarios"}, method = RequestMethod.GET)
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
+  public void cambiarEstadoDeComentariosNoLeidos(@RequestParam(value = "id") Integer id) {
+
+    List<Comentario> comentarios = servicioComentario.obtenerComentariosNoLeidos(id);
+
+    for (Comentario comentario : comentarios) {
+      String leido = "leido";
+      comentario.setEstado(leido);
+      servicioComentario.guardarComentario(comentario);
+    }
+  }
+
   @RequestMapping(path = {"api/viajes/{viaje_id}/destino/{destino_id}/guardar-fecha"}, method = RequestMethod.POST)
   @ResponseBody
-  public Integer guardarFechaDeUnDestino(@PathVariable("viaje_id") Long viaje_id,
-                                              @PathVariable("destino_id") Integer destino_id,
-                                              @RequestBody DestinoDto destinodto) {
+  public Integer guardarFechaDeUnDestino(
+      @PathVariable("viaje_id") Long viaje_id,
+      @PathVariable("destino_id") Integer destino_id,
+      @RequestBody DestinoDto destinodto) {
+
     ModelMap modelos = new ModelMap();
     Viaje viaje = new Viaje();
     viaje = servicioViaje.obtenerViajePorId(viaje_id);
@@ -300,8 +346,8 @@ public class ControladorViaje  {
     modelo.put("nombre", destino.getNombre());
     modelo.put("fechaInicio", destino.getFechaInicio());
     modelo.put("fechaHasta", destino.getFechaHasta());
-      modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
-      modelo.put("fechaHastaViaje", viaje.getFechaFin());
+    modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
+    modelo.put("fechaHastaViaje", viaje.getFechaFin());
 
     return new ModelAndView("destino/fecha", modelo);
   }
@@ -313,8 +359,6 @@ public class ControladorViaje  {
     Destino destino = new Destino();
     destino = servicioDestino.obtenerDestinoPorId(destino_id);
 
-
-
     ModelMap modelo = new ModelMap();
     modelo.put("viaje_id",viaje_id);
     modelo.put("destino_id", destino_id);
@@ -322,23 +366,23 @@ public class ControladorViaje  {
     modelo.put("nombre", destino.getNombre());
     /*modelo.put("fechaInicio", destino.getFechaInicio());
     modelo.put("fechaHasta", destino.getFechaHasta());*/
-      SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-      String fechaDesdeNormal = formatter.format(destino.getFechaInicio());
-      String fechaHastaNormal = formatter.format(destino.getFechaHasta());
-      modelo.put("fechaInicio", fechaDesdeNormal);
-      modelo.put("fechaHasta", fechaHastaNormal);
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+    String fechaDesdeNormal = formatter.format(destino.getFechaInicio());
+    String fechaHastaNormal = formatter.format(destino.getFechaHasta());
+    modelo.put("fechaInicio", fechaDesdeNormal);
+    modelo.put("fechaHasta", fechaHastaNormal);
 
     return new ModelAndView("destino/vista", modelo);
   }
 
-    @RequestMapping(path = {"/viajes/{viaje_id}/destino"}, method = RequestMethod.GET)
-    public ModelAndView elegirFechasDeDestinosPorViaje (@PathVariable ("viaje_id") Long viaje_id){
-        ModelMap modelo = new ModelMap();
+  @RequestMapping(path = {"/viajes/{viaje_id}/destino"}, method = RequestMethod.GET)
+  public ModelAndView elegirFechasDeDestinosPorViaje (@PathVariable ("viaje_id") Long viaje_id){
 
-        List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
-        modelo.put("destinos", destinos);
-      return new ModelAndView("viajes/mis-destinos", modelo);
-    }
+    ModelMap modelo = new ModelMap();
+    List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
+    modelo.put("destinos", destinos);
+    return new ModelAndView("viajes/mis-destinos", modelo);
+  }
 
   /*@RequestMapping(path = {"viajes/{id}/guardarFechas"}, method = RequestMethod.POST)
     public ModelAndView guardarFechasdeDestinoPorViaje( @RequestBody DestinoDto destinodto){
@@ -400,15 +444,13 @@ public class ControladorViaje  {
     servicioDestino.guardarFecha(destinoDto, destino_id);
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-      String fechaDesdeNormal = formatter.format(fechaDesdeFormateada);
-      String fechaHastaNormal = formatter.format(fechaHastaFormateada);
+    String fechaDesdeNormal = formatter.format(fechaDesdeFormateada);
+    String fechaHastaNormal = formatter.format(fechaHastaFormateada);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("fechaInicio", fechaDesdeNormal);
     modelo.put("fechaHasta",fechaHastaNormal);
 
-
     return new ModelAndView("destino/vista", modelo);
   }
-
 
 }

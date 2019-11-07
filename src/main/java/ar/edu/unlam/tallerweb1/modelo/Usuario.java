@@ -1,4 +1,8 @@
 package ar.edu.unlam.tallerweb1.modelo;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import javax.persistence.*;

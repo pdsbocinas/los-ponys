@@ -1,5 +1,9 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,8 +23,8 @@ public class Mail {
     @Column
     private String contenido;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @ManyToOne(fetch=FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Usuario usuario;
 
     public Long getId() {

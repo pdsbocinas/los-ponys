@@ -108,7 +108,7 @@ public class alojamientosControllerTest {
 
   }
 
-  //@Test
+  @Test
   public void validarCreacionDeReserva () throws Exception {
     Reserva reserva = new Reserva();
     Alojamiento alojamiento = new Alojamiento();

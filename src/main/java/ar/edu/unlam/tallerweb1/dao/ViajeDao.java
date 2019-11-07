@@ -11,5 +11,5 @@ public interface ViajeDao {
 
   List<Viaje> obtenerViajesPorUsuario(Integer id);
 
-  void borrarViaje(Long id);
+  void borrarViaje(Viaje viaje);
 }

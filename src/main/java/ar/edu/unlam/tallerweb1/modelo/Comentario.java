@@ -14,11 +14,16 @@ public class Comentario {
     @Column(name = "texto")
     private String texto;
 
-    @Column(name="viaje_id")
-    private Long viaje_id;
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn
+    private Viaje viaje;
 
-    @Column(name="usuario_email")
-    private String usuario_email;
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn
+    private Usuario usuario;
+
+    @Column
+    private String estado;
 
     public Long getId() {
         return id;
@@ -36,19 +41,27 @@ public class Comentario {
         this.texto = texto;
     }
 
-    public Long getViaje_id() {
-        return viaje_id;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setViaje_id(Long viaje_id) {
-        this.viaje_id = viaje_id;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public String getUsuario_email() {
-        return usuario_email;
+    public Viaje getViaje() {
+        return viaje;
     }
 
-    public void setUsuario_email(String usuario_email) {
-        this.usuario_email = usuario_email;
+    public void setViaje(Viaje viaje) {
+        this.viaje = viaje;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

@@ -29,12 +29,12 @@ public class Viaje {
     @Column(name = "fechaFin")
     private Date fechaFin;
 
-    @OneToMany(cascade = { CascadeType.PERSIST }, orphanRemoval = true)
+    @OneToMany(orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(name="viaje_id")
     private List<Destino> destinos;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST })
+    @ManyToMany(fetch=FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(
         name = "viaje_usuario",
@@ -45,8 +45,6 @@ public class Viaje {
 
     @Column(name = "privacidad")
     private String privacidad;
-
-
 
     public Date getFechaInicio() {
         return fechaInicio;

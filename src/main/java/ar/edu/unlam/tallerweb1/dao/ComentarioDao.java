@@ -10,7 +10,8 @@ import java.util.List;
 public interface ComentarioDao {
   void guardarComentario(Comentario comentario);
 
-  List<Comentario> obtenerComentariosPorViajeId(Long viaje_id) throws InterruptedException, ApiException, IOException;
+  List<Comentario> obtenerComentariosPorViajeId(Long viaje_id);
 
 
+  List<Comentario> obtenerComentariosNoLeidos(Integer id);
 }

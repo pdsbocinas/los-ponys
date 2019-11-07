@@ -3,6 +3,7 @@
 <%@ taglib prefix="ex" uri ="/WEB-INF/custom.tld" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
 <head>
@@ -13,7 +14,7 @@
     <jsp:body>
         <p>Reserva Exitosa</p>
         <strong>Numero de reserva: </strong><p>${reserva.getId()}</p>
-        <a href="/home">Volver a la home</a>
+        <a href="${pageContext}/home">Volver a la home</a>
     </jsp:body>
 </t:base>
 </body>

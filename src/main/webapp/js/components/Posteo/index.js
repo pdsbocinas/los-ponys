@@ -33,7 +33,7 @@ class App extends React.Component {
         .post( `${host}/viajes/comentar/enviar-comentario`, {
           texto: this.state.comentario_actual,
           viaje_id: this.state.viaje.id,
-            usuario_email: this.state.usuario_email
+          usuario_email: this.state.usuario_email
     })
         .then(   response => {
           console.log(response)
@@ -44,7 +44,7 @@ class App extends React.Component {
 
   obtenerComentarios = () => {
       axios
-          .get( `${host}/api/viajes/${this.state.viaje.id}/comentarios`)
+          .post( `${host}/api/viajes/${this.state.viaje.id}/comentarios`)
           .then(   response => {
               console.log(response)
               this.setState({

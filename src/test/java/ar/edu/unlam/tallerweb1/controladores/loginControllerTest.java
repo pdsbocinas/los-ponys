@@ -19,6 +19,8 @@ import static org.mockito.Mockito.*; //si o si para que funcione el mock, import
 
 public class loginControllerTest {
 
+    private ControladorLogin controladorLogin = new ControladorLogin();
+
     @Test
     public void validarLoginErroneo() {
 
@@ -33,11 +35,18 @@ public class loginControllerTest {
         //ejecucion
         ModelAndView mav = sut.validarLogin(usuario, request);
 
-        assertThat(mav.getViewName()).isEqualTo("login");
+        assertThat(mav.getViewName()).isEqualTo("home");
         assertThat(mav.getModel()).containsKey("error");
         assertThat(mav.getModel().get("error")).isEqualTo("Usuario o clave incorrecta");
     }
-    private ControladorLogin controladorLogin = new ControladorLogin();
+
+    @Test
+    public void validarLoginExitoso() {
+        // prueba de caja negra
+        // pruebas de caja blanca para probar metodos con void
+        // private ControladorLogin controladorLogin = new ControladorLogin();
+    }
+
     @Test
     public void validarLoginSiUsuarioNoExisteDeberiaReedirigirALogin(){
         //preparacion
@@ -45,7 +54,6 @@ public class loginControllerTest {
         HttpServletRequest request = null;
 
         ServicioLogin servicioLogin = mock(ServicioLogin.class);
-
         controladorLogin.setServicioLogin(servicioLogin);
         when(servicioLogin.consultarUsuario(usuario)).thenReturn(null);
         //controladorLogin = new ControladorLogin(servicioLogin); //inyeccion de dependencia por constructor

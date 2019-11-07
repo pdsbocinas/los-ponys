@@ -4,19 +4,20 @@ import {Col, Row} from 'react-bootstrap';
 const eliminar = (id, elimina) => {
   elimina;
 }
+
 const update = (id, update) => {
   update;
 }
+
 const List = props => {
   const [fechaInicio,setFechaInicio] = useState("")
   const [fechaFin,setFechaFin] = useState("")
   const [id,setId] = useState()
-  const onSelectDates = useCallback(()=>{props.onSelect(fechaInicio, fechaFin, placeId)})
+  const onSelectDates = useCallback(() => {props.onSelect(fechaInicio, fechaFin, placeId)})
   return (
     <>
       {props.items.length !== 0 && (
         <>
-
           <p>Mis destinos:</p>
           <Row>
             {
@@ -60,7 +61,6 @@ const List = props => {
       )}
     </>
   )
-
 }
 
 export default List;
