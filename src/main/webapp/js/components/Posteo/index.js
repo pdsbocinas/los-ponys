@@ -75,64 +75,70 @@ class App extends React.Component {
         <div className="container ">
 
           <fieldset className="border p-2">
-            <legend className="w-auto">Posteo del viaje</legend>
+            {/*<legend className="w-auto">Posteo del viaje</legend>*/}
 
             <div className="row">
-              <div className=" col">
-                <small>Titulo</small>
-                <p>
-                  <strong>{this.state.viaje.titulo}</strong>
-                </p>
+              <div className=" col text-center bg-dark text-white">
+                  <h1 className={"display-1"}>{this.state.viaje.titulo}</h1>
+              </div>
+            </div>
+            <div className="row justify-content-center bg-dark text-white pb-3">
+              <div className="col-4 text-center display-4">
+                {new Date(this.state.viaje.fechaInicio).toLocaleDateString()}
+              </div>
+              <div className="col-1 text-center display-4">-&gt;</div>
+              <div className="col-4 text-center display-4">
+                {new Date(this.state.viaje.fechaFin).toLocaleDateString()}
               </div>
             </div>
 
-            <div className="row">
-              <div className=" col">
-                <small>Desde</small>
-                <p>
-                  <strong>{this.state.viaje.fechaInicio}</strong>
-                </p>
-              </div>
 
-              <div className=" col">
-                <small>Hasta</small>
-                <p>
-                  <strong>{this.state.viaje.fechaFin}</strong>
-                </p>
-              </div>
-            </div>
+
 
             <div className="row">
               <div className="col-12">
-                <a href="viajes/10">Ver recorrido del viaje</a>
+                <h3 className={"display-3 text-center mt-2"}>Destinos</h3>
               </div>
             </div>
+            <div className="row justify-content-center">
 
-            <div className="row">
-              <div className="col-12">
-                <h3>Destinos:</h3>
                 {this.state.destinos && this.state.destinos.map(d => {
                   return(
                     <>
-                      <h4>{d.ciudad}</h4>
-                      <div>Desde: {d.fechaInicio} </div>
-                      <div>Hasta: {d.fechaHasta}</div>
+                      <div className="col-4 m-1">
+                        <div className="card text-center" >
+                          <div className="card-body">
+                            <h5 className="card-title">{d.ciudad}</h5>
+                            <p className="card-text"><b>{new Date(d.fechaInicio).toLocaleDateString()}</b> a <b>{new Date(d.fechaHasta).toLocaleDateString()}</b></p>
+                          </div>
+                          <div className="card-footer">
+                            <small className="text-muted"><a href={"./destino/"+d.id+"/vista"}>Ver más!</a></small>
+                          </div>
+                        </div>
+                      </div>
+                    {/*<div className={"col-4 border border-dark"}>*/}
+                    {/*  <h4 className={"display-4"}>{d.ciudad}</h4>*/}
+                    {/*  <div><b>{new Date(d.fechaInicio).toLocaleDateString()}</b> a <b>{new Date(d.fechaHasta).toLocaleDateString()}</b></div>*/}
+                    {/*</div>*/}
                     </>
                   )
 
                 })}
+
+            </div>
+            <div className="row">
+              <div className="col-12 text-center mt-2">
+                <a className={"badge badge-info"}  href="./recorridos">Ver recorrido del viaje</a>
               </div>
             </div>
               <i className="fas fa-heart"></i>
-              <div className="row">
+              <div className="row mt-2">
                   <div className="col-12">
-                      <h3>Comentarios:</h3>
+                      <h3 className={"display-4"}>Comentarios</h3>
                       {this.state.comentarios && this.state.comentarios.map(v => {
                           return(
-                              <div>
-                                  <p> <strong>{v.usuario_email}</strong></p>
-                                  <p>{v.texto}</p>
-                                  <hr/>
+                              <div class="border rounded-pill p-2 px-4 my-2 bg-light" >
+                                <span className={"text-primary font-weight-bold mr-1"}>{v.usuario_email}</span> {v.texto}
                               </div>
                                   )
 
@@ -145,13 +151,14 @@ class App extends React.Component {
               <div className="col-12">
                 <form action="">
                   <div className="form-group">
-                    <label htmlFor="">Comentar</label>
+                    {/*<label htmlFor="">Comentar</label>*/}
                     <input
                         type={"text"}
-                        className="form-control"
+                        className="form-control border rounded-pill bg-light mt-2"
                         id="comentario_actual"
                         name={"comentario_actual"}
                         value={this.state.comentario_actual}
+                        placeholder={"Escribe tu comentario"}
                         onChange={this.onChange}/>
 
 

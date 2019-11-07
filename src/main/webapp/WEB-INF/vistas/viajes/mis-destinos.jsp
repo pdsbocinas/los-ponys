@@ -16,7 +16,7 @@
       <div class="row mx-3">
         <c:forEach items="${destinos}" var="destino">
              <div class="col-4"  >
-                <div class="card" style="width: '18rem'; maxHeight: '320px'">
+                <div class="card mb-2"  style="min-height: 290px; max-height: 290px">
                     <div class="card-body">
                         <h5 class="card-title">${destino.ciudad}</h5>
 
@@ -39,11 +39,16 @@
             </div>
         </c:forEach>
       </div>
-
+        <div class="row mx-3">
+            <div class="col-12">
+                <a href="./recorridos" class="btn btn-primary">Ver recorrido</a>
+            </div>
+        </div>
     </jsp:body>
 </t:base>
 <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
 <%--<c:set var="elegirFechas"><ex:getManifestAssets value="elegirFechas.js"/></c:set>--%>
+
 <script>
 
   //var viaje_id = "${viaje_id}";

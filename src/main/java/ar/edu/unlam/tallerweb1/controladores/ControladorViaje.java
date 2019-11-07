@@ -380,6 +380,7 @@ public class ControladorViaje  {
 
     ModelMap modelo = new ModelMap();
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
+
     modelo.put("destinos", destinos);
     return new ModelAndView("viajes/mis-destinos", modelo);
   }

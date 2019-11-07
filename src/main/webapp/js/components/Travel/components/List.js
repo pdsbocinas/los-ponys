@@ -26,7 +26,7 @@ const List = props => {
                   <Col sm={4} key={`${i}-${s.name || s.nombre}`}>
 
                     <div className="card" style={{width: '18rem', maxHeight: '320px'}}>
-                      <img src={s.icon} className="card-img-top" alt={s.name || s.nombre}/>
+                      {/*<img src={s.icon} className="card-img-top" alt={s.name || s.nombre}/>*/}
                       <div className="card-body">
                         <h5 className="card-title">{s.name || s.nombre}</h5>
                         <p className="card-text">{s.formattedAddress || s.ciudad}</p>
@@ -35,15 +35,15 @@ const List = props => {
                         <label htmlFor="fechaHasta">Hasta</label>
                         <input id="fechaHasta" type="text" onChange={(e)=>{setFechaFin(e.target.value)}}/>*/}
 
-                        <div>{new Date(s.fechaInicio).toDateString()}</div>
-                        <div>{new Date(s.fechaHasta).toDateString()}</div>
+                        {/*<div>{new Date(s.fechaInicio).toDateString()}</div>*/}
+                        {/*<div>{new Date(s.fechaHasta).toDateString()}</div>*/}
                         {/*<button
                           className={"btn btn-info"}
                           onClick = {()=>{setId(s.id);props.onSelect(fechaInicio,fechaFin,id)}}
                           Fecha>Elegir fechas
                           onClick={onSelectDates()}>Guardar
                         </button>*/}
-                        <a href={s.viaje_id+"/destino/"+s.id+"/vista"} className={"btn btn-primary"}>Elegir Fechas</a>
+                        {/*<a href={s.viaje_id+"/destino/"+s.id+"/vista"} className={"btn btn-primary"}>Elegir Fechas</a>*/}
 
                         <button
                           className={"btn btn-danger"}
