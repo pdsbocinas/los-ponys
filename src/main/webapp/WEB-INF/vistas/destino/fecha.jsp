@@ -17,8 +17,6 @@
                <div class="row">
                   <h1 class="display-4">Ya casi terminamos...</h1>
                </div>
-
-
                 <div class="row">
                     <div class="col-12 text-center">
                         <h4>¿Cuánto tiempo te quedarás en <span class="text-primary">${ciudad}</span>?</h4>
@@ -55,18 +53,12 @@
                   </div>
                 </div>
                 <p class="text-danger">${error}</p>
-
                 <div class="row mt-2">
                   <div class="col-12 text-right">
                     <a href="../" class="btn btn-secondary">Volver</a>
                     <button type="submit" class="btn btn-primary">Guardar cambios!</button>
                   </div>
                 </div>
-
-
-
-
-
             </form>
         </div>
 

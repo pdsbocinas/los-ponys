@@ -33,7 +33,7 @@
                                     <a href="${contextPath}/viajes/${viaje.getId()}/destino">${viaje.getTitulo()}</a>
                                 </div>
                                 <input type="hidden" name="id" value="${viaje.getId()}" />
-                                <button type="submit">Borrar viaje</button>
+                                <button class="btn btn-danger" type="submit">Borrar viaje</button>
                             </div>
                         </form:form>
                     </div>
