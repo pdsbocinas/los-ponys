@@ -35,7 +35,7 @@ public class loginControllerTest {
         //ejecucion
         ModelAndView mav = sut.validarLogin(usuario, request);
 
-        assertThat(mav.getViewName()).isEqualTo("home");
+        assertThat(mav.getViewName()).isEqualTo("login");
         assertThat(mav.getModel()).containsKey("error");
         assertThat(mav.getModel().get("error")).isEqualTo("Usuario o clave incorrecta");
     }
