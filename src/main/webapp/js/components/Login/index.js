@@ -7,8 +7,11 @@ import axios from "axios";
 import {host} from "../../host";
 
 const Wrapper = styled.section`
+  width : 300px;
+  border-bottom-right-radius: 2em;
+  border-bottom-left-radius: 2em;
   padding: 4em;
-  background: papayawhip;
+  background: #c67441ad;
   position: absolute;
   top: 60px;
   right: 40px;
@@ -16,6 +19,7 @@ const Wrapper = styled.section`
   
   p {
     margin-bottom: 0px;
+    color : white;
   }
   
   a {

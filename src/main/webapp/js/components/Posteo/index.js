@@ -138,7 +138,7 @@ class App extends React.Component {
                       {this.state.comentarios && this.state.comentarios.map(v => {
                           return(
                               <div class="border rounded-pill p-2 px-4 my-2 bg-light" >
-                                <span className={"text-primary font-weight-bold mr-1"}>{v.usuario_email}</span> {v.texto}
+                                <span className={"text-primary font-weight-bold mr-1"}>{v.usuario.email}</span> {v.texto}
                               </div>
                                   )
 

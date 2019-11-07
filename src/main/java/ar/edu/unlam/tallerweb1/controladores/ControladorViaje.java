@@ -231,6 +231,7 @@ public class ControladorViaje  {
   @RequestMapping(path = {"/viajes/{id}/comentar"}, method = RequestMethod.GET)
   @ResponseBody
   public ModelAndView comentarViaje(@PathVariable("id") Long id, HttpServletRequest request) throws InterruptedException, ApiException, IOException {
+
     ModelMap modelo = new ModelMap();
     modelo.put("id",id);
 
@@ -380,7 +381,7 @@ public class ControladorViaje  {
 
     ModelMap modelo = new ModelMap();
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
-
+    modelo.put("viaje_id", viaje_id);
     modelo.put("destinos", destinos);
     return new ModelAndView("viajes/mis-destinos", modelo);
   }

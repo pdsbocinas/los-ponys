@@ -40,8 +40,12 @@
         </c:forEach>
       </div>
         <div class="row mx-3">
-            <div class="col-12">
-                <a href="./recorridos" class="btn btn-primary">Ver recorrido</a>
+          <div class="col-6">
+            <a href="../${viaje_id}" class="btn btn-secondary">Agregar o quitar destinos</a>
+            <a href="./recorridos" class="btn btn-primary">Ver recorrido</a>
+          </div>
+            <div class="col-6">
+
             </div>
         </div>
     </jsp:body>
