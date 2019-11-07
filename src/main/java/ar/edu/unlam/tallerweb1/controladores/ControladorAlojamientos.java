@@ -93,8 +93,8 @@ public class ControladorAlojamientos {
     return new ModelAndView("alojamientos/detail", modelos);
   }
 
-  @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/alojamiento/{id}/confirm-alojamiento"}, method = RequestMethod.GET)
-  public ModelAndView crearReservaParaAlojamiento(@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @PathVariable("id") Integer id, @ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) {
+  @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/alojamiento/confirm-alojamiento"}, method = RequestMethod.GET)
+  public ModelAndView crearReservaParaAlojamiento(@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) {
 
     HttpSession session = request.getSession();
 //  Usuario usuario = (Usuario) session.getAttribute("USER");

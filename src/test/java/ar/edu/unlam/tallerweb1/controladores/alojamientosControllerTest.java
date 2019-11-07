@@ -76,9 +76,8 @@ public class alojamientosControllerTest {
 
     Long viaje_id = (long)123456;
     Integer destino_id = 1;
-    Integer id = 1;
 
-    ModelAndView mav = controladorAlojamientos.crearReservaParaAlojamiento(viaje_id, destino_id, id, reservaDto, result, model, request);
+    ModelAndView mav = controladorAlojamientos.crearReservaParaAlojamiento(viaje_id, destino_id, reservaDto, result, model, request);
 
     assertThat(mav.getModel().get("reserva")).isInstanceOf(Reserva.class);
 
@@ -112,9 +111,8 @@ public class alojamientosControllerTest {
 
     Long viaje_id = (long)123456;
     Integer destino_id = 1;
-    Integer id = 1;
 
-    ModelAndView mav = controladorAlojamientos.crearReservaParaAlojamiento(viaje_id, destino_id, id, reservaDto, result, model, request);
+    ModelAndView mav = controladorAlojamientos.crearReservaParaAlojamiento(viaje_id, destino_id, reservaDto, result, model, request);
     assertThat(mav.getViewName()).isEqualTo("error");
 
   }
