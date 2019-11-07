@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.modelo.Destino;
+import ar.edu.unlam.tallerweb1.modelo.DestinoDto;
 import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import com.google.maps.errors.ApiException;
 
@@ -21,4 +22,6 @@ public interface ServicioViaje {
   List<Viaje> obtenerViajesPorUsuario(Integer userId);
 
   void borrarViaje(Long id);
+
+  void guardarDestinos(Long id, List<DestinoDto> destinos);
 }

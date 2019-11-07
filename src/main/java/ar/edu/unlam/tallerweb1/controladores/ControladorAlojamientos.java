@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlojamiento;
+import ar.edu.unlam.tallerweb1.servicios.ServicioDestino;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistroUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import org.springframework.context.annotation.PropertySource;
@@ -29,6 +30,9 @@ public class ControladorAlojamientos {
 
   @Inject
   private ServicioReserva servicioReserva;
+
+  @Inject
+  private ServicioDestino servicioDestino;
 
   public void setServicioRegistroUsuario(ServicioRegistroUsuario servicioRegistroUsuario) {
     this.servicioRegistroUsuario = servicioRegistroUsuario;
@@ -61,6 +65,17 @@ public class ControladorAlojamientos {
   public ModelAndView alojamientoView (HttpServletRequest request) {
     ModelMap modelos = new ModelMap();
     return new ModelAndView("alojamientos/index");
+  }
+
+  @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/alojamiento"}, method = RequestMethod.GET)
+  public ModelAndView alojamientosPorDestino (@PathVariable("viaje_id") Long viaje_id,
+                                              @PathVariable("destino_id") Integer destino_id,
+                                              HttpServletRequest request) {
+    ModelMap modelo = new ModelMap();
+    Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
+
+    modelo.put("ciudad",destino.getCiudad());
+    return new ModelAndView("alojamientos/index", modelo);
   }
 
   @RequestMapping(path = {"/alojamientos/{id}"}, method = RequestMethod.GET)

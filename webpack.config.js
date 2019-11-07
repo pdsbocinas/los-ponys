@@ -43,6 +43,9 @@ module.exports = {
     ],
     posteo: [
       './js/components/Posteo/index.js'
+    ],
+    elegirFechas: [
+      './js/components/Elegirfechas/index.js'
     ]
   },
   output: {

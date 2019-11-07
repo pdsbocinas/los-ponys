@@ -5,11 +5,10 @@ import ar.edu.unlam.tallerweb1.dao.DestinoDao;
 import ar.edu.unlam.tallerweb1.dao.UsuarioDao;
 import ar.edu.unlam.tallerweb1.dao.ViajeDao;
 import ar.edu.unlam.tallerweb1.modelo.Destino;
+import ar.edu.unlam.tallerweb1.modelo.DestinoDto;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.modelo.Viaje;
-import com.google.maps.PlaceDetailsRequest;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.PlaceDetails;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -19,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service("servicioViaje")
-public class ServicioViajeImpl implements ServicioViaje{
+public class ServicioViajeImpl implements ServicioViaje {
 
     @Inject
     private ViajeDao viajeDao;
@@ -36,7 +35,7 @@ public class ServicioViajeImpl implements ServicioViaje{
     }
 
     @Override
-    public List<Viaje> obtenerViajes () {
+    public List<Viaje> obtenerViajes() {
         return viajeDao.obtenerViajes();
     }
 
@@ -87,5 +86,24 @@ public class ServicioViajeImpl implements ServicioViaje{
     @Override
     public void borrarViaje(Long id) {
         viajeDao.borrarViaje(id);
+    }
+
+    @Override
+    public void guardarDestinos(Long id, List<DestinoDto> destinos) {
+        Viaje viaje = viajeDao.obtenerViajePorId(id);
+        List<Destino> listaDestinos = new ArrayList<>();
+        for (DestinoDto destinoDto : destinos) {
+            Destino destino = new Destino();
+
+            destino.setId(destinoDto.getId());
+            destino.setCiudad(destinoDto.getCiudad());
+            destino.setFechaInicio(destinoDto.getFechaInicio());
+            destino.setFechaFin(destinoDto.getFechaHasta());
+            listaDestinos.add(destino);
+        }
+        destinoDao.guardarDestinos(listaDestinos);
+        viaje.setDestinos(listaDestinos);
+        viajeDao.guardarViaje(viaje);
+
     }
 }

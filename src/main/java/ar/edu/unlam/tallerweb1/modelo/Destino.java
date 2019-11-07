@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,8 +20,8 @@ public class Destino {
     private String nombre;
 
     // normalizar
-    @Column(name = "region")
-    private String region;
+    //@Column(name = "region")
+    //private String region;
 
     @Column(name = "placeId")
     private String placeId;
@@ -33,18 +34,24 @@ public class Destino {
     private URL icon;
 
     // normalizar
-    @ManyToOne
-    private Pais pais;
+    //@ManyToOne
+    //private Pais pais;
 
-    @ManyToOne
-    @JsonIgnore
-    private Reserva reserva;
+    // @ManyToOne
+    // @JsonIgnore
+    // private Reserva reserva;
 
     @Column(name = "lat")
     private Double lat;
 
     @Column(name = "lng")
     private Double lng;
+
+    @Column(name = "fechaInicio")
+    private Date fechaInicio;
+
+    @Column(name = "fechaHasta")
+    private Date fechaHasta;
 
     // Getters and Setters
 
@@ -81,21 +88,21 @@ public class Destino {
         this.nombre = nombre;
     }
 
-    public Pais getPais() {
-        return pais;
-    }
+    //public Pais getPais() {
+    //    return pais;
+    //}
 
-    public void setPais(Pais pais) {
-        this.pais = pais;
-    }
+    //public void setPais(Pais pais) {
+    //    this.pais = pais;
+    //}
 
-    public String getRegion() {
-        return region;
-    }
+    //public String getRegion() {
+    //    return region;
+    //}
 
-    public void setRegion(String region) {
-        this.region = region;
-    }
+    //public void setRegion(String region) {
+    //     this.region = region;
+    //  }
 
     public String getCiudad() {
         return ciudad;
@@ -105,13 +112,13 @@ public class Destino {
         this.ciudad = ciudad;
     }
 
-    public Reserva getReserva() {
-        return reserva;
-    }
+    //public Reserva getReserva() {
+    //    return reserva;
+    //}
 
-    public void setReserva(Reserva reserva) {
-        this.reserva = reserva;
-    }
+    //public void setReserva(Reserva reserva) {
+    //    this.reserva = reserva;
+    //}
 
     public URL getIcon() {
         return icon;
@@ -127,5 +134,21 @@ public class Destino {
 
     public void setPlaceId(String placeId) {
         this.placeId = placeId;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaHasta() {
+        return fechaHasta;
+    }
+
+    public void setFechaFin(Date fechaHasta) {
+        this.fechaHasta = fechaHasta;
     }
 }
