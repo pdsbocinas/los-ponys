@@ -14,10 +14,12 @@ public class Comentario {
     @Column(name = "texto")
     private String texto;
 
+    @Column(name="viaje_id")
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn
     private Viaje viaje;
 
+    @Column(name="usuario_id")
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn
     private Usuario usuario;
