@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -100,10 +101,41 @@ public class ControladorViaje  {
     return new ModelAndView("viajes/create");
   }
 
-  @RequestMapping(path = {"/viajes/{id}/recorridos"}, method = RequestMethod.GET)
-  @CrossOrigin
-  public ModelAndView crearRecorrido () {
-    return new ModelAndView("viajes/recorridos");
+  @RequestMapping(path = {"/viajes/{viaje_id}/recorridos"}, method = RequestMethod.GET)
+  public ModelAndView crearRecorrido (@PathVariable ("viaje_id") Long viaje_id) {
+      ModelMap modelo = new ModelMap();
+      List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
+
+    String origen = "";
+    String destino = "";
+
+
+    if(destinos.size() == 2){
+        origen = destinos.get(0).getPlaceId();
+        destino = destinos.get(1).getPlaceId();
+    }else if (destinos.size() > 2){
+        ArrayList<String> waypoint = new ArrayList<String>();
+            for (int i = 1; i <= destinos.size(); i++){
+                if(i==1){
+                    origen = destinos.get(0).getPlaceId();
+                }else if(i != destinos.size()){
+                    waypoint.add(destinos.get(i-1).getPlaceId());
+                }else if(i == destinos.size()){
+                    destino = destinos.get(i-1).getPlaceId();
+                }
+            }
+        modelo.put("waypoint", waypoint);
+        }
+
+//      for (Destino d:destinos
+//           ) {
+//          ciudad = d.getPlaceId();
+//      }
+
+
+      modelo.put("origen", origen);
+      modelo.put("destino", destino);
+      return new ModelAndView("viajes/recorridos",modelo);
   }
 
   @RequestMapping(path = {"/api/destinos"}, method = RequestMethod.GET)
