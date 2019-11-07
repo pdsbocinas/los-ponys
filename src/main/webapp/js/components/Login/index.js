@@ -7,12 +7,13 @@ import axios from "axios";
 import {host} from "../../host";
 
 const Wrapper = styled.section`
-  padding: 4em;
+  padding: 2em;
   background: papayawhip;
   position: absolute;
-  top: 60px;
-  right: 40px;
+  top: 40px;
+  right: 70px;
   z-index: 1;
+  width: 310px;
   
   p {
     margin-bottom: 0px;

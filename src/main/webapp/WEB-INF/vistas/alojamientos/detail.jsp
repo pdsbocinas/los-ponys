@@ -20,7 +20,8 @@
                     <p class="card-text">${alojamiento.getDescripcion()}</p>
                     <p class="card-text">${alojamiento.getDireccion()}</p>
                 </div>
-                <form:form commandName="reservaDto" action="confirm-alojamiento" method="POST" modelAttribute="reservaDto">
+                <%--@elvariable id="reservaDto" type=""--%>
+                <form:form commandName="reservaDto" action="confirm-alojamiento" method="GET" modelAttribute="reservaDto">
                     <form:input type="text" path="checkin" value="Tue Oct 01 2019 00:00:00 GMT-0300 (Argentina Standard Time)" />
                     <form:input type="text" path="checkout" value="Tue Oct 01 2019 00:00:00 GMT-0300 (Argentina Standard Time)" />
                     <form:hidden path="user_id" value="${usuario.getId()}" />
