@@ -4,8 +4,21 @@ import axios from 'axios';
 import { host } from '../../host.js';
 import List from './components/List';
 import { Container, Row, Button } from 'react-bootstrap';
+import styled from 'styled-components'
 
-// esto es una de las formas para hacer consumo de apis via json, mirar el Controller Pais, metodo getPaisesJson
+const Title = styled.h1`
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 30px;
+`;
+
+const Subtitle = styled.h2`
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  font-size: 24px;
+`;
+
 class App extends React.Component {
 
   // aca inicializamos el State local del componente
@@ -20,7 +33,8 @@ class App extends React.Component {
     const destinationSelectedCopy = Object.assign([], this.state.destinationSelected);
     destinationSelectedCopy.splice(nombre, 1);
     this.setState({destinationSelected: destinationSelectedCopy});
-}
+  }
+
   onChangeFrom = async (date) =>{
     const newDate = this.setDate(date);
     await this.setState({ fechaInicio : newDate })
@@ -30,6 +44,7 @@ class App extends React.Component {
     const newDate = this.setDate(date);
     await this.setState({ fechaFin : newDate })
   }
+
   update = (fechaInicio, fechaFin,id) =>{
     const destino = this.state.destinationSelected.filter((d)=>{
       console.log("destino:"+ d)
@@ -42,8 +57,7 @@ class App extends React.Component {
     console.log(id)
 
 
-   console.log("destino")
-    console.log(destino)
+   console.log("destino",destino)
 
     //const destinoBuscado = destino[0]
     //console.log("destino buscado")
@@ -61,13 +75,13 @@ class App extends React.Component {
         //fechaHasta: '2019-12-01'
 
     })
-        .then(res => {
-            console.log(res.data)
-            const destino_id = res.data
-          const url =  window.location.href = `${host}/viaje/${lastURLSegmentId}destino/${destino_id}/vista`
-          return url;
-        })
-        .catch(e => console.log(e))
+    .then(res => {
+        console.log(res.data)
+        const destino_id = res.data
+      const url =  window.location.href = `${host}/viaje/${lastURLSegmentId}destino/${destino_id}/vista`
+      return url;
+    })
+    .catch(e => console.log(e))
   }
 
 
@@ -151,21 +165,27 @@ class App extends React.Component {
     const { destination, keyword, destinationSelected } = this.state;
     return (
       <Container>
+        <Title>Agrega destinos a tu viaje</Title>
         <Row className="justify-content-md-center">
           <form style={{
             width: '53%',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            marginBottom: '55px'
           }}>
             <input className="form-control" style={{maxWidth: '600px', height: '45px', margin: '0px'}} type="text" value={keyword} onChange={ev => this.onSearch(ev.target.value)} placeholder='Buscar por destino'/>
             <Button style={{
               width: '230px',
               height: '45px',
-              margin: '0'
             }} onClick={this.onSaveDestination} variant="primary">Guardar destinos</Button>
           </form>
         </Row>
+        {destination.length === 0 && (
+          <>
+            <Subtitle>No tenés ningún destino aun, empezá a agregar</Subtitle>
+          </>
+        )}
         {keyword.length > 4 && (
           <ul style={{ maxWidth: '600px', height: '350px', margin: '15px auto 40px', overflow: 'scroll' }} className="list-group">
             {destination.map((destin, i) => (
@@ -179,7 +199,6 @@ class App extends React.Component {
           items={destinationSelected}
           delete={(nombre)=>this.delete(nombre)}
           onSelect={this.update}
-
         />
       </Container>
     )

@@ -10,6 +10,7 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import org.junit.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +73,11 @@ public class alojamientosControllerTest {
     ServicioReserva servicioReserva = mock(ServicioReserva.class);
     controladorAlojamientos.setServicioReserva(servicioReserva);
 
-    ModelAndView mav = controladorAlojamientos.submit(reservaDto, result, model, request);
+
+    Long viaje_id = (long)123456;
+    Integer destino_id = 1;
+
+    ModelAndView mav = controladorAlojamientos.crearReservaParaAlojamiento(viaje_id, destino_id, reservaDto, result, model, request);
 
     assertThat(mav.getModel().get("reserva")).isInstanceOf(Reserva.class);
 
@@ -90,6 +95,7 @@ public class alojamientosControllerTest {
 
     ReservaDto reservaDto = mock(ReservaDto.class);
     BindingResult result = null;
+
     ModelMap model = null;
     HttpServletRequest request = mock(HttpServletRequest.class);
 
@@ -103,7 +109,10 @@ public class alojamientosControllerTest {
     controladorAlojamientos.setServicioReserva(servicioReserva);
     doThrow(Exception.class).when(servicioReserva).crearReservaParaAlojamiento(any(Reserva.class));
 
-    ModelAndView mav = controladorAlojamientos.submit(reservaDto, result, model, request);
+    Long viaje_id = (long)123456;
+    Integer destino_id = 1;
+
+    ModelAndView mav = controladorAlojamientos.crearReservaParaAlojamiento(viaje_id, destino_id, reservaDto, result, model, request);
     assertThat(mav.getViewName()).isEqualTo("error");
 
   }

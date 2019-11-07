@@ -1,17 +1,26 @@
 package ar.edu.unlam.tallerweb1.dao;
 
 import ar.edu.unlam.tallerweb1.modelo.Alojamiento;
-import ar.edu.unlam.tallerweb1.modelo.Viaje;
+import com.google.maps.GeoApiContext;
+import com.google.maps.TextSearchRequest;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.PlacesSearchResponse;
+import com.google.maps.model.PlacesSearchResult;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Repository("AlojamientoDao")
 @Transactional
@@ -19,6 +28,9 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
 
   @Inject
   private SessionFactory sessionFactory;
+
+  @Value("${datasource.apiKey}")
+  private String apiKey;
 
   public Criteria objetoCriteria() {
     Session session = sessionFactory.getCurrentSession();
@@ -89,5 +101,55 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
     return alojamiento;
   }
 
+  @Override
+  public void guardarAlojamientos(String ciudad) throws InterruptedException, ApiException, IOException {
 
+    Session session = sessionFactory.getCurrentSession();
+    List<Alojamiento> alojamientos = this.obtenerTodosLosAlojamientos();
+
+    for(Alojamiento alojamiento : alojamientos) {
+      session.delete(alojamiento);
+    }
+
+    GeoApiContext context = new GeoApiContext.Builder()
+        .apiKey(apiKey)
+        .build();
+    List<Alojamiento> listaDeAlojamientos = new ArrayList<>();
+
+    TextSearchRequest request = new TextSearchRequest(context);
+    PlacesSearchResponse response = request.query(ciudad).await();
+    for (PlacesSearchResult alojDto : response.results) {
+      String tokenPage = response.nextPageToken;
+      Alojamiento alojamiento = new Alojamiento();
+      alojamiento.setNombre(alojDto.name);
+      alojamiento.setDescripcion(alojDto.formattedAddress);
+      alojamiento.setPrecio(priceRandom());
+      alojamiento.setBookeable(getRandomBoolean());
+      alojamiento.setRating((int)alojDto.rating);
+      listaDeAlojamientos.add(alojamiento);
+    }
+
+    this.guardarAlojamientosEnLabase(listaDeAlojamientos);
+  }
+
+  @Override
+  public void guardarAlojamientosEnLabase(List<Alojamiento> alojamientos) {
+    final Session session = sessionFactory.getCurrentSession();
+
+    for(Alojamiento alojamiento : alojamientos) {
+      session.saveOrUpdate(alojamiento);
+    }
+  }
+
+  static Integer priceRandom() {
+    double randomDouble = Math.random();
+    randomDouble = randomDouble * 9000 + 1;
+    int randomInt = (int) randomDouble;
+    return randomInt;
+  }
+
+  public boolean getRandomBoolean() {
+    Random random = new Random();
+    return random.nextBoolean();
+  }
 }

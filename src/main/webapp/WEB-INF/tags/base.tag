@@ -20,10 +20,10 @@
         <header class="navbar-expand-lg navbar-light bg-light" id="pageheader">
             <nav class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-11">
+                    <div class="col-sm-10">
                         <a class="navbar-brand" href="${contextPath}/home">Travel Ponies</a>
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item active">

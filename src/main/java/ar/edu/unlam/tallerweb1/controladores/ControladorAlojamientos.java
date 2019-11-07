@@ -5,6 +5,7 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioAlojamiento;
 import ar.edu.unlam.tallerweb1.servicios.ServicioDestino;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistroUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
+import com.google.maps.errors.ApiException;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -71,16 +73,17 @@ public class ControladorAlojamientos {
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/alojamiento"}, method = RequestMethod.GET)
   public ModelAndView alojamientosPorDestino (@PathVariable("viaje_id") Long viaje_id,
                                               @PathVariable("destino_id") Integer destino_id,
-                                              HttpServletRequest request) {
+                                              HttpServletRequest request) throws InterruptedException, ApiException, IOException {
     ModelMap modelo = new ModelMap();
     Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
-
+    String ciudad = "hoteles en " + destino.getCiudad();
+    servicioAlojamiento.guardarAlojamientos(ciudad);
     modelo.put("ciudad",destino.getCiudad());
     return new ModelAndView("alojamientos/index", modelo);
   }
 
-  @RequestMapping(path = {"/alojamientos/{id}"}, method = RequestMethod.GET)
-  public ModelAndView alojamientoView (@PathVariable("id") Integer id, @ModelAttribute("reservaDto") ReservaDto reservaDto, HttpServletRequest request) {
+  @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/alojamiento/{id}"}, method = RequestMethod.GET)
+  public ModelAndView alojamientoView (@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @PathVariable("id") Integer id, @ModelAttribute("reservaDto") ReservaDto reservaDto, HttpServletRequest request) {
     ModelMap modelos = new ModelMap();
     modelos.put("reservaDto", new ReservaDto());
     HttpSession session = request.getSession();
@@ -90,8 +93,8 @@ public class ControladorAlojamientos {
     return new ModelAndView("alojamientos/detail", modelos);
   }
 
-  @RequestMapping(path = {"/alojamientos/confirm-alojamiento"}, method = RequestMethod.POST)
-  public ModelAndView submit(@ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) {
+  @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/alojamiento/confirm-alojamiento"}, method = RequestMethod.GET)
+  public ModelAndView crearReservaParaAlojamiento(@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) {
 
     HttpSession session = request.getSession();
 //  Usuario usuario = (Usuario) session.getAttribute("USER");

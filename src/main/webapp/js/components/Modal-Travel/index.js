@@ -106,7 +106,7 @@ class App extends React.Component {
         </div>
         <Modal show={show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Crea tu viaje</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group controlId="titulo">

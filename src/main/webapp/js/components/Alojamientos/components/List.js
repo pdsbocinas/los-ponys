@@ -15,9 +15,11 @@ const List = props => (
                     <h2 className="card-title">{hotel.nombre}</h2>
                     <h3 className="card-text">{hotel.direccion}</h3>
                     <p>{hotel.descripcion}</p>
+                    <br/>
+                    <strong>{hotel.precio}</strong>
                     <button
                       className={"btn btn-primary"}
-                      onClick={() => { return window.location.href = `alojamientos/${hotel.id}`}}>Reservar
+                      onClick={() => { return window.location.href = `${window.location.pathname}/${hotel.id}`}}>Reservar
                     </button>
                   </div>
                 </div>
