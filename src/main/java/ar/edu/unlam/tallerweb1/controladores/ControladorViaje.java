@@ -20,6 +20,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,6 +51,8 @@ public class ControladorViaje  {
   @Inject
   private ServicioDestino servicioDestino;
 
+  @Inject
+  private ServicioFoto servicioFoto;
 
   @Value("${datasource.apiKey}")
   private String apiKey;
@@ -355,16 +359,18 @@ public class ControladorViaje  {
 
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/vista"}, method = RequestMethod.GET)
   @ResponseBody
-  public ModelAndView vistaDeUnDestino(@PathVariable("destino_id") Integer destino_id, @PathVariable("viaje_id") Long viaje_id) {
+  public ModelAndView vistaDeUnDestino(@PathVariable("destino_id") Integer destino_id,
+                                       @PathVariable("viaje_id") Long viaje_id) {
 
     Destino destino = new Destino();
     destino = servicioDestino.obtenerDestinoPorId(destino_id);
-
+    List<Foto> fotos = servicioFoto.obtenerFotosPorDestinoId(destino_id);
     ModelMap modelo = new ModelMap();
     modelo.put("viaje_id",viaje_id);
     modelo.put("destino_id", destino_id);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("nombre", destino.getNombre());
+    modelo.put("fotos",fotos);
     /*modelo.put("fechaInicio", destino.getFechaInicio());
     modelo.put("fechaHasta", destino.getFechaHasta());*/
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -454,5 +460,39 @@ public class ControladorViaje  {
 
     return new ModelAndView("destino/vista", modelo);
   }
+
+
+  @RequestMapping("viajes/{viaje_id}/destino/{destino_id}/subirFoto")
+  public ModelAndView formulario() {
+    return new ModelAndView("uploadFile");
+  }
+
+  @RequestMapping(path = "viajes/{viaje_id}/destino/{destino_id}/validar-formulario", method = RequestMethod.POST)
+  public ModelAndView guardaFichero(@ModelAttribute FileFormBean fileFormBean,
+                                    @PathVariable("destino_id") Integer destino_id) {
+    ModelMap modelo = new ModelMap();
+    String mensaje = "ok";
+    try {
+//      grabarFicheroALocal(fileFormBean);
+      String nombreFoto = servicioFoto.subirFotoAUnDestino(fileFormBean,destino_id);
+      Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
+
+      Foto foto = new Foto();
+      foto.setDestino(destino);
+      foto.setName(nombreFoto);
+      servicioDestino.guardarFoto(foto);
+
+    } catch (Exception e) {
+      StringWriter errors = new StringWriter();
+      e.printStackTrace(new PrintWriter(errors));
+      mensaje = errors.toString();
+      //e.printStackTrace();
+      // mensaje = "error";
+
+    }
+    modelo.put("mensaje", mensaje);
+    return new ModelAndView("uploadFile", modelo);
+  }
+
 
 }

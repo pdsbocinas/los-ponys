@@ -17,5 +17,7 @@ public interface DestinoDao {
 
   List<Destino> obtenerDestinosDeViajes(Long id);
 
-    void guardarFecha(Destino destino, Long destino_id);
+  void guardarFecha(Destino destino, Long destino_id);
+
+  void guardarFoto(String nombreFoto, Integer destino_id);
 }

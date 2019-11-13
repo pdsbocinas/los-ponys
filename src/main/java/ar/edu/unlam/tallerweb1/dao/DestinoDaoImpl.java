@@ -101,4 +101,12 @@ public class DestinoDaoImpl implements DestinoDao {
 
     session.saveOrUpdate(destino);
   }
+
+  @Override
+  public void guardarFoto(String nombreFoto, Integer destino_id) {
+    Session session = sessionFactory.getCurrentSession();
+    Destino destino = obtenerDestinoPorId(destino_id);
+    destino.setFoto(nombreFoto);
+    session.saveOrUpdate(destino);
+  }
 }
