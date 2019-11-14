@@ -416,6 +416,8 @@ public class ControladorViaje  {
     Destino destino = new Destino();
     destino = servicioDestino.obtenerDestinoPorId(destino_id);
 
+    List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
+
     String fechaDesde = req.getParameter("fechaInicio");
     String fechaHasta = req.getParameter("fechaHasta");
 
@@ -433,15 +435,37 @@ public class ControladorViaje  {
     modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
     modelo.put("fechaHastaViaje", viaje.getFechaFin());
 
-    if(fechaDesdeFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
+    if(fechaDesdeFormateada.compareTo(fechaHastaFormateada) > 0 ){
+      modelo.put("error","La fecha de inicio debe ser menor a la de fin");
+      return new ModelAndView("/destino/fecha",modelo);
+    }else if(fechaDesdeFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
             fechaDesdeFormateada.compareTo(viaje.getFechaFin()) > 0){
       modelo.put("error","Te lo dijimos... tené en cuenta la fecha de tu viaje");
       return new ModelAndView("/destino/fecha",modelo);
-    }
-    if(fechaHastaFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
+    }else if(fechaHastaFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
             fechaHastaFormateada.compareTo(viaje.getFechaFin()) > 0){
       modelo.put("error","Te lo dijimos... tené en cuenta la fecha de tu viaje");
       return new ModelAndView("destino/fecha",modelo);
+    }else if(!destinos.isEmpty()){
+      for (Destino d: destinos
+           ) {
+        if(destino_id != d.getId()){
+          if(d.getFechaInicio() != null && d.getFechaHasta() != null){
+            if(fechaDesdeFormateada.compareTo(d.getFechaInicio()) > 0 &&
+              fechaDesdeFormateada.compareTo(d.getFechaHasta()) < 0){
+              String mensaje = "La fecha se solapa con la de "+ d.getCiudad();
+              modelo.put("error",mensaje);
+              return new ModelAndView("destino/fecha",modelo);
+            }else if(fechaHastaFormateada.compareTo(d.getFechaInicio()) > 0 &&
+              fechaHastaFormateada.compareTo(d.getFechaHasta()) < 0 ){
+              String mensaje = "La fecha se solapa con la de "+ d.getCiudad();
+              modelo.put("error",mensaje);
+              return new ModelAndView("destino/fecha",modelo);
+            }
+          }
+
+        }
+      }
     }
 
     DestinoDto destinoDto = new DestinoDto();
@@ -462,37 +486,7 @@ public class ControladorViaje  {
   }
 
 
-  @RequestMapping("viajes/{viaje_id}/destino/{destino_id}/subirFoto")
-  public ModelAndView formulario() {
-    return new ModelAndView("uploadFile");
-  }
 
-  @RequestMapping(path = "viajes/{viaje_id}/destino/{destino_id}/validar-formulario", method = RequestMethod.POST)
-  public ModelAndView guardaFichero(@ModelAttribute FileFormBean fileFormBean,
-                                    @PathVariable("destino_id") Integer destino_id) {
-    ModelMap modelo = new ModelMap();
-    String mensaje = "ok";
-    try {
-//      grabarFicheroALocal(fileFormBean);
-      String nombreFoto = servicioFoto.subirFotoAUnDestino(fileFormBean,destino_id);
-      Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
-
-      Foto foto = new Foto();
-      foto.setDestino(destino);
-      foto.setName(nombreFoto);
-      servicioDestino.guardarFoto(foto);
-
-    } catch (Exception e) {
-      StringWriter errors = new StringWriter();
-      e.printStackTrace(new PrintWriter(errors));
-      mensaje = errors.toString();
-      //e.printStackTrace();
-      // mensaje = "error";
-
-    }
-    modelo.put("mensaje", mensaje);
-    return new ModelAndView("uploadFile", modelo);
-  }
 
 
 }
