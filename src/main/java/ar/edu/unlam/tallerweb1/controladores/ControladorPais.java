@@ -28,7 +28,6 @@ public class ControladorPais {
 
     ModelMap modelo = new ModelMap();
 
-    // Obtiene los paises de la base de datos
     List<Pais> result = servicioPais.obtenerPaises();
 
     modelo.put("paises", result);

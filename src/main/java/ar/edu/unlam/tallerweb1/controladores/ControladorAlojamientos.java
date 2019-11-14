@@ -6,7 +6,6 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioDestino;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistroUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import com.google.maps.errors.ApiException;
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -19,10 +18,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @PropertySource(value= {"classpath:application.properties"})
@@ -58,7 +55,6 @@ public class ControladorAlojamientos {
       @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
       HttpServletRequest request
   ) {
-    // String queries = request.getQueryString();
     List<Alojamiento> alojamientos = servicioAlojamiento.obtenerAlojamientosParametrizados(desde, hasta, precioDesde, precioHasta, rating, ofertas, descuento, offset, size);
 
     return alojamientos;
@@ -97,8 +93,6 @@ public class ControladorAlojamientos {
   public ModelAndView crearReservaParaAlojamiento(@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) {
 
     HttpSession session = request.getSession();
-//  Usuario usuario = (Usuario) session.getAttribute("USER");
-
     BindingResult r = result;
 
     Integer user_id = reservaDto.getUser_id();

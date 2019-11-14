@@ -12,7 +12,7 @@ public class viajeControllerTest {
 
   @Test
   public void creacionDeViajeExitosa () {
-
+    ControladorViaje controladorViaje = new ControladorViaje();
 
   }
 
@@ -24,5 +24,6 @@ public class viajeControllerTest {
 
     ServicioViaje servicioLogin = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
   }
+
 
 }
