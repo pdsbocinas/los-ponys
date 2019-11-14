@@ -22,7 +22,6 @@ import java.io.StringWriter;
 @Controller
 public class ControladorFotos {
 
-
   @Inject
   private ServicioViaje servicioViaje;
 

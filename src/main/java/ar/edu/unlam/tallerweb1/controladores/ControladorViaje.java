@@ -392,19 +392,7 @@ public class ControladorViaje  {
     return new ModelAndView("viajes/mis-destinos", modelo);
   }
 
-  /*@RequestMapping(path = {"viajes/{id}/guardarFechas"}, method = RequestMethod.POST)
-    public ModelAndView guardarFechasdeDestinoPorViaje( @RequestBody DestinoDto destinodto){
 
-      Date fechaDesde = destinodto.getFechaInicio();
-      Date fechaHasta = destinodto.getFechaHasta();
-
-      ModelMap modelo = new ModelMap();
-
-      modelo.put("fechaDesde", fechaDesde);
-      modelo.put("fechaHasta",fechaHasta);
-
-    return new ModelAndView("viajes/fechas", modelo);
-    }*/
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/guardarFechas"}, method = RequestMethod.POST)
   public ModelAndView guardarFechasdeDestinoPorViaje (HttpServletRequest req,
                                                       @PathVariable("destino_id") Integer destino_id,
