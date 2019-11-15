@@ -129,7 +129,7 @@ class App extends React.Component {
   onSaveDestination = () => {
     const { destinationSelected } = this.state;
     console.log(destinationSelected);
-    const destination = destinationSelected.map((d)=>{
+    /*const destination = destinationSelected.map((d)=>{
       let obj = {}
       obj["ciudad"] = d.name
       obj["nombre"] = d.name
@@ -142,7 +142,7 @@ class App extends React.Component {
 
     })
     console.log(destination)
-    const arrayDestination = [destination]
+    const arrayDestination = [destination]*/
 
     //const placeIds = destinationSelected.map(v => { return (v.placeId)});
     const pageURL = window.location.href;
@@ -150,8 +150,8 @@ class App extends React.Component {
     console.log(`${host}/api/viajes/${lastURLSegmentId}/guardarDestinos`);
 
     axios.post(`${host}/api/viajes/${lastURLSegmentId}/guardarDestinos`,
-       //destinationSelected
-      destination
+       destinationSelected
+      //destination
 
     )
     .then(res => {

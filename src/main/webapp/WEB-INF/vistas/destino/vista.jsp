@@ -45,11 +45,33 @@
                         <h5 class="card-title">Tus momentos</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Compartí fotos de este destino para que los demás puedan comentar</h6>
                         <p class="card-text"></p>
-                        <a href="./alojamiento" class="btn btn-primary">Subí fotos</a>
+                        <a href="./subirFoto" class="btn btn-primary">Subí fotos</a>
+                          <div class="row mt-2">
+                        <c:choose>
+                        <c:when test="${fotos != null}">
+                          <c:forEach items="${fotos}" var="foto">
+                            <div class="col-3 mt-1">
+                              <img
+                                class="img-thumbnail"
+                                src="/Los_Ponys_war/images/destinos/${foto.name}"
+                                alt=""
+                              >
+                            </div>
+                          </c:forEach>
+
+
+                      </c:when>
+                      <c:otherwise>
+                          <div class="col-12">Todavia no subiste fotos</div>
+                      </c:otherwise>
+                      </c:choose>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+
                 <div class="row">
                   <div class="col-12">
                     <a

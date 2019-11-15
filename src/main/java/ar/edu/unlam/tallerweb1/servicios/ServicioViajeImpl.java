@@ -96,7 +96,12 @@ public class ServicioViajeImpl implements ServicioViaje {
             Destino destino = new Destino();
 
             destino.setId(destinoDto.getId());
-            destino.setCiudad(destinoDto.getCiudad());
+            if(destinoDto.getName() != null){
+                destino.setCiudad(destinoDto.getName());
+            }else{
+                destino.setCiudad(destinoDto.getCiudad());
+            }
+
             destino.setPlaceId(destinoDto.getPlaceId());
             destino.setFechaInicio(destinoDto.getFechaInicio());
             destino.setFechaFin(destinoDto.getFechaHasta());

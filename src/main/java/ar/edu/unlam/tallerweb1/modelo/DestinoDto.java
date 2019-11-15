@@ -13,6 +13,15 @@ public class DestinoDto {
   private String placeId;
 
   private String ciudad;
+  private String name;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 
   private URL icon;
 
