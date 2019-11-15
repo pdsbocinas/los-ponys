@@ -2,39 +2,33 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.maps.GeoApiContext;
 import com.google.maps.TextSearchRequest;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.PlacesSearchResponse;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import javax.inject.Inject;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Controller
-@PropertySource(value= {"classpath:application.properties"})
-public class ControladorViaje  {
+@PropertySource(value = {"classpath:application.properties"})
+public class ControladorViaje {
 
   @Inject
   private ServicioViaje servicioViaje;
@@ -58,10 +52,8 @@ public class ControladorViaje  {
   private String apiKey;
 
   @RequestMapping("/viajes")
-  public ModelAndView homeViaje (HttpServletRequest request) {
+  public ModelAndView homeViaje(HttpServletRequest request) {
     ModelMap modelos = new ModelMap();
-    ObjectMapper Obj = new ObjectMapper();
-    // List<Viaje> viajes = servicioViaje.obtenerViajes();
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
 
     if (usuario != null) {
@@ -78,18 +70,6 @@ public class ControladorViaje  {
     }
 
     return new ModelAndView("redirect:/home", modelos);
-
-/*    try {
-      String jsonStr = Obj.writeValueAsString(usuario);
-      modelos.put("usuario", jsonStr);
-      // Displaying JSON String
-      System.out.println(jsonStr);
-    }
-
-    catch (IOException e) {
-      e.printStackTrace();
-    }*/
-
   }
 
   @RequestMapping(path = "/eliminar-viaje", method = RequestMethod.POST)
@@ -102,53 +82,45 @@ public class ControladorViaje  {
   }
 
   @RequestMapping(path = {"/viajes/{id}"}, method = RequestMethod.GET)
-  public ModelAndView crearViajeView (@PathVariable("id") Integer id, HttpServletRequest request) {
-    ModelMap modelos = new ModelMap();
-
+  public ModelAndView crearViajeView(@PathVariable("id") Integer id, HttpServletRequest request) {
     return new ModelAndView("viajes/create");
   }
 
   @RequestMapping(path = {"/viajes/{viaje_id}/recorridos"}, method = RequestMethod.GET)
-  public ModelAndView crearRecorrido (@PathVariable ("viaje_id") Long viaje_id) {
-      ModelMap modelo = new ModelMap();
-      List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
+  public ModelAndView crearRecorrido(@PathVariable("viaje_id") Long viaje_id) {
+    ModelMap modelo = new ModelMap();
+    List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
 
     String origen = "";
     String destino = "";
 
-
-    if(destinos.size() == 2){
-        origen = destinos.get(0).getPlaceId();
-        destino = destinos.get(1).getPlaceId();
-    }else if (destinos.size() > 2){
-        ArrayList<String> waypoint = new ArrayList<String>();
-            for (int i = 1; i <= destinos.size(); i++){
-                if(i==1){
-                    origen = destinos.get(0).getPlaceId();
-                }else if(i != destinos.size()){
-                    waypoint.add(destinos.get(i-1).getPlaceId());
-                }else if(i == destinos.size()){
-                    destino = destinos.get(i-1).getPlaceId();
-                }
-            }
-        modelo.put("waypoint", waypoint);
+    // llevar esta logica al servicio
+    if (destinos.size() == 2) {
+      origen = destinos.get(0).getPlaceId();
+      destino = destinos.get(1).getPlaceId();
+    } else if (destinos.size() > 2) {
+      ArrayList<String> waypoint = new ArrayList<String>();
+      for (int i = 1; i <= destinos.size(); i++) {
+        if (i == 1) {
+          origen = destinos.get(0).getPlaceId();
+        } else if (i != destinos.size()) {
+          waypoint.add(destinos.get(i - 1).getPlaceId());
+        } else if (i == destinos.size()) {
+          destino = destinos.get(i - 1).getPlaceId();
         }
+      }
+      modelo.put("waypoint", waypoint);
+    }
 
-//      for (Destino d:destinos
-//           ) {
-//          ciudad = d.getPlaceId();
-//      }
-
-
-      modelo.put("origen", origen);
-      modelo.put("destino", destino);
-      return new ModelAndView("viajes/recorridos",modelo);
+    modelo.put("origen", origen);
+    modelo.put("destino", destino);
+    return new ModelAndView("viajes/recorridos", modelo);
   }
 
   @RequestMapping(path = {"/api/destinos"}, method = RequestMethod.GET)
   @ResponseBody
   public Object obtenerDestinos(HttpServletRequest request,
-                                  HttpServletResponse response) throws InterruptedException, ApiException, IOException {
+                                HttpServletResponse response) throws InterruptedException, ApiException, IOException {
     GeoApiContext context = new GeoApiContext.Builder()
         .apiKey(apiKey)
         .build();
@@ -167,6 +139,7 @@ public class ControladorViaje  {
     // todo agregar validaciones de los datos que vienen, por ejemplo que no sean null, cosas por el estilo
     // ViajeDto es el modelo que me viene del Frontend, una clase DTO es para mapear un Json que no corresponde a mi modelo de negocio
     // el servicio crearViaje me va devolver el id del viaje, por ende se lo seteo al controller
+    // llevar logica de envio de mail al servicio
     viajeDto.setId(
         servicioViaje.crearViaje(
             viajeDto.getTitulo(),
@@ -204,21 +177,21 @@ public class ControladorViaje  {
 
   @RequestMapping(path = {"/api/viajes/{id}/guardarDestinos"}, method = RequestMethod.POST)
   @ResponseBody
-  public void guardarOActualizarDestinos(@PathVariable Long id, @RequestBody  List<DestinoDto> destinosDto) throws InterruptedException, ApiException, IOException {
+  public void guardarOActualizarDestinos(@PathVariable Long id, @RequestBody List<DestinoDto> destinosDto) throws InterruptedException, ApiException, IOException {
     servicioViaje.guardarDestinos(id, destinosDto);
 
   }
 
   @RequestMapping(path = {"/api/viajes/{id}/obtener-destinos"}, method = RequestMethod.GET)
   @ResponseBody
-  public List<Destino> obtenerDestinosPorViaje(@PathVariable Long id){
+  public List<Destino> obtenerDestinosPorViaje(@PathVariable Long id) {
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(id);
     return destinos;
   }
 
   @RequestMapping(path = {"/api/mis-viajes"}, method = RequestMethod.GET)
   @ResponseBody
-  public List<Viaje> obtenerMisViajes(HttpServletRequest request){
+  public List<Viaje> obtenerMisViajes(HttpServletRequest request) {
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
     Integer userId = usuario.getId();
     List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(userId);
@@ -227,7 +200,7 @@ public class ControladorViaje  {
 
   @RequestMapping(path = {"/api/viajes-publicos"}, method = RequestMethod.GET)
   @ResponseBody
-  public List<Viaje> obtenerViajesPublicos(HttpServletRequest request){
+  public List<Viaje> obtenerViajesPublicos(HttpServletRequest request) {
     List<Viaje> viajes = servicioViaje.obtenerViajes();
     return viajes;
   }
@@ -237,17 +210,17 @@ public class ControladorViaje  {
   public ModelAndView comentarViaje(@PathVariable("id") Long id, HttpServletRequest request) throws InterruptedException, ApiException, IOException {
 
     ModelMap modelo = new ModelMap();
-    modelo.put("id",id);
+    modelo.put("id", id);
 
     Viaje viaje = servicioViaje.obtenerViajePorId(id);
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
 
     if (usuario != null) {
       modelo.put("usuario_email", usuario.getEmail());
-      modelo.put("viaje_id",viaje.getId());
-      modelo.put("viaje_fechaInicio",viaje.getFechaInicio());
-      modelo.put("viaje_fechaFin",viaje.getFechaFin());
-      modelo.put("viaje_titulo",viaje.getTitulo());
+      modelo.put("viaje_id", viaje.getId());
+      modelo.put("viaje_fechaInicio", viaje.getFechaInicio());
+      modelo.put("viaje_fechaFin", viaje.getFechaFin());
+      modelo.put("viaje_titulo", viaje.getTitulo());
     } else {
       return new ModelAndView("redirect:/home");
     }
@@ -267,6 +240,7 @@ public class ControladorViaje  {
     String comment = comentarioDto.getTexto();
     String estado = "no leido";
 
+    // TODO meter todo esto en el servicio de guardar comentario
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
     Usuario usuario = servicioRegistroUsuario.obtenerUsuarioPorMail(email_usuario);
 
@@ -290,8 +264,6 @@ public class ControladorViaje  {
   @RequestMapping(path = {"/api/viajes/comentarios/no-leido"}, method = RequestMethod.GET)
   @ResponseBody
   public List<Comentario> obtenerComentariosNoLeidos(@RequestParam(value = "id") Integer userId, HttpServletRequest request) {
-//    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
-//    Integer id = usuario.getId();
     List<Comentario> comentarios = servicioComentario.obtenerComentariosNoLeidos(userId);
     return comentarios;
   }
@@ -320,12 +292,12 @@ public class ControladorViaje  {
     Viaje viaje = new Viaje();
     viaje = servicioViaje.obtenerViajePorId(viaje_id);
     //Date fechaInicio = new Date();
-    if(destinodto.getFechaInicio().compareTo(viaje.getFechaInicio()) < 0 ||
-            destinodto.getFechaInicio().compareTo(viaje.getFechaFin()) > 0){
+    if (destinodto.getFechaInicio().compareTo(viaje.getFechaInicio()) < 0 ||
+        destinodto.getFechaInicio().compareTo(viaje.getFechaFin()) > 0) {
       return 0;
     }
-    if(destinodto.getFechaHasta().compareTo(viaje.getFechaInicio()) < 0 ||
-            destinodto.getFechaHasta().compareTo(viaje.getFechaFin()) > 0){
+    if (destinodto.getFechaHasta().compareTo(viaje.getFechaInicio()) < 0 ||
+        destinodto.getFechaHasta().compareTo(viaje.getFechaFin()) > 0) {
       return 0;
     }
     servicioDestino.guardarFecha(destinodto, destino_id);
@@ -341,11 +313,11 @@ public class ControladorViaje  {
 
     Destino destino = new Destino();
     destino = servicioDestino.obtenerDestinoPorId(destino_id);
-      Viaje viaje = new Viaje();
-      viaje = servicioViaje.obtenerViajePorId(viaje_id);
+    Viaje viaje = new Viaje();
+    viaje = servicioViaje.obtenerViajePorId(viaje_id);
 
     ModelMap modelo = new ModelMap();
-    modelo.put("viaje_id",viaje_id);
+    modelo.put("viaje_id", viaje_id);
     modelo.put("destino_id", destino_id);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("nombre", destino.getNombre());
@@ -366,11 +338,11 @@ public class ControladorViaje  {
     destino = servicioDestino.obtenerDestinoPorId(destino_id);
     List<Foto> fotos = servicioFoto.obtenerFotosPorDestinoId(destino_id);
     ModelMap modelo = new ModelMap();
-    modelo.put("viaje_id",viaje_id);
+    modelo.put("viaje_id", viaje_id);
     modelo.put("destino_id", destino_id);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("nombre", destino.getNombre());
-    modelo.put("fotos",fotos);
+    modelo.put("fotos", fotos);
     /*modelo.put("fechaInicio", destino.getFechaInicio());
     modelo.put("fechaHasta", destino.getFechaHasta());*/
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -383,7 +355,7 @@ public class ControladorViaje  {
   }
 
   @RequestMapping(path = {"/viajes/{viaje_id}/destino"}, method = RequestMethod.GET)
-  public ModelAndView elegirFechasDeDestinosPorViaje (@PathVariable ("viaje_id") Long viaje_id){
+  public ModelAndView elegirFechasDeDestinosPorViaje(@PathVariable("viaje_id") Long viaje_id) {
 
     ModelMap modelo = new ModelMap();
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
@@ -392,11 +364,10 @@ public class ControladorViaje  {
     return new ModelAndView("viajes/mis-destinos", modelo);
   }
 
-
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/guardarFechas"}, method = RequestMethod.POST)
-  public ModelAndView guardarFechasdeDestinoPorViaje (HttpServletRequest req,
-                                                      @PathVariable("destino_id") Integer destino_id,
-                                                      @PathVariable("viaje_id") Long viaje_id) throws ParseException {
+  public ModelAndView guardarFechasdeDestinoPorViaje(HttpServletRequest req,
+                                                     @PathVariable("destino_id") Integer destino_id,
+                                                     @PathVariable("viaje_id") Long viaje_id) throws ParseException {
 
     Viaje viaje = new Viaje();
     viaje = servicioViaje.obtenerViajePorId(viaje_id);
@@ -423,32 +394,33 @@ public class ControladorViaje  {
     modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
     modelo.put("fechaHastaViaje", viaje.getFechaFin());
 
-    if(fechaDesdeFormateada.compareTo(fechaHastaFormateada) > 0 ){
-      modelo.put("error","La fecha de inicio debe ser menor a la de fin");
-      return new ModelAndView("/destino/fecha",modelo);
-    }else if(fechaDesdeFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
-            fechaDesdeFormateada.compareTo(viaje.getFechaFin()) > 0){
-      modelo.put("error","Te lo dijimos... tené en cuenta la fecha de tu viaje");
-      return new ModelAndView("/destino/fecha",modelo);
-    }else if(fechaHastaFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
-            fechaHastaFormateada.compareTo(viaje.getFechaFin()) > 0){
-      modelo.put("error","Te lo dijimos... tené en cuenta la fecha de tu viaje");
-      return new ModelAndView("destino/fecha",modelo);
-    }else if(!destinos.isEmpty()){
-      for (Destino d: destinos
-           ) {
-        if(destino_id != d.getId()){
-          if(d.getFechaInicio() != null && d.getFechaHasta() != null){
-            if(fechaDesdeFormateada.compareTo(d.getFechaInicio()) > 0 &&
-              fechaDesdeFormateada.compareTo(d.getFechaHasta()) < 0){
-              String mensaje = "La fecha se solapa con la de "+ d.getCiudad();
-              modelo.put("error",mensaje);
-              return new ModelAndView("destino/fecha",modelo);
-            }else if(fechaHastaFormateada.compareTo(d.getFechaInicio()) > 0 &&
-              fechaHastaFormateada.compareTo(d.getFechaHasta()) < 0 ){
-              String mensaje = "La fecha se solapa con la de "+ d.getCiudad();
-              modelo.put("error",mensaje);
-              return new ModelAndView("destino/fecha",modelo);
+
+    if (fechaDesdeFormateada.compareTo(fechaHastaFormateada) > 0) {
+      modelo.put("error", "La fecha de inicio debe ser menor a la de fin");
+      return new ModelAndView("/destino/fecha", modelo);
+    } else if (fechaDesdeFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
+        fechaDesdeFormateada.compareTo(viaje.getFechaFin()) > 0) {
+      modelo.put("error", "Te lo dijimos... tené en cuenta la fecha de tu viaje");
+      return new ModelAndView("/destino/fecha", modelo);
+    } else if (fechaHastaFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
+        fechaHastaFormateada.compareTo(viaje.getFechaFin()) > 0) {
+      modelo.put("error", "Te lo dijimos... tené en cuenta la fecha de tu viaje");
+      return new ModelAndView("destino/fecha", modelo);
+    } else if (!destinos.isEmpty()) {
+      for (Destino d : destinos
+      ) {
+        if (destino_id != d.getId()) {
+          if (d.getFechaInicio() != null && d.getFechaHasta() != null) {
+            if (fechaDesdeFormateada.compareTo(d.getFechaInicio()) > 0 &&
+                fechaDesdeFormateada.compareTo(d.getFechaHasta()) < 0) {
+              String mensaje = "La fecha se solapa con la de " + d.getCiudad();
+              modelo.put("error", mensaje);
+              return new ModelAndView("destino/fecha", modelo);
+            } else if (fechaHastaFormateada.compareTo(d.getFechaInicio()) > 0 &&
+                fechaHastaFormateada.compareTo(d.getFechaHasta()) < 0) {
+              String mensaje = "La fecha se solapa con la de " + d.getCiudad();
+              modelo.put("error", mensaje);
+              return new ModelAndView("destino/fecha", modelo);
             }
           }
 
@@ -468,13 +440,9 @@ public class ControladorViaje  {
     String fechaHastaNormal = formatter.format(fechaHastaFormateada);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("fechaInicio", fechaDesdeNormal);
-    modelo.put("fechaHasta",fechaHastaNormal);
+    modelo.put("fechaHasta", fechaHastaNormal);
 
     return new ModelAndView("destino/vista", modelo);
   }
-
-
-
-
 
 }

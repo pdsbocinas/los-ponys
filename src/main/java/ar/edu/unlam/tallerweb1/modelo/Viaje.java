@@ -34,6 +34,11 @@ public class Viaje {
     @JoinColumn(name="viaje_id")
     private List<Destino> destinos;
 
+    @OneToMany(orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinColumn(name="comentario_id")
+    private List<Comentario> comentarios;
+
     @ManyToMany(fetch=FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(

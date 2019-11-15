@@ -29,12 +29,8 @@ public class ControladorRegistroUsuario {
   public ModelAndView irALogin() {
 
     ModelMap modelo = new ModelMap();
-    // Se agrega al modelo un objeto del tipo Usuario con key 'usuario' para que el mismo sea asociado
-    // al model attribute del form que esta definido en la vista 'login'
     Usuario usuario = new Usuario();
     modelo.put("usuario", usuario);
-    // Se va a la vista login (el nombre completo de la lista se resuelve utilizando el view resolver definido en el archivo spring-servlet.xml)
-    // y se envian los datos a la misma  dentro del modelo
     return new ModelAndView("home", modelo);
   }
 
@@ -52,29 +48,24 @@ public class ControladorRegistroUsuario {
 
       usuarioDto.setId(0);
       model.put("email","");
-      //Creo una session para manejar errores
       HttpSession session = request.getSession();
       session.setAttribute("ERROR", "duplicado");
       return "duplicado";
-//            return new ModelAndView("redirect:/home",model);
     }
 
     usuario.setPassword(usuarioDto.getPassword());
 
-    //Guardo el usuario en la base
     usuarioDto.setId(servicioRegistroUsuario.crearUsuario(
         usuarioDto.getEmail(),
         usuarioDto.getPassword()
     ));
-    //creo la session y le paso el usuario, a la vez que elimino la sesion de error
+
     HttpSession session = request.getSession();
     session.setAttribute("USER", usuario);
     session.removeAttribute("ERROR");
 
-    //le mando el mail a la vista asi saludo lo tomo desde react
     model.put("email",usuarioDto.getEmail());
     return "correcto";
-//        return new ModelAndView("redirect:/home",model);
   }
 
   @RequestMapping("/registroOK")
