@@ -26,6 +26,9 @@
                     <div class="col-12">
                         Hasta el <span class="font-weight-bold">${fechaHasta}</span>
                     </div>
+                  <div class="col-12">
+                    <a href="./fecha" class="badge badge-primary">Modificar fecha</a>
+                  </div>
                 </div>
 
                 <div class="row mt-3">

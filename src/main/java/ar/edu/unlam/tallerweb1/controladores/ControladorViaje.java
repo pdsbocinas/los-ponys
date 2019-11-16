@@ -281,31 +281,7 @@ public class ControladorViaje {
     }
   }
 
-  @RequestMapping(path = {"api/viajes/{viaje_id}/destino/{destino_id}/guardar-fecha"}, method = RequestMethod.POST)
-  @ResponseBody
-  public Integer guardarFechaDeUnDestino(
-      @PathVariable("viaje_id") Long viaje_id,
-      @PathVariable("destino_id") Integer destino_id,
-      @RequestBody DestinoDto destinodto) {
 
-    ModelMap modelos = new ModelMap();
-    Viaje viaje = new Viaje();
-    viaje = servicioViaje.obtenerViajePorId(viaje_id);
-    //Date fechaInicio = new Date();
-    if (destinodto.getFechaInicio().compareTo(viaje.getFechaInicio()) < 0 ||
-        destinodto.getFechaInicio().compareTo(viaje.getFechaFin()) > 0) {
-      return 0;
-    }
-    if (destinodto.getFechaHasta().compareTo(viaje.getFechaInicio()) < 0 ||
-        destinodto.getFechaHasta().compareTo(viaje.getFechaFin()) > 0) {
-      return 0;
-    }
-    servicioDestino.guardarFecha(destinodto, destino_id);
-    Destino destino = new Destino();
-    destino = servicioDestino.obtenerDestinoPorId(destino_id);
-
-    return destino.getId();
-  }
 
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/fecha"}, method = RequestMethod.GET)
   @ResponseBody
@@ -321,8 +297,13 @@ public class ControladorViaje {
     modelo.put("destino_id", destino_id);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("nombre", destino.getNombre());
-    modelo.put("fechaInicio", destino.getFechaInicio());
-    modelo.put("fechaHasta", destino.getFechaHasta());
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    String fechaInicioFormateada = formatter.format(destino.getFechaInicio());
+    String fechaHastaFormateada = formatter.format(destino.getFechaHasta());
+    modelo.put("fechaInicio", fechaInicioFormateada);
+    modelo.put("fechaHasta", fechaHastaFormateada);
+    //modelo.put("fechaInicio", destino.getFechaInicio());
+    //modelo.put("fechaHasta", destino.getFechaHasta());
     modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
     modelo.put("fechaHastaViaje", viaje.getFechaFin());
 

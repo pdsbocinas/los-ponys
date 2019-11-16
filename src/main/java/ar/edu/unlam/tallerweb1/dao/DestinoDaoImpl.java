@@ -45,7 +45,7 @@ public class DestinoDaoImpl implements DestinoDao {
   @Override
   public void guardarDestino(Destino destino) {
     final Session session = sessionFactory.getCurrentSession();
-    session.save(destino);
+    session.saveOrUpdate(destino);
   }
 
   @Override
