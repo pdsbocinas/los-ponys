@@ -6,9 +6,40 @@
 <html>
 <head>
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+
     <title>Vista de destino</title>
 </head>
+<style>
+  .grid {
+    background: #DDD;
+  }
+
+  /* clear fix */
+  .grid:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  /* ---- .grid-item ---- */
+
+  .grid-sizer,
+  .grid-item {
+    width: 33.333%;
+  }
+
+  .grid-item {
+    float: left;
+  }
+
+  .grid-item img {
+    display: block;
+    max-width: 100%;
+  }
+
+</style>
 <body>
+
 <t:base>
     <jsp:body>
         <div class="container">
@@ -84,9 +115,38 @@
                 </div>
 
             </form>
+
+
+            <div class="grid">
+              <div class="grid-sizer"></div>
+              <c:forEach items="${fotos}" var="foto">
+                <div class="grid-item">
+                  <img src="/Los_Ponys_war/images/destinos/${foto.name}" />
+                </div>
+              </c:forEach>
+            </div>
+
         </div>
 
     </jsp:body>
 </t:base>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script>
+  // external js: masonry.pkgd.js, imagesloaded.pkgd.js
+
+  var grid = document.querySelector('.grid');
+  var msnry;
+
+  imagesLoaded( grid, function() {
+    // init Isotope after all images have loaded
+    msnry = new Masonry( grid, {
+      itemSelector: '.grid-item',
+      columnWidth: '.grid-sizer',
+      percentPosition: true
+    });
+  });
+
+</script>
 </body>
 </html>
