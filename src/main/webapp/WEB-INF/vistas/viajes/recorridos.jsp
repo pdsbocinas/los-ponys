@@ -23,11 +23,10 @@
 </style>
 <t:base>
     <jsp:body>
-      <h1 class="display-4">Aquí está tu recorrido</h1>
-      <div id="map" ></div>
-        <a href="./destino" class="btn btn-secondary">Volver</a>
+    <h1 class="display-4">Aquí está tu recorrido</h1>
+    <div id="map" ></div>
+    <a href="./destino" class="btn btn-secondary">Volver</a>
       <script>
-
         function initMap() {
           var directionsService = new google.maps.DirectionsService();
           var directionsRenderer = new google.maps.DirectionsRenderer();

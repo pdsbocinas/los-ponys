@@ -13,6 +13,7 @@ public class DestinoDto {
   private String placeId;
 
   private String ciudad;
+
   private String name;
 
   public String getName() {
