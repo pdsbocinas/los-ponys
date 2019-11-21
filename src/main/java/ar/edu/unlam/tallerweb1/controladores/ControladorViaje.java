@@ -321,19 +321,29 @@ public class ControladorViaje {
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/vista"}, method = RequestMethod.GET)
   @ResponseBody
   public ModelAndView vistaDeUnDestino(@PathVariable("destino_id") Integer destino_id,
-                                       @PathVariable("viaje_id") Long viaje_id) {
+                                       @PathVariable("viaje_id") Long viaje_id,
+                                       HttpServletRequest request) {
+    ModelMap modelo = new ModelMap();
+    Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+    List<Usuario> usuarios = viaje.getUsuarios();
+    for (Usuario u: usuarios
+         ) {
+      if (usuario.getId() == u.getId()){
+        modelo.put("permisoUsuario", true);
+      }
+    }
 
     Destino destino = new Destino();
     destino = servicioDestino.obtenerDestinoPorId(destino_id);
     List<Foto> fotos = servicioFoto.obtenerFotosPorDestinoId(destino_id);
-    ModelMap modelo = new ModelMap();
+
     modelo.put("viaje_id", viaje_id);
     modelo.put("destino_id", destino_id);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("nombre", destino.getNombre());
     modelo.put("fotos", fotos);
-    /*modelo.put("fechaInicio", destino.getFechaInicio());
-    modelo.put("fechaHasta", destino.getFechaHasta());*/
+
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     String fechaDesdeNormal = formatter.format(destino.getFechaInicio());
     String fechaHastaNormal = formatter.format(destino.getFechaHasta());

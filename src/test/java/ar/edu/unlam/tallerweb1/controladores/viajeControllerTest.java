@@ -38,9 +38,9 @@ public class viajeControllerTest {
     Foto foto = new Foto();
     Long viajeId = null;
 
-
     ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
     sut.setServicioFoto(servicioFoto);
+
     when(servicioFoto.obtenerFoto(foto)).thenReturn(null);
     when(servicioFoto.elegirFotoComoPortada(foto)).thenReturn(false);
 
