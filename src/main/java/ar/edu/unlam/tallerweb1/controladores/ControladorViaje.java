@@ -51,6 +51,14 @@ public class ControladorViaje {
   @Value("${datasource.apiKey}")
   private String apiKey;
 
+  public void setServicioViaje(ServicioViaje servicioViaje) {
+    this.servicioViaje = servicioViaje;
+  }
+
+  public void setServicioFoto(ServicioFoto servicioFoto) {
+    this.servicioFoto = servicioFoto;
+  }
+
   @RequestMapping("/viajes")
   public ModelAndView homeViaje(HttpServletRequest request) {
     ModelMap modelos = new ModelMap();
@@ -335,13 +343,22 @@ public class ControladorViaje {
     return new ModelAndView("destino/vista", modelo);
   }
 
-  @RequestMapping(path = {"/viajes/{viaje_id}/destino"}, method = RequestMethod.GET)
-  public ModelAndView elegirFechasDeDestinosPorViaje(@PathVariable("viaje_id") Long viaje_id) {
+  @RequestMapping(path = {"/viajes/{viajeId}/destino"}, method = RequestMethod.GET)
+  public ModelAndView elegirFechasDeDestinosPorViaje(@PathVariable("viajeId") Long viajeId,
+                                                     @ModelAttribute("errorFotoPortada") String errorFotoPortada) {
 
     ModelMap modelo = new ModelMap();
-    List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
-    modelo.put("viaje_id", viaje_id);
+    Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
+    List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viajeId);
+    Foto foto =  servicioFoto.obtenerFotoDePortada(viajeId);
+
+    modelo.put("viajeId", viajeId);
     modelo.put("destinos", destinos);
+    modelo.put("errorFotoPortada", errorFotoPortada);
+    if(foto != null){
+      modelo.put("fotoPortada",foto.getName());
+    }
+
     return new ModelAndView("viajes/mis-destinos", modelo);
   }
 
@@ -426,4 +443,32 @@ public class ControladorViaje {
     return new ModelAndView("destino/vista", modelo);
   }
 
+  @RequestMapping("viajes/{viajeId}/fotodeportada")
+  public ModelAndView subirFotoDePortada(@PathVariable ("viajeId") Long viajeId) {
+    Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
+    List<Foto> fotos = servicioFoto.obtenerFotosDeDestinosDelViaje(viajeId);
+
+    ModelMap modelo = new ModelMap();
+    modelo.put("fotos", fotos);
+    //create a reservation object
+    Foto foto =new Foto();
+    //provide reservation object to the model
+    modelo.addAttribute("foto", foto);
+    return new ModelAndView("viajes/elegirFotoDePortada", modelo);
+  }
+
+  @RequestMapping("viajes/{viajeId}/submitForm")
+  public ModelAndView seleccionarFotoDePortada(@ModelAttribute("foto") Foto foto,
+                           @PathVariable("viajeId") Long viajeId){
+
+    Foto fotoPortada = servicioFoto.obtenerFoto(foto);
+    Boolean result = servicioFoto.elegirFotoComoPortada(fotoPortada);
+    ModelMap modelo = new ModelMap();
+    if (!result){
+      modelo.put("errorFotoPortada","No se pudo seleccionar la foto de portada");
+    }
+
+    return new ModelAndView("redirect:/viajes/"+viajeId+"/destino",modelo);
+
+  }
 }

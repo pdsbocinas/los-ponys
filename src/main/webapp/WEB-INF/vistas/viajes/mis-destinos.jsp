@@ -12,8 +12,17 @@
 <t:base>
     <jsp:body>
        <h1 class="display-4">Estos son los destinos que elegiste!</h1>
+      <h4>${fotoNombre}</h4>
+
 <%--        <div id="root"></div>--%>
       <div class="row mx-3">
+        <div class="col-12">
+          <a href="./fotodeportada" class="btn btn-warning">Elegir foto de portada</a>
+        </div>
+        <div class="col-12">
+          <h2>${errorFotoPortada}</h2>
+          <img src="/Los_Ponys_war/images/destinos/${fotoPortada}" class="img-fluid" alt="Responsive image">
+        </div>
         <c:forEach items="${destinos}" var="destino">
              <div class="col-4"  >
                 <div class="card mb-2"  style="min-height: 290px; max-height: 290px">

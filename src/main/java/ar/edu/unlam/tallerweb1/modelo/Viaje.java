@@ -106,4 +106,5 @@ public class Viaje {
     public void setPrivacidad(String privacidad) {
         this.privacidad = privacidad;
     }
+
 }

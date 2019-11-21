@@ -30,6 +30,17 @@ public class FotoDaoImpl implements FotoDao {
   }
 
   @Override
+  public Foto obtenerFoto(Foto foto) {
+    final Session session = sessionFactory.getCurrentSession();
+    Criteria criteria = session.createCriteria(Foto.class)
+      .add(Restrictions.eq("id", foto.getId()));
+
+    Foto result = (Foto) criteria.uniqueResult();
+
+    return result;
+  }
+
+  @Override
   public List<Foto> obtenerFotosPorDestinoId(Integer destino_id) {
     Session session = sessionFactory.getCurrentSession();
     Criteria criteria = session.createCriteria(Foto.class)
@@ -39,5 +50,44 @@ public class FotoDaoImpl implements FotoDao {
     List<Foto> list = criteria.list();
 
     return list;
+  }
+
+  @Override
+  public List<Foto> obtenerFotosDeDestinosDelViaje(Long viajeId) {
+    Session session = sessionFactory.getCurrentSession();
+    Criteria criteria = session.createCriteria(Foto.class)
+      .createAlias("viaje", "v")
+      .add(Restrictions.eq("v.id", viajeId));
+
+    List<Foto> list = criteria.list();
+
+    return list;
+  }
+
+  @Override
+  public Boolean elegirFotoComoPortada(Foto foto) {
+    Session session = sessionFactory.getCurrentSession();
+    Foto fotoPortadaAnterior = obtenerFotoDePortada(foto.getViaje().getId());
+    fotoPortadaAnterior.setPortada(false);
+    foto.setPortada(true);
+    session.update(foto);
+    return foto.getPortada();
+  }
+
+  @Override
+  public Foto obtenerFotoDePortada(Long viajeId) {
+    Session session = sessionFactory.getCurrentSession();
+    Criteria criteria = session.createCriteria(Foto.class)
+      .createAlias("viaje", "v")
+      .add(Restrictions.eq("v.id", viajeId))
+      .add(Restrictions.eq("portada", true));
+
+    Foto foto = (Foto) criteria.uniqueResult();
+    if(foto != null){
+      return foto;
+    }else{
+      return new Foto();
+    }
+
   }
 }
