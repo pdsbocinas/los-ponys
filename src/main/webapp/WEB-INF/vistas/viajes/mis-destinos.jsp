@@ -23,6 +23,12 @@
         </div>
       </div>
       <div class="d-flex bd-highlight">
+        <h4>${fotoNombre}</h4>
+        <a href="./fotodeportada" class="btn btn-warning">Elegir foto de portada</a>
+        <h2>${errorFotoPortada}</h2>
+        <img src="/Los_Ponys_war/images/destinos/${fotoPortada}" class="img-fluid" alt="Responsive image">
+      </div>
+      <div class="d-flex bd-highlight">
         <c:forEach items="${destinos}" var="destino">
           <div class="card mb-2" style="min-height: 290px; max-height: 290px; margin-right: 15px;">
             <div class="card-body">

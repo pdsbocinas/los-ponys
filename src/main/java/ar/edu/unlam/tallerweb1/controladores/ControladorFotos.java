@@ -37,20 +37,49 @@ public class ControladorFotos {
     return new ModelAndView("uploadFile");
   }
 
-  @RequestMapping(path = "viajes/{viaje_id}/destino/{destino_id}/validar-formulario", method = RequestMethod.POST)
+  @RequestMapping(path = "viajes/{viajeId}/destino/{destinoId}/validar-formulario", method = RequestMethod.POST)
   public ModelAndView guardaFichero(@ModelAttribute FileFormBean fileFormBean,
-                                    @PathVariable("destino_id") Integer destino_id) {
+                                    @PathVariable("viajeId") Long viajeId,
+                                    @PathVariable("destinoId") Integer destinoId) {
     ModelMap modelo = new ModelMap();
     String mensaje = "ok";
     try {
 //      grabarFicheroALocal(fileFormBean);
-      String nombreFoto = servicioFoto.subirFotoAUnDestino(fileFormBean,destino_id);
-      Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
-
+      String nombreFoto = servicioFoto.subirFotoAUnDestino(fileFormBean,destinoId);
+      Destino destino = servicioDestino.obtenerDestinoPorId(destinoId);
+      Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
       Foto foto = new Foto();
+      foto.setViaje(viaje);
       foto.setDestino(destino);
       foto.setName(nombreFoto);
       servicioDestino.guardarFoto(foto);
+
+    } catch (Exception e) {
+      StringWriter errors = new StringWriter();
+      e.printStackTrace(new PrintWriter(errors));
+      mensaje = errors.toString();
+      //e.printStackTrace();
+      // mensaje = "error";
+
+    }
+    modelo.put("mensaje", mensaje);
+    return new ModelAndView("uploadFile", modelo);
+  }
+
+
+  @RequestMapping(path = "viajes/{viajeId}/validar-formulario", method = RequestMethod.POST)
+  public ModelAndView guardaFotoDePortada(@ModelAttribute FileFormBean fileFormBean,
+                                    @PathVariable("viajeId") Long viajeId) {
+    ModelMap modelo = new ModelMap();
+    String mensaje = "ok";
+    try {
+      String nombreFoto = servicioFoto.subirFotoDePortadaAViaje(fileFormBean,viajeId);
+      Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
+
+      Foto foto = new Foto();
+      foto.setViaje(viaje);
+      foto.setName(nombreFoto);
+      servicioViaje.guardarFoto(foto);
 
     } catch (Exception e) {
       StringWriter errors = new StringWriter();

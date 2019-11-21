@@ -51,6 +51,14 @@ public class ControladorViaje {
   @Value("${datasource.apiKey}")
   private String apiKey;
 
+  public void setServicioViaje(ServicioViaje servicioViaje) {
+    this.servicioViaje = servicioViaje;
+  }
+
+  public void setServicioFoto(ServicioFoto servicioFoto) {
+    this.servicioFoto = servicioFoto;
+  }
+
   @RequestMapping("/viajes")
   public ModelAndView homeViaje(HttpServletRequest request) {
     ModelMap modelos = new ModelMap();
@@ -280,30 +288,6 @@ public class ControladorViaje {
     }
   }
 
-  @RequestMapping(path = {"api/viajes/{viaje_id}/destino/{destino_id}/guardar-fecha"}, method = RequestMethod.POST)
-  @ResponseBody
-  public Integer guardarFechaDeUnDestino(
-      @PathVariable("viaje_id") Long viaje_id,
-      @PathVariable("destino_id") Integer destino_id,
-      @RequestBody DestinoDto destinodto) {
-
-    ModelMap modelos = new ModelMap();
-    Viaje viaje = new Viaje();
-    viaje = servicioViaje.obtenerViajePorId(viaje_id);
-    //Date fechaInicio = new Date();
-    if (destinodto.getFechaInicio().compareTo(viaje.getFechaInicio()) < 0 ||
-        destinodto.getFechaInicio().compareTo(viaje.getFechaFin()) > 0) {
-      return 0;
-    }
-    if (destinodto.getFechaHasta().compareTo(viaje.getFechaInicio()) < 0 ||
-        destinodto.getFechaHasta().compareTo(viaje.getFechaFin()) > 0) {
-      return 0;
-    }
-    servicioDestino.guardarFecha(destinodto, destino_id);
-    Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
-    return destino.getId();
-  }
-
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/fecha"}, method = RequestMethod.GET)
   @ResponseBody
   public ModelAndView fechaDeUnDestino(@PathVariable("destino_id") Integer destino_id, @PathVariable("viaje_id") Long viaje_id) {
@@ -316,8 +300,13 @@ public class ControladorViaje {
     modelo.put("destino_id", destino_id);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("nombre", destino.getNombre());
-    modelo.put("fechaInicio", destino.getFechaInicio());
-    modelo.put("fechaHasta", destino.getFechaHasta());
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    String fechaInicioFormateada = formatter.format(destino.getFechaInicio());
+    String fechaHastaFormateada = formatter.format(destino.getFechaHasta());
+    modelo.put("fechaInicio", fechaInicioFormateada);
+    modelo.put("fechaHasta", fechaHastaFormateada);
+    //modelo.put("fechaInicio", destino.getFechaInicio());
+    //modelo.put("fechaHasta", destino.getFechaHasta());
     modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
     modelo.put("fechaHastaViaje", viaje.getFechaFin());
 
@@ -327,19 +316,29 @@ public class ControladorViaje {
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/vista"}, method = RequestMethod.GET)
   @ResponseBody
   public ModelAndView vistaDeUnDestino(@PathVariable("destino_id") Integer destino_id,
-                                       @PathVariable("viaje_id") Long viaje_id) {
+                                       @PathVariable("viaje_id") Long viaje_id,
+                                       HttpServletRequest request) {
+    ModelMap modelo = new ModelMap();
+    Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+    List<Usuario> usuarios = viaje.getUsuarios();
+    for (Usuario u: usuarios
+         ) {
+      if (usuario.getId() == u.getId()){
+        modelo.put("permisoUsuario", true);
+      }
+    }
 
     Destino destino = new Destino();
     destino = servicioDestino.obtenerDestinoPorId(destino_id);
     List<Foto> fotos = servicioFoto.obtenerFotosPorDestinoId(destino_id);
-    ModelMap modelo = new ModelMap();
+
     modelo.put("viaje_id", viaje_id);
     modelo.put("destino_id", destino_id);
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("nombre", destino.getNombre());
     modelo.put("fotos", fotos);
-    /*modelo.put("fechaInicio", destino.getFechaInicio());
-    modelo.put("fechaHasta", destino.getFechaHasta());*/
+
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     String fechaDesdeNormal = formatter.format(destino.getFechaInicio());
     String fechaHastaNormal = formatter.format(destino.getFechaHasta());
@@ -349,13 +348,22 @@ public class ControladorViaje {
     return new ModelAndView("destino/vista", modelo);
   }
 
-  @RequestMapping(path = {"/viajes/{viaje_id}/destino"}, method = RequestMethod.GET)
-  public ModelAndView elegirFechasDeDestinosPorViaje(@PathVariable("viaje_id") Long viaje_id) {
+  @RequestMapping(path = {"/viajes/{viajeId}/destino"}, method = RequestMethod.GET)
+  public ModelAndView elegirFechasDeDestinosPorViaje(@PathVariable("viajeId") Long viajeId,
+                                                     @ModelAttribute("errorFotoPortada") String errorFotoPortada) {
 
     ModelMap modelo = new ModelMap();
-    List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
-    modelo.put("viaje_id", viaje_id);
+    Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
+    List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viajeId);
+    Foto foto =  servicioFoto.obtenerFotoDePortada(viajeId);
+
+    modelo.put("viajeId", viajeId);
     modelo.put("destinos", destinos);
+    modelo.put("errorFotoPortada", errorFotoPortada);
+    if(foto != null){
+      modelo.put("fotoPortada",foto.getName());
+    }
+
     return new ModelAndView("viajes/mis-destinos", modelo);
   }
 
@@ -440,4 +448,32 @@ public class ControladorViaje {
     return new ModelAndView("destino/vista", modelo);
   }
 
+  @RequestMapping("viajes/{viajeId}/fotodeportada")
+  public ModelAndView subirFotoDePortada(@PathVariable ("viajeId") Long viajeId) {
+    Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
+    List<Foto> fotos = servicioFoto.obtenerFotosDeDestinosDelViaje(viajeId);
+
+    ModelMap modelo = new ModelMap();
+    modelo.put("fotos", fotos);
+    //create a reservation object
+    Foto foto =new Foto();
+    //provide reservation object to the model
+    modelo.addAttribute("foto", foto);
+    return new ModelAndView("viajes/elegirFotoDePortada", modelo);
+  }
+
+  @RequestMapping("viajes/{viajeId}/submitForm")
+  public ModelAndView seleccionarFotoDePortada(@ModelAttribute("foto") Foto foto,
+                           @PathVariable("viajeId") Long viajeId){
+
+    Foto fotoPortada = servicioFoto.obtenerFoto(foto);
+    Boolean result = servicioFoto.elegirFotoComoPortada(fotoPortada);
+    ModelMap modelo = new ModelMap();
+    if (!result){
+      modelo.put("errorFotoPortada","No se pudo seleccionar la foto de portada");
+    }
+
+    return new ModelAndView("redirect:/viajes/"+viajeId+"/destino",modelo);
+
+  }
 }

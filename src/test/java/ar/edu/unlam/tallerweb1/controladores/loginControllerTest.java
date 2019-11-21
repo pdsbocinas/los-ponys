@@ -30,6 +30,7 @@ public class loginControllerTest {
 
         ServicioLogin servicioLogin = mock(ServicioLogin.class); //reemplaza el servicio real por uno falso
         sut.setServicioLogin(servicioLogin);
+
         when(servicioLogin.consultarUsuario(usuario)).thenReturn(null);
 
         //ejecucion

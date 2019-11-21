@@ -54,10 +54,6 @@ public class Destino {
     private Date fechaHasta;
 
 
-
-    @Column(name="foto")
-    private String foto;
-
     // Getters and Setters
 
 
@@ -161,11 +157,4 @@ public class Destino {
         this.fechaHasta = fechaHasta;
     }
 
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
 }
