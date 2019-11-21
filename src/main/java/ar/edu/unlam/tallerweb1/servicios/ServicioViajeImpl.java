@@ -2,12 +2,10 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 
 import ar.edu.unlam.tallerweb1.dao.DestinoDao;
+import ar.edu.unlam.tallerweb1.dao.FotoDao;
 import ar.edu.unlam.tallerweb1.dao.UsuarioDao;
 import ar.edu.unlam.tallerweb1.dao.ViajeDao;
-import ar.edu.unlam.tallerweb1.modelo.Destino;
-import ar.edu.unlam.tallerweb1.modelo.DestinoDto;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
-import ar.edu.unlam.tallerweb1.modelo.Viaje;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import com.google.maps.errors.ApiException;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +26,10 @@ public class ServicioViajeImpl implements ServicioViaje {
 
     @Inject
     private UsuarioDao usuarioDao;
+
+    @Inject
+    private FotoDao fotoDao;
+
 
     @Override
     public String iniciarViaje(Date inicio, Date fin, String destino) {
@@ -111,5 +113,10 @@ public class ServicioViajeImpl implements ServicioViaje {
         viaje.setDestinos(listaDestinos);
         viajeDao.guardarViaje(viaje);
 
+    }
+
+    @Override
+    public void guardarFoto(Foto foto) {
+        fotoDao.guardarFoto(foto);
     }
 }

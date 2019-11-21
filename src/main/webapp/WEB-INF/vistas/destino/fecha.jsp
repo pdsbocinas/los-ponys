@@ -38,7 +38,8 @@
                         type="date"
                         id="fechaDesde"
                         name="fechaInicio"
-                        class="form-control">
+                        class="form-control"
+                      value="${fechaInicio}">
                     </div>
                   </div>
                   <div class="col-6">
@@ -48,7 +49,8 @@
                         type="date"
                         id="fechaHasta"
                         name="fechaHasta"
-                        class="form-control">
+                        class="form-control"
+                      value="${fechaHasta}">
                     </div>
                   </div>
                 </div>

@@ -18,6 +18,14 @@ public class Foto {
     @JoinColumn
     private Destino destino;
 
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn
+    private Viaje viaje;
+
+    @Column( name = "portada")
+    private Boolean portada;
+
+
     public Long getId() {
         return id;
     }
@@ -40,5 +48,21 @@ public class Foto {
 
     public void setDestino(Destino destino) {
         this.destino = destino;
+    }
+
+    public Viaje getViaje() {
+        return viaje;
+    }
+
+    public void setViaje(Viaje viaje) {
+        this.viaje = viaje;
+    }
+
+    public Boolean getPortada() {
+        return portada;
+    }
+
+    public void setPortada(Boolean portada) {
+        this.portada = portada;
     }
 }
