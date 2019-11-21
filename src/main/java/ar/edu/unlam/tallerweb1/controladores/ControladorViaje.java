@@ -187,7 +187,6 @@ public class ControladorViaje {
   @ResponseBody
   public void guardarOActualizarDestinos(@PathVariable Long id, @RequestBody List<DestinoDto> destinosDto) throws InterruptedException, ApiException, IOException {
     servicioViaje.guardarDestinos(id, destinosDto);
-
   }
 
   @RequestMapping(path = {"/api/viajes/{id}/obtener-destinos"}, method = RequestMethod.GET)
@@ -289,16 +288,12 @@ public class ControladorViaje {
     }
   }
 
-
-
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/fecha"}, method = RequestMethod.GET)
   @ResponseBody
   public ModelAndView fechaDeUnDestino(@PathVariable("destino_id") Integer destino_id, @PathVariable("viaje_id") Long viaje_id) {
 
-    Destino destino = new Destino();
-    destino = servicioDestino.obtenerDestinoPorId(destino_id);
-    Viaje viaje = new Viaje();
-    viaje = servicioViaje.obtenerViajePorId(viaje_id);
+    Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
+    Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
 
     ModelMap modelo = new ModelMap();
     modelo.put("viaje_id", viaje_id);
