@@ -398,6 +398,23 @@ public class ControladorViaje {
     modelo.put("fechaHastaViaje", viaje.getFechaFin());
 
 
+    ValidacionInicioFinDelDestino v1 = new ValidacionInicioFinDelDestino();
+    ValidacionInicioDelViaje v2 = new ValidacionInicioDelViaje(viaje.getFechaInicio());
+    ValidacionFinDelViaje v3 = new ValidacionFinDelViaje(viaje.getFechaFin());
+
+    v1.proximaValidacion(v2);
+    v2.proximaValidacion(v3);
+    v3.proximaValidacion(null);
+
+    try{
+      v1.validar(fechaDesdeFormateada, fechaHastaFormateada);
+
+    } catch (RuntimeException e){
+      modelo.put("error", e.getMessage());
+      return new ModelAndView("/destino/fecha", modelo);
+
+    }
+
     if (fechaDesdeFormateada.compareTo(fechaHastaFormateada) > 0) {
       modelo.put("error", "La fecha de inicio debe ser menor a la de fin");
       return new ModelAndView("/destino/fecha", modelo);

@@ -1,12 +1,13 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -34,10 +35,13 @@ public class Viaje {
     @JoinColumn(name="viaje_id")
     private List<Destino> destinos;
 
+
+
     @OneToMany(orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(name="comentario_id")
-    private List<Comentario> comentarios;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Cascade(CascadeType.ALL)
+    private List<Comentario> comentarios = new LinkedList<>();
 
     @ManyToMany(fetch=FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -50,6 +54,19 @@ public class Viaje {
 
     @Column(name = "privacidad")
     private String privacidad;
+
+    public void agregarComentario(Comentario comentario){
+        comentario.setViaje(this);
+        comentarios.add(comentario);
+    }
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
 
     public Date getFechaInicio() {
         return fechaInicio;
