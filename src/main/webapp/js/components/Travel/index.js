@@ -89,7 +89,7 @@ class App extends React.Component {
   componentDidMount () {
     const pageURL = window.location.href;
     const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-    axios.get(`${host}/api/viajes/${lastURLSegmentId}obtener-destinos`)
+    axios.get(`${host}/api/viajes/${lastURLSegmentId}/obtener-destinos`)
       .then(async v => {
         const data = v.data
         await this.setState({
