@@ -2,8 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from 'axios';
 import { host } from '../../host.js';
-import divWithClassName from "react-bootstrap/utils/divWithClassName";
-
 
 // esto es una de las formas para hacer consumo de apis via json, mirar el Controller Pais, metodo getPaisesJson
 class App extends React.Component {

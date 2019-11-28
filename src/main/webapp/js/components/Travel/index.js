@@ -147,9 +147,8 @@ class App extends React.Component {
     //const placeIds = destinationSelected.map(v => { return (v.placeId)});
     const pageURL = window.location.href;
     const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-    console.log(`${host}/api/viajes/${lastURLSegmentId}/guardarDestinos`);
 
-    axios.post(`${host}/api/viajes/${lastURLSegmentId}guardarDestinos`,
+    axios.post(`${host}/api/viajes/${lastURLSegmentId}/guardarDestinos`,
        destinationSelected
       //destination
 

@@ -17,26 +17,26 @@ import java.util.List;
 @Transactional
 public class ViajeDaoImpl implements ViajeDao{
 
-    @Inject
-    private SessionFactory sessionFactory;
+  @Inject
+  private SessionFactory sessionFactory;
 
-    @Override
-    public void guardarViaje(Viaje viaje) {
-        // guardar el viaje en la base de datos con hibernate Criteria
-        Session session = sessionFactory.getCurrentSession();
-        // Transaction tx = session.beginTransaction();
-        session.saveOrUpdate(viaje);
-        // tx.commit();
-        // session.close();
-    }
+  @Override
+  public void guardarViaje(Viaje viaje) {
+      // guardar el viaje en la base de datos con hibernate Criteria
+      Session session = sessionFactory.getCurrentSession();
+      // Transaction tx = session.beginTransaction();
+      session.saveOrUpdate(viaje);
+      // tx.commit();
+      // session.close();
+  }
 
-    @Override
-    public List<Viaje> obtenerViajes() {
-        Session session = sessionFactory.getCurrentSession();
-        Criteria cr = session.createCriteria(Viaje.class);
-        List results = cr.list();
-        return results;
-    }
+  @Override
+  public List<Viaje> obtenerViajes() {
+      Session session = sessionFactory.getCurrentSession();
+      Criteria cr = session.createCriteria(Viaje.class);
+      List results = cr.list();
+      return results;
+  }
 
   @Override
   public Viaje obtenerViajePorId(Long id) {
