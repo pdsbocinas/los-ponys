@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @PropertySource(value = {"classpath:application.properties"})
@@ -350,7 +352,7 @@ public class ControladorViaje {
 
   @RequestMapping(path = {"/viajes/{viajeId}/destino"}, method = RequestMethod.GET)
   public ModelAndView elegirFechasDeDestinosPorViaje(@PathVariable("viajeId") Long viajeId,
-                                                     @ModelAttribute("errorFotoPortada") String errorFotoPortada) {
+                                                     @ModelAttribute("errorFotoPortada") String errorFotoPortada) throws JsonProcessingException {
 
     ModelMap modelo = new ModelMap();
     Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
@@ -363,6 +365,9 @@ public class ControladorViaje {
     if(foto != null){
       modelo.put("fotoPortada",foto.getName());
     }
+
+    ObjectMapper destinosJson = new ObjectMapper();
+    modelo.put("destinosJson", destinosJson.writeValueAsString(destinos));
 
     return new ModelAndView("viajes/mis-destinos", modelo);
   }

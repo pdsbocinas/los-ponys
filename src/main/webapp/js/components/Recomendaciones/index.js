@@ -2,9 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from 'axios';
 import { host } from '../../host.js';
-import {Col, Row} from "react-bootstrap";
 import List from './components/List';
-import Slider from "react-slick";
 
 class App extends React.Component {
 
@@ -22,28 +20,44 @@ class App extends React.Component {
 
   getRecomendaciones = () => {
     const { params } = this.state
-    axios.get(`${host}/api/recomendaciones`,{
-      params: params
-    })
-    .then(async v => {
-      const data = v.data;
-      return await this.setState({
-        recomendaciones: data
+    const destinos = destinosJson.map(v => v.ciudad)
+
+    destinos.forEach(v => {
+      axios.get(`${host}/api/recomendaciones`,{
+        params: {
+          destino: v
+        }
       })
-    })
-    .catch(e => {
-      console.log(e)
+      .then(async v => {
+        const data = v.data;
+        return await this.setState({
+          recomendaciones: this.state.recomendaciones.concat(data)
+        })
+      })
+      .catch(e => {
+        console.log(e)
+      })
     })
   }
 
   render () {
     const { recomendaciones } = this.state
+
     return (
-      <Row>
-          <List
-            items={recomendaciones}
-          />
-      </Row>
+      <>
+        <h2>Museos</h2>
+        <List
+          items={recomendaciones && recomendaciones[0]['museos']}
+        />
+        <h2>Restaurantes</h2>
+        <List
+          items={recomendaciones && recomendaciones[0]['restaurantes']}
+        />
+        <h2>Monumentos</h2>
+        <List
+          items={recomendaciones && recomendaciones[0]['monumentos']}
+        />
+      </>
     )
   }
 }

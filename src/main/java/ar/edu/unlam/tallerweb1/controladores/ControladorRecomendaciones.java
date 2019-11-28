@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -29,11 +31,20 @@ public class ControladorRecomendaciones {
 
   @RequestMapping(path = {"/api/recomendaciones"}, method = RequestMethod.GET)
   @ResponseBody
-  public List<PuntoDeInteres> homeRecomendaciones (HttpServletRequest request) throws InterruptedException, ApiException, IOException {
-    String tipo = request.getParameter("tipo");
-    String destino = request.getParameter("destino");
+  public HashMap<String, List<PuntoDeInteres>> homeRecomendaciones (HttpServletRequest request) throws InterruptedException, ApiException, IOException {
+    List<String> tipos = new ArrayList<>();
+    HashMap<String, List<PuntoDeInteres>> data = new HashMap<>();
 
-    List<PuntoDeInteres> puntosDeInteres = servicioRecomendador.obtenerPuntosDeInteres(tipo, destino);
-    return puntosDeInteres;
+    tipos.add("museos");
+    tipos.add("restaurantes");
+    tipos.add("monumentos");
+
+    for (String tipo : tipos) {
+      String destino = request.getParameter("destino");
+      List<PuntoDeInteres> puntosDeInteres = servicioRecomendador.obtenerPuntosDeInteres(tipo, destino);
+      data.put(tipo, puntosDeInteres);
+    }
+
+    return data;
   }
 }

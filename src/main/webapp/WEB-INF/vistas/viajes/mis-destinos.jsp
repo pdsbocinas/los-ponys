@@ -3,6 +3,7 @@
 <%@ taglib prefix="ex" uri ="/WEB-INF/custom.tld" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
 <head>
@@ -18,7 +19,7 @@
           <h1 class="display-4">Estos son los destinos que elegiste!</h1>
         </div>
         <div class="p-2 bd-highlight align-self-center">
-          <a href="../${viaje_id}" class="btn btn-secondary">Agregar o quitar destinos</a>
+          <a href="${contextPath}/viajes/${viajeId}" class="btn btn-secondary">Agregar o quitar destinos</a>
           <a href="./recorridos" class="btn btn-primary">Ver recorrido</a>
         </div>
       </div>
@@ -55,6 +56,9 @@
     </div>
   </jsp:body>
 </t:base>
+<script>
+  var destinosJson = ${destinosJson};
+</script>
 <c:set var="recomendaciones"><ex:getManifestAssets value="recomendaciones.js"/></c:set>
 <script src="<c:url value="${recomendaciones}"/>"></script>
 </body>
