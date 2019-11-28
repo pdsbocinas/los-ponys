@@ -64,7 +64,6 @@ public class viajeControllerTest {
     ControladorViaje sut = new ControladorViaje();
     Viaje viaje = new Viaje();
     Destino destino = new Destino();
-    DestinoDto destinoDto = new DestinoDto();
     ArrayList<Destino> destinos = new ArrayList<Destino>();
     Date inicio = new Date();
     Date fin = new Date();
@@ -85,7 +84,7 @@ public class viajeControllerTest {
     when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
     when(httpServletRequest.getParameter("fechaInicio")).thenReturn(null);
     when(httpServletRequest.getParameter("fechaHasta")).thenReturn(null);
-    when(servicioViaje.validaFecha(destino,destinos,viaje,inicio,fin)).thenReturn("error");
+    when(servicioViaje.validaFecha(destino,destinos,viaje,inicio,fin)).thenReturn("Ok");
 
 
 
@@ -93,7 +92,7 @@ public class viajeControllerTest {
     ModelAndView mav = controladorViaje.guardarFechasDeDestinoPorViaje(req,destino.getId(),viaje.getId());
 
     //verificacion
-    assertThat(mav.getViewName()).isEqualTo("/destino/fecha");
+    assertThat(mav.getViewName()).isEqualTo("/destino/vista");
     assertThat(mav.getModel()).containsKey("error");
   }
 

@@ -407,6 +407,7 @@ public class ControladorViaje {
 
     Date fechaDesdeFormateada = sdf.parse(fechaDesde);
     Date fechaHastaFormateada = sdf.parse(fechaHasta);
+
     String mensajeGuardarFecha = servicioViaje.validaFecha(destino,destinos,viaje,fechaDesdeFormateada,fechaHastaFormateada);
     if(mensajeGuardarFecha!= "Ok"){
       modelo.put("error", mensajeGuardarFecha);
