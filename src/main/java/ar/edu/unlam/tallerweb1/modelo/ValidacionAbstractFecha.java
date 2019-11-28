@@ -1,4 +1,4 @@
-package ar.edu.unlam.tallerweb1.controladores;
+package ar.edu.unlam.tallerweb1.modelo;
 
 import java.util.Date;
 
@@ -12,7 +12,7 @@ public class ValidacionAbstractFecha implements ValidacionFecha {
 
   @Override
   public void validar(Date inicio, Date fin) {
-      if(proxima!=null){
+      if(proxima != null){
         proxima.validar(inicio,fin);
       }
 

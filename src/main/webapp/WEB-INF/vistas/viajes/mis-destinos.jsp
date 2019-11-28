@@ -3,6 +3,7 @@
 <%@ taglib prefix="ex" uri ="/WEB-INF/custom.tld" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
 <head>
@@ -13,33 +14,43 @@
 <t:base>
   <jsp:body>
     <div class="container-fluid">
-      <div class="d-flex bd-highlight">
-        <div class="p-2 flex-grow-1 bd-highlight">
+      <div class="row ">
+        <div class="col-12 text-center text-uppercase text-primary ">
+          <h1 class="display-4">${viajeTitulo}</h1>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-6 text-center">
+          <h2>${errorFotoPortada}</h2>
+          <img src="/Los_Ponys_war/images/destinos/${fotoPortada}" class="img-fluid" alt="">
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-6">
+          <a href="./fotodeportada" class="btn btn-block btn-warning">Elegir foto de portada</a>
+        </div>
+      </div>
+
+      <div class="row justify-content-around">
+        <div class="col-12 my-2 text-center">
           <h1 class="display-4">Estos son los destinos que elegiste!</h1>
         </div>
-        <div class="p-2 bd-highlight align-self-center">
-          <a href="../${viaje_id}" class="btn btn-secondary">Agregar o quitar destinos</a>
-          <a href="./recorridos" class="btn btn-primary">Ver recorrido</a>
+        <div class="col-12 text-center text-muted my-2">
+           <a href="${contextPath}/viajes/${viajeId}" class="badge badge-primary">Podes agregar o quitar destinos desde acá</a>
         </div>
-      </div>
-      <div class="d-flex bd-highlight">
-        <h4>${fotoNombre}</h4>
-        <a href="./fotodeportada" class="btn btn-warning">Elegir foto de portada</a>
-        <h2>${errorFotoPortada}</h2>
-        <img src="/Los_Ponys_war/images/destinos/${fotoPortada}" class="img-fluid" alt="Responsive image">
-      </div>
-      <div class="d-flex bd-highlight">
+
         <c:forEach items="${destinos}" var="destino">
-          <div class="card mb-2" style="min-height: 290px; max-height: 290px; margin-right: 15px;">
-            <div class="card-body">
+          <div class="card mb-2 col-4 m-2 bg-dark">
+            <div class="card-body bg-light">
               <h5 class="card-title">${destino.ciudad}</h5>
               <c:choose>
                 <c:when test="${destino.fechaInicio != null && destino.fechaHasta != null}">
-                  <h6 class="card-subtitle mb-2 text-muted">Aquí estarás...</h6>
-                  <p class="card-text">Desde: <b>${destino.fechaInicio}</b></p>
-                  <p class="card-text">Hasta: <b>${destino.fechaHasta}</b></p>
-                  <a href="./destino/${destino.id}/vista" class="btn btn-primary">Ver destino
-                  </a>
+                  <p class="card-text"><b>${destino.fechaInicio}</b> - <b>${destino.fechaHasta}</b></p>
+                  <div class="row justify-content-end">
+                      <a href="./destino/${destino.id}/vista" class="btn btn-primary">Ver destino
+                      </a>
+                  </div>
+
                 </c:when>
                 <c:otherwise>
                   <h6 class="card-subtitle mb-2 text-muted">Cuántos días te quedarás aqui?</h6>
@@ -50,6 +61,10 @@
             </div>
           </div>
         </c:forEach>
+        <div class="col-12 text-center text-muted">
+          <h1 class="display-4">Cuando tengas todo listo mirá el recorrido  </h1>
+          <a href="./recorridos" class="badge badge-primary">Ver Recorrido</a>
+        </div>
       </div>
       <div id="puntos"></div>
     </div>

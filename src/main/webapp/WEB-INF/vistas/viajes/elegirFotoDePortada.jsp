@@ -17,15 +17,25 @@
       <div class="row mx-3">
 
           <c:forEach items="${fotos}" var="foto">
+            <div class="col-2">
+              <form:form action="submitForm" modelAttribute="foto">
+                  <div class="row border rounded p-1" >
+                    <div class="col-12 position-relative">
+                      <div class="row justify-content-center align-items-center" style="min-height: 80px; max-height: 80px">
+                        <div class="col-8">
+                          <img src="/Los_Ponys_war/images/destinos/${foto.name}" class="img-fluid" alt="">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 text-center">
+                      <button type="submit" class="btn btn-primary" >Seleccionar</button>
+                    </div>
+                  </div>
+                <form:hidden path="id" value="${foto.id}"/>
 
+              </form:form>
+            </div>
 
-            <form:form action="submitForm" modelAttribute="foto">
-
-              <img src="/Los_Ponys_war/images/destinos/${foto.name}" class="img-responsive" alt="">
-              <button type="submit" class="btn btn-primary">Seleccionar</button>
-              <form:hidden path="id" value="${foto.id}"/>
-
-            </form:form>
           </c:forEach>
 
 

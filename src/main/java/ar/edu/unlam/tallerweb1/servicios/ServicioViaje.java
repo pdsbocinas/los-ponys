@@ -21,4 +21,6 @@ public interface ServicioViaje {
   void borrarViaje(Viaje viaje);
   void guardarDestinos(Long id, List<DestinoDto> destinos);
   void guardarFoto(Foto foto);
+
+  String validaFecha(Destino destino, List<Destino> destinos,Viaje viaje, Date inicio, Date fin);
 }

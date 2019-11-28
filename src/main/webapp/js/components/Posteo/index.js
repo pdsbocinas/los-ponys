@@ -15,7 +15,8 @@ class App extends React.Component {
       id: viaje_id,
       fechaInicio: viaje_fechaInicio,
       fechaFin: viaje_fechaFin,
-      titulo: viaje_titulo
+      titulo: viaje_titulo,
+      fotoPortada : viajeFotoPortada
     },
     destinos:[],
       comentario_actual: '',
@@ -89,6 +90,11 @@ class App extends React.Component {
               <div className="col-1 text-center display-4">-&gt;</div>
               <div className="col-4 text-center display-4">
                 {new Date(this.state.viaje.fechaFin).toLocaleDateString()}
+              </div>
+            </div>
+            <div className="row justify-content-center">
+              <div className="col-6 text-center">
+                <img src={"/Los_Ponys_war/images/destinos/"+this.state.viaje.fotoPortada} className="img-fluid" alt=""/>
               </div>
             </div>
 
