@@ -38,7 +38,7 @@ public class viajeControllerTest {
   }
 
   @Test
-  public void seleccionarFotoDePortadaDeViaje(){
+  public void seleccionarFotoDePortadaDeViajeError(){
     ControladorViaje sut = new ControladorViaje();
     Foto foto = new Foto();
     Long viajeId = null;
@@ -50,16 +50,36 @@ public class viajeControllerTest {
     when(servicioFoto.elegirFotoComoPortada(foto)).thenReturn(false);
 
     //ejecucion
-    ModelAndView mav = controladorViaje.seleccionarFotoDePortada(foto, viajeId);
+    ModelAndView mav = sut.seleccionarFotoDePortada(foto, viajeId);
 
     //verificacion
-    assertThat(mav.getViewName()).isEqualTo("/viajes/"+viajeId+"/destino");
-    assertThat(mav.getModel()).containsKey("error");
-    assertThat(mav.getModel().get("error")).isEqualTo("error");
+    assertThat(mav.getViewName()).isEqualTo("redirect:/viajes/"+viajeId+"/destino");
+    assertThat(mav.getModel()).containsKey("errorFotoPortada");
+    assertThat(mav.getModel().get("errorFotoPortada")).isEqualTo("No se pudo seleccionar la foto de portada");
+  }
+
+  @Test
+  public void seleccionarFotoDePortadaDeViajeOK(){
+    ControladorViaje sut = new ControladorViaje();
+    Foto foto = new Foto();
+    Long viajeId = null;
+
+    ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
+    sut.setServicioFoto(servicioFoto);
+
+    when(servicioFoto.obtenerFoto(foto)).thenReturn(foto);
+    when(servicioFoto.elegirFotoComoPortada(foto)).thenReturn(true);
+
+    //ejecucion
+    ModelAndView mav = sut.seleccionarFotoDePortada(foto, viajeId);
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("redirect:/viajes/"+viajeId+"/destino");
+    assertThat(mav.getModel()).doesNotContainKey("errorFotoPortada");
   }
 
 
-  @Test
+ /* @Test
   public void validaUnaFechaCorrecta() throws ParseException {
     ControladorViaje sut = new ControladorViaje();
     Viaje viaje = new Viaje();
@@ -95,7 +115,7 @@ public class viajeControllerTest {
     assertThat(mav.getViewName()).isEqualTo("/destino/vista");
     assertThat(mav.getModel()).containsKey("error");
   }
-
+*/
 }
 
 
