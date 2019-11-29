@@ -11,7 +11,7 @@ public interface ServicioDestino {
 
   Destino obtenerDestinoPorId(Integer id);
 
-  void guardarFecha(DestinoDto destino, Integer destino_id);
+  void guardarDestino(Destino destino);
 
   void guardarFoto(Foto foto);
 

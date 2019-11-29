@@ -121,4 +121,26 @@ public class ServicioViajeImpl implements ServicioViaje {
     public void guardarFoto(Foto foto) {
         fotoDao.guardarFoto(foto);
     }
+
+    @Override
+    public String validaFecha(Destino destino, List<Destino>destinos, Viaje viaje, Date inicio, Date fin) {
+        ValidacionFechaNoVacia v1 = new ValidacionFechaNoVacia();
+        ValidacionInicioFinDelDestino v2 = new ValidacionInicioFinDelDestino();
+        ValidacionInicioDelViaje v3 = new ValidacionInicioDelViaje(viaje.getFechaInicio());
+        ValidacionFinDelViaje v4 = new ValidacionFinDelViaje(viaje.getFechaFin());
+        ValidacionDestinoConDestino v5 = new ValidacionDestinoConDestino(destino, destinos);
+
+        v1.proximaValidacion(v2);
+        v2.proximaValidacion(v3);
+        v3.proximaValidacion(v4);
+        v4.proximaValidacion(v5);
+        v5.proximaValidacion(null);
+        try {
+            v1.validar(inicio, fin);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "Ok";
+    }
+
 }

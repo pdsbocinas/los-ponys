@@ -52,13 +52,19 @@ public class ControladorViaje {
 
   @Value("${datasource.apiKey}")
   private String apiKey;
+  private HttpServletRequest httpServletRequest;
 
   public void setServicioViaje(ServicioViaje servicioViaje) {
     this.servicioViaje = servicioViaje;
   }
-
+  public void setServicioDestino(ServicioDestino servicioDestino) {
+    this.servicioDestino = servicioDestino;
+  }
   public void setServicioFoto(ServicioFoto servicioFoto) {
     this.servicioFoto = servicioFoto;
+  }
+  public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+    this.httpServletRequest = httpServletRequest;
   }
 
   @RequestMapping("/viajes")
@@ -227,11 +233,13 @@ public class ControladorViaje {
     modelo.put("id", id);
 
     Viaje viaje = servicioViaje.obtenerViajePorId(id);
+
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
 
     if (usuario != null) {
       modelo.put("usuario_email", usuario.getEmail());
       modelo.put("viaje_id", viaje.getId());
+      modelo.put("viajeFotoPortada",servicioFoto.obtenerFotoDePortada(viaje.getId()).getName());
       modelo.put("viaje_fechaInicio", viaje.getFechaInicio());
       modelo.put("viaje_fechaFin", viaje.getFechaFin());
       modelo.put("viaje_titulo", viaje.getTitulo());
@@ -308,10 +316,16 @@ public class ControladorViaje {
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("nombre", destino.getNombre());
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    String fechaInicioFormateada = formatter.format(destino.getFechaInicio());
-    String fechaHastaFormateada = formatter.format(destino.getFechaHasta());
-    modelo.put("fechaInicio", fechaInicioFormateada);
-    modelo.put("fechaHasta", fechaHastaFormateada);
+    if(destino.getFechaInicio()!= null){
+      String fechaInicioFormateada = formatter.format(destino.getFechaInicio());
+      modelo.put("fechaInicio", fechaInicioFormateada);
+    }
+    if(destino.getFechaHasta()!=null){
+      String fechaHastaFormateada = formatter.format(destino.getFechaHasta());
+      modelo.put("fechaHasta", fechaHastaFormateada);
+    }
+
+
     //modelo.put("fechaInicio", destino.getFechaInicio());
     //modelo.put("fechaHasta", destino.getFechaHasta());
     modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
@@ -365,6 +379,7 @@ public class ControladorViaje {
     Foto foto =  servicioFoto.obtenerFotoDePortada(viajeId);
 
     modelo.put("viajeId", viajeId);
+    modelo.put("viajeTitulo", viaje.getTitulo());
     modelo.put("destinos", destinos);
     modelo.put("errorFotoPortada", errorFotoPortada);
     if(foto != null){
@@ -378,12 +393,11 @@ public class ControladorViaje {
   }
 
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/guardarFechas"}, method = RequestMethod.POST)
-  public ModelAndView guardarFechasdeDestinoPorViaje(HttpServletRequest req,
+  public ModelAndView guardarFechasDeDestinoPorViaje(HttpServletRequest req,
                                                      @PathVariable("destino_id") Integer destino_id,
                                                      @PathVariable("viaje_id") Long viaje_id) throws ParseException {
 
-    Viaje viaje = new Viaje();
-    viaje = servicioViaje.obtenerViajePorId(viaje_id);
+    Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
 
     Destino destino = new Destino();
     destino = servicioDestino.obtenerDestinoPorId(destino_id);
@@ -393,77 +407,32 @@ public class ControladorViaje {
     String fechaDesde = req.getParameter("fechaInicio");
     String fechaHasta = req.getParameter("fechaHasta");
 
-
     ModelMap modelo = new ModelMap();
 
+    modelo.put("ciudad", destino.getCiudad());
+    modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
+    modelo.put("fechaHastaViaje", viaje.getFechaFin());
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     Date fechaDesdeFormateada = sdf.parse(fechaDesde);
     Date fechaHastaFormateada = sdf.parse(fechaHasta);
 
-    modelo.put("ciudad", destino.getCiudad());
-
-    modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
-    modelo.put("fechaHastaViaje", viaje.getFechaFin());
-
-
-    ValidacionInicioFinDelDestino v1 = new ValidacionInicioFinDelDestino();
-    ValidacionInicioDelViaje v2 = new ValidacionInicioDelViaje(viaje.getFechaInicio());
-    ValidacionFinDelViaje v3 = new ValidacionFinDelViaje(viaje.getFechaFin());
-
-    v1.proximaValidacion(v2);
-    v2.proximaValidacion(v3);
-    v3.proximaValidacion(null);
-
-    try{
-      v1.validar(fechaDesdeFormateada, fechaHastaFormateada);
-
-    } catch (RuntimeException e){
-      modelo.put("error", e.getMessage());
+    String mensajeGuardarFecha = servicioViaje.validaFecha(destino,destinos,viaje,fechaDesdeFormateada,fechaHastaFormateada);
+    if(mensajeGuardarFecha!= "Ok"){
+      modelo.put("error", mensajeGuardarFecha);
       return new ModelAndView("/destino/fecha", modelo);
-
     }
 
-    if (fechaDesdeFormateada.compareTo(fechaHastaFormateada) > 0) {
-      modelo.put("error", "La fecha de inicio debe ser menor a la de fin");
-      return new ModelAndView("/destino/fecha", modelo);
-    } else if (fechaDesdeFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
-        fechaDesdeFormateada.compareTo(viaje.getFechaFin()) > 0) {
-      modelo.put("error", "Te lo dijimos... tené en cuenta la fecha de tu viaje");
-      return new ModelAndView("/destino/fecha", modelo);
-    } else if (fechaHastaFormateada.compareTo(viaje.getFechaInicio()) < 0 ||
-        fechaHastaFormateada.compareTo(viaje.getFechaFin()) > 0) {
-      modelo.put("error", "Te lo dijimos... tené en cuenta la fecha de tu viaje");
-      return new ModelAndView("destino/fecha", modelo);
-    } else if (!destinos.isEmpty()) {
-      for (Destino d : destinos
-      ) {
-        if (destino_id != d.getId()) {
-          if (d.getFechaInicio() != null && d.getFechaHasta() != null) {
-            if (fechaDesdeFormateada.compareTo(d.getFechaInicio()) > 0 &&
-                fechaDesdeFormateada.compareTo(d.getFechaHasta()) < 0) {
-              String mensaje = "La fecha se solapa con la de " + d.getCiudad();
-              modelo.put("error", mensaje);
-              return new ModelAndView("destino/fecha", modelo);
-            } else if (fechaHastaFormateada.compareTo(d.getFechaInicio()) > 0 &&
-                fechaHastaFormateada.compareTo(d.getFechaHasta()) < 0) {
-              String mensaje = "La fecha se solapa con la de " + d.getCiudad();
-              modelo.put("error", mensaje);
-              return new ModelAndView("destino/fecha", modelo);
-            }
-          }
-
-        }
-      }
-    }
-
-    DestinoDto destinoDto = new DestinoDto();
+    /*DestinoDto destinoDto = new DestinoDto();
     destinoDto.setId(destino_id);
     destinoDto.setFechaInicio(fechaDesdeFormateada);
-    destinoDto.setFechaHasta(fechaHastaFormateada);
+    destinoDto.setFechaHasta(fechaHastaFormateada);*/
 
-    servicioDestino.guardarFecha(destinoDto, destino_id);
+    destino.setFechaInicio(fechaDesdeFormateada);
+    destino.setFechaHasta(fechaHastaFormateada);
+
+    servicioDestino.guardarDestino(destino);
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
     String fechaDesdeNormal = formatter.format(fechaDesdeFormateada);
@@ -482,9 +451,9 @@ public class ControladorViaje {
 
     ModelMap modelo = new ModelMap();
     modelo.put("fotos", fotos);
-    //create a reservation object
+
     Foto foto =new Foto();
-    //provide reservation object to the model
+
     modelo.addAttribute("foto", foto);
     return new ModelAndView("viajes/elegirFotoDePortada", modelo);
   }
