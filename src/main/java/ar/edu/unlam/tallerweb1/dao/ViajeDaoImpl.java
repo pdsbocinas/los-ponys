@@ -45,7 +45,6 @@ public class ViajeDaoImpl implements ViajeDao{
         .add(Restrictions.eq("id", id))
         .uniqueResult();
     return v;
-
   }
 
   @Override
@@ -59,11 +58,11 @@ public class ViajeDaoImpl implements ViajeDao{
   }
 
   @Override
+  @Transactional
   public void borrarViaje(Viaje viaje) {
     Session session = sessionFactory.getCurrentSession();
     if (viaje != null) {
       session.delete(viaje);
-
     }
   }
 }

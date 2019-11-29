@@ -8,6 +8,7 @@ import ar.edu.unlam.tallerweb1.dao.ViajeDao;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import com.google.maps.errors.ApiException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service("servicioViaje")
+@Transactional
 public class ServicioViajeImpl implements ServicioViaje {
 
     @Inject

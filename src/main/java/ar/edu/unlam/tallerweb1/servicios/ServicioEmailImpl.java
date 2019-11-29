@@ -9,6 +9,7 @@ import ar.edu.unlam.tallerweb1.modelo.Mail;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @Service("servicioEmail")
 @Transactional
@@ -33,5 +34,15 @@ public class ServicioEmailImpl implements ServicioEmail {
   @Override
   public void guardarEmail(Mail mail) {
     emailDao.guardarMail(mail);
+  }
+
+  @Override
+  public List<Mail> obtenerEmailsPorUsuario(Integer userId) {
+    return emailDao.obtenerEmailsPorUsuario(userId);
+  }
+
+  @Override
+  public void borrarEmails(List<Mail> mails) {
+    emailDao.borrarEmails(mails);
   }
 }

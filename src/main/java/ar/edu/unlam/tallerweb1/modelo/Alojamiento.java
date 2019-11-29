@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.Date;
 
 @Entity
-@Table(name = "alojamiento")
+@Table(name = "Alojamiento")
 public class Alojamiento {
 
     @Id

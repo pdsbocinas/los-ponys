@@ -16,9 +16,9 @@
 </t:base>
 <script>
 	<%--var mensaje = "[[${error}]]";--%>
-    var email = "${email}";
-    var duplicado = "${duplicado}";
-    var registroError = "${error1}";
+	var email = "${email}";
+	var duplicado = "${duplicado}";
+	var registroError = "${error1}";
 	var errorLogin = "${errorLogin}";
 	var login = "${login}";
 	var id = "${id}";

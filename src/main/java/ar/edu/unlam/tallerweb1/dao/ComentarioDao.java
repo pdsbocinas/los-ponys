@@ -14,4 +14,6 @@ public interface ComentarioDao {
 
 
   List<Comentario> obtenerComentariosNoLeidos(Integer id);
+
+  void borrarComentarios(List<Comentario> comentarios);
 }

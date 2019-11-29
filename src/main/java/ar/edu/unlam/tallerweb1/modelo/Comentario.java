@@ -3,7 +3,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "comentario")
+@Table(name = "Comentario")
 public class Comentario {
 
     @Id
@@ -15,11 +15,9 @@ public class Comentario {
     private String texto;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn
     private Viaje viaje;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn
     private Usuario usuario;
 
     @Column

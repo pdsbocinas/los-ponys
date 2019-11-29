@@ -207,7 +207,7 @@ class App extends React.Component{
                   titulo={viaje.titulo}
                   fechaInicio={viaje.fechaInicio}
                   fechaFin={viaje.fechaFin}
-                  usuario={viaje.usuarios[0].email}
+                  usuario={viaje && viaje.usuarios.length !== 0 ? viaje.usuarios[0].email : ''}
                   boton={"Ver"}
                   action ={"viajes/"+ viaje.id +"/comentar"}
                 />

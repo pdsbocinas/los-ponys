@@ -3,7 +3,6 @@ package ar.edu.unlam.tallerweb1.modelo;
 import java.util.List;
 import java.util.Map;
 
-// modelo similar a lo que devuelve la api
 public class PaisDto {
 
   private Long id;

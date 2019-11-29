@@ -83,10 +83,15 @@ public class ControladorViaje {
   }
 
   @RequestMapping(path = "/eliminar-viaje", method = RequestMethod.POST)
-  @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public ModelAndView borrarViaje(@ModelAttribute("viaje") Viaje viaje, HttpServletResponse response) {
+  public ModelAndView borrarViaje(@ModelAttribute("viaje") Viaje viaje, HttpServletRequest request, HttpServletResponse response) {
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+    Integer userId = usuario.getId();
     Long id = viaje.getId();
     Viaje v = servicioViaje.obtenerViajePorId(id);
+    List<Comentario> comentarios = servicioComentario.obtenerComentariosPorViajeId(v.getId());
+    List<Mail> mails = servicioEmail.obtenerEmailsPorUsuario(userId);
+    servicioEmail.borrarEmails(mails);
+    servicioComentario.borrarComentarios(comentarios);
     servicioViaje.borrarViaje(v);
     return new ModelAndView("redirect:/home");
   }

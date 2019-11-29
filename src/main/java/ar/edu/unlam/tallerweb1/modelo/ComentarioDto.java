@@ -4,18 +4,12 @@ import javax.persistence.*;
 
 public class ComentarioDto {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", unique = true, nullable = false)
   private Long id;
 
-  @Column(name = "texto")
   private String texto;
 
-  @ManyToOne
   private Long viaje_id;
 
-  @Column(name="usuario_email")
   private String usuario_email;
 
   public Long getId() {

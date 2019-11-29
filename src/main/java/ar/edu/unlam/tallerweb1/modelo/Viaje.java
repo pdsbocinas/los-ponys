@@ -6,8 +6,8 @@ import org.hibernate.annotations.CascadeType;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -30,33 +30,24 @@ public class Viaje {
     @Column(name = "fechaFin")
     private Date fechaFin;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(cascade = javax.persistence.CascadeType.PERSIST)
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinColumn(name="viaje_id")
-    private List<Destino> destinos;
+    private List<Destino> destinos = new ArrayList<>();
 
-
-
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="comentario_id")
-    @LazyCollection(LazyCollectionOption.FALSE)
+/*    @OneToMany(orphanRemoval = true)
     @Cascade(CascadeType.ALL)
-    private List<Comentario> comentarios = new LinkedList<>();
+    private List<Comentario> comentarios = new ArrayList<>();*/
 
     @ManyToMany(fetch=FetchType.EAGER)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(
-        name = "viaje_usuario",
-        joinColumns = @JoinColumn(name = "viaje_id"),
-        inverseJoinColumns = @JoinColumn(name = "usuario_id")
-    )
+    @Cascade(CascadeType.PERSIST)
+    @JoinTable(name = "viaje_usuario")
     private List<Usuario> usuarios;
 
     @Column(name = "privacidad")
     private String privacidad;
 
-    public void agregarComentario(Comentario comentario){
-        comentario.setViaje(this);
+/*    public void agregarComentario(Comentario comentario){
+        // comentario.setViaje(this);
         comentarios.add(comentario);
     }
 
@@ -66,7 +57,7 @@ public class Viaje {
 
     public void setComentarios(List<Comentario> comentarios) {
         this.comentarios = comentarios;
-    }
+    }*/
 
     public Date getFechaInicio() {
         return fechaInicio;
@@ -123,5 +114,4 @@ public class Viaje {
     public void setPrivacidad(String privacidad) {
         this.privacidad = privacidad;
     }
-
 }
