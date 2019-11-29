@@ -3,7 +3,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "foto")
+@Table(name = "Foto")
 public class Foto {
 
     @Id
@@ -24,7 +24,6 @@ public class Foto {
 
     @Column( name = "portada")
     private Boolean portada;
-
 
     public Long getId() {
         return id;

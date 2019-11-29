@@ -14,8 +14,8 @@
 <%--            <form action="../../viaje/${viaje_id}/destino/${destino_id}/guardarFechas" method="POST">--%>
               <form action="guardarFechas" method="POST">
 
-               <div class="row">
-                  <h1 class="display-4">Ya casi terminamos...</h1>
+               <div class="row justify-content-center">
+                  <h1 class="display-4">Hablemos de fechas</h1>
                </div>
                 <div class="row">
                     <div class="col-12 text-center">
@@ -54,7 +54,7 @@
                     </div>
                   </div>
                 </div>
-                <p class="text-danger">${error}</p>
+                <span class="badge badge-pill badge-danger">${error}</span>
                 <div class="row mt-2">
                   <div class="col-12 text-right">
                     <a href="../" class="btn btn-secondary">Volver</a>

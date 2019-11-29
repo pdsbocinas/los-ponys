@@ -32,11 +32,11 @@ public class ServicioDestinoImpl implements ServicioDestino {
     }
 
     @Override
-  public void guardarFecha(DestinoDto destinoDto, Integer destino_id) {
-    Destino destino = new Destino();
+  public void guardarDestino(Destino destino) {
+    /*Destino destino = new Destino();
     destino = destinoDao.obtenerDestinoPorId(destinoDto.getId());
     destino.setFechaInicio(destinoDto.getFechaInicio());
-    destino.setFechaFin(destinoDto.getFechaHasta());
+    destino.setFechaFin(destinoDto.getFechaHasta());*/
     destinoDao.guardarDestino(destino);
   }
 

@@ -25,6 +25,7 @@
   var viaje_fechaInicio = "${viaje_fechaInicio}";
   var viaje_fechaFin = "${viaje_fechaFin}";
   var viaje_titulo = "${viaje_titulo}";
+  var viajeFotoPortada = "${viajeFotoPortada}";
 
 </script>
 <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>

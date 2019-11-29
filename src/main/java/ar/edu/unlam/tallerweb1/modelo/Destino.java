@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.net.URL;
@@ -8,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "destino")
+@Table(name = "Destino")
 public class Destino {
 
     @Id
@@ -33,10 +34,6 @@ public class Destino {
     @Column(name = "icon")
     private URL icon;
 
-    // normalizar
-    //@ManyToOne
-    //private Pais pais;
-
     // @ManyToOne
     // @JsonIgnore
     // private Reserva reserva;
@@ -52,10 +49,6 @@ public class Destino {
 
     @Column(name = "fechaHasta")
     private Date fechaHasta;
-
-
-    // Getters and Setters
-
 
     public Double getLat() {
         return lat;

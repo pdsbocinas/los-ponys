@@ -56,4 +56,13 @@ public class ComentarioDaoImpl implements ComentarioDao {
 
     return list;
   }
+
+  @Override
+  @Transactional
+  public void borrarComentarios(List<Comentario> comentarios) {
+    Session session = sessionFactory.getCurrentSession();
+    for (Comentario comentario : comentarios) {
+      session.delete(comentario);
+    }
+  }
 }

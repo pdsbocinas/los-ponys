@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,6 @@ public class Mail {
     private String contenido;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Usuario usuario;
 
     public Long getId() {

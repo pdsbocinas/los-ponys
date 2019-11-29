@@ -1,4 +1,4 @@
-package ar.edu.unlam.tallerweb1.controladores;
+package ar.edu.unlam.tallerweb1.modelo;
 
 import java.util.Date;
 

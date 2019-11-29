@@ -23,7 +23,7 @@
             </div>
 
             <div class="row">
-                <c:forEach var="viaje" items="${viajes}">
+                <c:forEach items="${viajes}" var="viaje">
                     <div class="col-4" style="display: flex;">
                         <form:form action="eliminar-viaje" method="POST" modelAttribute="viaje">
                             <div class="card" style="width: 18rem;" >

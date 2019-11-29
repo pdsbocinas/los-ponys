@@ -1,13 +1,18 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.modelo.Comentario;
-import ar.edu.unlam.tallerweb1.modelo.ComentarioDto;
-import ar.edu.unlam.tallerweb1.modelo.Foto;
-import ar.edu.unlam.tallerweb1.modelo.Viaje;
+import ar.edu.unlam.tallerweb1.modelo.*;
+import ar.edu.unlam.tallerweb1.servicios.ServicioDestino;
 import ar.edu.unlam.tallerweb1.servicios.ServicioFoto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioViaje;
 import org.junit.Test;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -54,4 +59,45 @@ public class viajeControllerTest {
   }
 
 
+  @Test
+  public void validaUnaFechaCorrecta() throws ParseException {
+    ControladorViaje sut = new ControladorViaje();
+    Viaje viaje = new Viaje();
+    Destino destino = new Destino();
+    ArrayList<Destino> destinos = new ArrayList<Destino>();
+    Date inicio = new Date();
+    Date fin = new Date();
+    HttpServletRequest req = null;
+
+    ServicioViaje servicioViaje = mock(ServicioViaje.class);
+    sut.setServicioViaje(servicioViaje);
+
+    ServicioDestino servicioDestino = mock(ServicioDestino.class);
+    sut.setServicioDestino(servicioDestino);
+
+    HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+    sut.setHttpServletRequest(httpServletRequest);
+
+
+    when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(null);
+    when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(null);
+    when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
+    when(httpServletRequest.getParameter("fechaInicio")).thenReturn(null);
+    when(httpServletRequest.getParameter("fechaHasta")).thenReturn(null);
+    when(servicioViaje.validaFecha(destino,destinos,viaje,inicio,fin)).thenReturn("Ok");
+
+
+
+    //ejecucion
+    ModelAndView mav = controladorViaje.guardarFechasDeDestinoPorViaje(req,destino.getId(),viaje.getId());
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("/destino/vista");
+    assertThat(mav.getModel()).containsKey("error");
+  }
+
 }
+
+
+
+
