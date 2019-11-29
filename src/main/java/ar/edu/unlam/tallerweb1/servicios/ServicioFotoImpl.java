@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
+
 import ar.edu.unlam.tallerweb1.dao.DestinoDao;
 import ar.edu.unlam.tallerweb1.dao.FotoDao;
-import ar.edu.unlam.tallerweb1.modelo.Destino;
 import ar.edu.unlam.tallerweb1.modelo.FileFormBean;
 import ar.edu.unlam.tallerweb1.modelo.Foto;
 import org.springframework.stereotype.Service;
@@ -23,9 +23,8 @@ public class ServicioFotoImpl implements ServicioFoto {
   DestinoDao destinoDao;
   @Inject
   FotoDao fotoDao;
-  @Override
-  public String subirFotoAUnDestino(FileFormBean fileFormBean, Integer destino_id) throws IOException {
 
+  public String subirFoto (FileFormBean fileFormBean) throws IOException {
     CommonsMultipartFile uploaded = fileFormBean.getFichero();
     String lugar = System.getProperty("user.home");
     String path = lugar + "/documents\\UNLAM\\taller web\\proyecto app\\los-ponys\\src\\main\\webapp\\images\\destinos\\" + uploaded.getOriginalFilename();
@@ -48,30 +47,15 @@ public class ServicioFotoImpl implements ServicioFoto {
     return uploaded.getOriginalFilename();
   }
 
+  @Override
+  public String subirFotoAUnDestino(FileFormBean fileFormBean, Integer destino_id) throws IOException {
+    return this.subirFoto(fileFormBean);
+  }
+
 
   @Override
   public String subirFotoDePortadaAViaje(FileFormBean fileFormBean, Long viajeId) throws IOException {
-
-    CommonsMultipartFile uploaded = fileFormBean.getFichero();
-    String lugar = System.getProperty("user.home");
-    String path = lugar + "/documents\\UNLAM\\taller web\\proyecto app\\los-ponys\\src\\main\\webapp\\images\\viajes\\portada\\" + uploaded.getOriginalFilename();
-    File localFile = new File(path);
-
-    FileOutputStream os = null;
-
-    try {
-      os = new FileOutputStream(localFile);
-      os.write(uploaded.getBytes());
-    } finally {
-      if (os != null) {
-        try {
-          os.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-    return uploaded.getOriginalFilename();
+    return this.subirFoto(fileFormBean);
   }
 
   @Override
@@ -100,7 +84,10 @@ public class ServicioFotoImpl implements ServicioFoto {
   @Override
   public Foto obtenerFoto(Foto foto) {
     return fotoDao.obtenerFoto(foto);
-
   }
 
+  @Override
+  public void borrarFotos(List<Foto> fotos) {
+    fotoDao.borrarFotos(fotos);
+  }
 }

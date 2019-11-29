@@ -1,7 +1,5 @@
 package ar.edu.unlam.tallerweb1.dao;
 
-import ar.edu.unlam.tallerweb1.modelo.Destino;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import org.hibernate.Criteria;
 import org.hibernate.Session;

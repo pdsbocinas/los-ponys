@@ -16,4 +16,6 @@ public interface FotoDao {
   Boolean elegirFotoComoPortada(Foto foto);
 
   Foto obtenerFotoDePortada(Long viajeId);
+
+  void borrarFotos(List<Foto> fotos);
 }

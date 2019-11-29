@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.dao;
 
 
-import ar.edu.unlam.tallerweb1.modelo.Destino;
 import ar.edu.unlam.tallerweb1.modelo.Foto;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -88,6 +87,13 @@ public class FotoDaoImpl implements FotoDao {
     }else{
       return new Foto();
     }
+  }
 
+  @Override
+  public void borrarFotos(List<Foto> fotos) {
+    Session session = sessionFactory.getCurrentSession();
+    for (Foto foto : fotos) {
+      session.delete(foto);
+    }
   }
 }

@@ -96,6 +96,8 @@ public class ControladorViaje {
     Viaje v = servicioViaje.obtenerViajePorId(id);
     List<Comentario> comentarios = servicioComentario.obtenerComentariosPorViajeId(v.getId());
     List<Mail> mails = servicioEmail.obtenerEmailsPorUsuario(userId);
+    List<Foto> fotos = servicioFoto.obtenerFotosDeDestinosDelViaje(v.getId());
+    servicioFoto.borrarFotos(fotos);
     servicioEmail.borrarEmails(mails);
     servicioComentario.borrarComentarios(comentarios);
     servicioViaje.borrarViaje(v);

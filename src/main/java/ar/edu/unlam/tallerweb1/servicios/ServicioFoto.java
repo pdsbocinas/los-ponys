@@ -20,4 +20,6 @@ public interface ServicioFoto {
   Foto obtenerFotoDePortada(Long viajeId);
 
   Foto obtenerFoto(Foto foto);
+
+  void borrarFotos(List<Foto> fotos);
 }
