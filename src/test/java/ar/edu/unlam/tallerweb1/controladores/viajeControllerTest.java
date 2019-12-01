@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.maps.errors.ApiException;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -175,6 +176,7 @@ public class viajeControllerTest {
     assertThat(mav.getModel()).containsKey("fechaInicio");
   }
 
+
   @Test
   public void elegirFechaDeDestinoAUnDestinoSinFechaCargada () {
     ControladorViaje sut = new ControladorViaje();
@@ -198,6 +200,137 @@ public class viajeControllerTest {
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("destino/fecha");
     assertThat(mav.getModel()).doesNotContainKey("fechaIncio");
+  }
+
+/* NO SE COMO MOCKEAR HTTPSERVLETREQUEST
+  @Test
+  public void vistaDeUnDestino () {
+    ControladorViaje sut = new ControladorViaje();
+
+    Viaje viaje = new Viaje();
+    Destino destino = new Destino();
+    HttpServletRequest request = null;
+    Usuario usuario = new Usuario();
+    List<Foto> fotos;
+
+    ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
+    sut.setServicioViaje(servicioViaje);
+
+    ServicioDestino servicioDestino = mock(ServicioDestino.class); //reemplaza el servicio real por uno falso
+    sut.setServicioDestino(servicioDestino);
+
+    ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
+    sut.setServicioFoto(servicioFoto);
+
+
+    when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
+    when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(destino);
+    when(servicioFoto.obtenerFotosPorDestinoId(destino.getId())).thenReturn(null);
+
+
+
+    //ejecucion
+    ModelAndView mav = sut.vistaDeUnDestino(destino.getId(),viaje.getId(),request);
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("destino/vista");
+    //assertThat(mav.getModel()).containsKey("fechaInicio");
+  }
+*/
+
+
+  @Test
+  public void vistaDeUnViaje () throws JsonProcessingException {
+    ControladorViaje sut = new ControladorViaje();
+
+    Viaje viaje = new Viaje();
+    Destino destino = new Destino();
+    Usuario usuario = new Usuario();
+
+    String errorFotoPortada = null;
+
+    ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
+    sut.setServicioViaje(servicioViaje);
+
+    ServicioDestino servicioDestino = mock(ServicioDestino.class); //reemplaza el servicio real por uno falso
+    sut.setServicioDestino(servicioDestino);
+
+    ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
+    sut.setServicioFoto(servicioFoto);
+
+    when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
+    when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
+    when(servicioFoto.obtenerFotoDePortada(viaje.getId())).thenReturn(null);
+
+    //ejecucion
+    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada);
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("viajes/mis-destinos");
+  }
+
+  @Test
+  public void vistaDeUnViajeConFotoDePortadaSeleccionada () throws JsonProcessingException {
+    ControladorViaje sut = new ControladorViaje();
+
+    Viaje viaje = new Viaje();
+    Destino destino = new Destino();
+    Usuario usuario = new Usuario();
+    Foto foto = new Foto();
+    foto.setName("nombreFoto");
+    String errorFotoPortada = null;
+
+    ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
+    sut.setServicioViaje(servicioViaje);
+
+    ServicioDestino servicioDestino = mock(ServicioDestino.class); //reemplaza el servicio real por uno falso
+    sut.setServicioDestino(servicioDestino);
+
+    ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
+    sut.setServicioFoto(servicioFoto);
+
+    when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
+    when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
+    when(servicioFoto.obtenerFotoDePortada(viaje.getId())).thenReturn(foto);
+
+    //ejecucion
+    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada);
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("viajes/mis-destinos");
+    assertThat(mav.getModel()).containsKey("fotoPortada");
+    assertThat(mav.getModel().get("fotoPortada")).isNotNull();
+  }
+
+  @Test
+  public void vistaDeUnViajeSinFotoDePortadaSeleccionada () throws JsonProcessingException {
+    ControladorViaje sut = new ControladorViaje();
+
+    Viaje viaje = new Viaje();
+    Destino destino = new Destino();
+    Usuario usuario = new Usuario();
+
+    String errorFotoPortada = null;
+
+    ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
+    sut.setServicioViaje(servicioViaje);
+
+    ServicioDestino servicioDestino = mock(ServicioDestino.class); //reemplaza el servicio real por uno falso
+    sut.setServicioDestino(servicioDestino);
+
+    ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
+    sut.setServicioFoto(servicioFoto);
+
+    when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
+    when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
+    when(servicioFoto.obtenerFotoDePortada(viaje.getId())).thenReturn(null);
+
+    //ejecucion
+    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada);
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("viajes/mis-destinos");
+    assertThat(mav.getModel()).doesNotContainKey("fotoPortada");
   }
 
 

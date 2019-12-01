@@ -381,7 +381,7 @@ public class ControladorViaje {
   }
 
   @RequestMapping(path = {"/viajes/{viajeId}/destino"}, method = RequestMethod.GET)
-  public ModelAndView elegirFechasDeDestinosPorViaje(@PathVariable("viajeId") Long viajeId,
+  public ModelAndView vistaDelViaje (@PathVariable("viajeId") Long viajeId,
                                                      @ModelAttribute("errorFotoPortada") String errorFotoPortada) throws JsonProcessingException {
 
     ModelMap modelo = new ModelMap();
@@ -434,11 +434,6 @@ public class ControladorViaje {
       modelo.put("error", mensajeGuardarFecha);
       return new ModelAndView("/destino/fecha", modelo);
     }
-
-    /*DestinoDto destinoDto = new DestinoDto();
-    destinoDto.setId(destino_id);
-    destinoDto.setFechaInicio(fechaDesdeFormateada);
-    destinoDto.setFechaHasta(fechaHastaFormateada);*/
 
     destino.setFechaInicio(fechaDesdeFormateada);
     destino.setFechaHasta(fechaHastaFormateada);
