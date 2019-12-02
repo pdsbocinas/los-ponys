@@ -28,6 +28,7 @@ public class ComentarioDaoImpl implements ComentarioDao {
   @Override
   public void guardarComentario(Comentario comentario) {
     final Session session = sessionFactory.getCurrentSession();
+
       session.saveOrUpdate(comentario);
   }
 
