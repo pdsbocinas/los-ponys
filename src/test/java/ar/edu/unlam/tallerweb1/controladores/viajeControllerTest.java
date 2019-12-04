@@ -10,6 +10,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,13 +24,9 @@ import static org.mockito.Mockito.when;
 public class viajeControllerTest {
   private ControladorViaje controladorViaje = new ControladorViaje();
 
-
-/*
-
   @Test
-  public void MostrarViajesAUsuarioLogueado ()  {
+  public void MostrarViajesAUsuarioNoLogueado ()  {
     ControladorViaje sut = new ControladorViaje();
-
 
     ViajeDto viajeDto = new ViajeDto();
     Viaje viaje = new Viaje();
@@ -41,7 +38,12 @@ public class viajeControllerTest {
     HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
     sut.setHttpServletRequest(httpServletRequest);
 
-    when(httpServletRequest.getSession().getAttribute("USER")).thenReturn(null);
+    HttpSession httpSession = mock(HttpSession.class);
+    sut.setHttpSession(httpSession);
+
+    when(httpServletRequest.getSession()).thenReturn(httpSession);
+    when(httpSession.getAttribute("USER")).thenReturn(null);
+
 
     //ejecucion
     ModelAndView mav = sut.homeViaje(httpServletRequest);
@@ -52,36 +54,104 @@ public class viajeControllerTest {
     assertThat(mav.getModel().get("user")).isEqualTo(null);
 
   }
-*/
 
   @Test
-  public void creacionDeViajeExitosa () throws InterruptedException, ApiException, IOException {
+  public void MostrarViajesAUsuarioLogueado ()  {
     ControladorViaje sut = new ControladorViaje();
+
     ViajeDto viajeDto = new ViajeDto();
     Viaje viaje = new Viaje();
-    List<Foto> fotos;
+    Usuario usuario = new Usuario();
 
-    ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
+    ServicioViaje servicioViaje = mock(ServicioViaje.class);
     sut.setServicioViaje(servicioViaje);
 
-    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
-    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+    HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+    sut.setHttpServletRequest(httpServletRequest);
 
-    ServicioEmail servicioEmail = mock(ServicioEmail.class);
-    sut.setServicioEmail(servicioEmail);
+    HttpSession httpSession = mock(HttpSession.class);
+    sut.setHttpSession(httpSession);
 
-    when(servicioViaje.crearViaje(viajeDto.getTitulo(),viajeDto.getFechaInicio(),viajeDto.getFechaFin(),
-      viajeDto.getPrivacidad(),viajeDto.getDestinos(),viajeDto.getUsuarios())).thenReturn(null);
+    when(httpServletRequest.getSession()).thenReturn(httpSession);
+    when(httpSession.getAttribute("USER")).thenReturn(usuario);
 
-    when(servicioRegistroUsuario.obtenerUsuarioPorMail(null)).thenReturn(null);
 
     //ejecucion
-    viajeDto = sut.crearViaje(viajeDto);
+    ModelAndView mav = sut.homeViaje(httpServletRequest);
 
     //verificacion
-    assertThat(viajeDto.getId()).isNull();
-
+    assertThat(mav.getViewName()).isEqualTo("viajes/travel");
+    assertThat(mav.getModel()).containsKey("user_id");
   }
+
+  @Test
+  public void MostrarViajesAUsuarioLogueadoSinViajesCreados ()  {
+    ControladorViaje sut = new ControladorViaje();
+
+    ViajeDto viajeDto = new ViajeDto();
+    Viaje viaje = new Viaje();
+    Usuario usuario = new Usuario();
+
+    ServicioViaje servicioViaje = mock(ServicioViaje.class);
+    sut.setServicioViaje(servicioViaje);
+
+    HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+    sut.setHttpServletRequest(httpServletRequest);
+
+    HttpSession httpSession = mock(HttpSession.class);
+    sut.setHttpSession(httpSession);
+
+    when(httpServletRequest.getSession()).thenReturn(httpSession);
+    when(httpSession.getAttribute("USER")).thenReturn(usuario);
+    when(servicioViaje.obtenerViajesPorUsuario(usuario.getId())).thenReturn(null);
+
+
+    //ejecucion
+    ModelAndView mav = sut.homeViaje(httpServletRequest);
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("viajes/travel");
+    assertThat(mav.getModel()).containsKey("user_id");
+    assertThat(mav.getModel()).containsKey("viajes");
+    assertThat(mav.getModel().get("viajes")).isEqualTo(null);
+  }
+
+  @Test
+  public void MostrarViajesAUsuarioLogueadoConViajesCreados ()  {
+    ControladorViaje sut = new ControladorViaje();
+
+    ViajeDto viajeDto = new ViajeDto();
+    Viaje viaje = new Viaje();
+    ArrayList<Viaje> viajes = new ArrayList<Viaje>();
+    viajes.add(viaje);
+    Usuario usuario = new Usuario();
+
+    ServicioViaje servicioViaje = mock(ServicioViaje.class);
+    sut.setServicioViaje(servicioViaje);
+
+    HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+    sut.setHttpServletRequest(httpServletRequest);
+
+    HttpSession httpSession = mock(HttpSession.class);
+    sut.setHttpSession(httpSession);
+
+    when(httpServletRequest.getSession()).thenReturn(httpSession);
+    when(httpSession.getAttribute("USER")).thenReturn(usuario);
+    when(servicioViaje.obtenerViajesPorUsuario(usuario.getId())).thenReturn(viajes);
+
+
+    //ejecucion
+    ModelAndView mav = sut.homeViaje(httpServletRequest);
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("viajes/travel");
+    assertThat(mav.getModel()).containsKey("user_id");
+    assertThat(mav.getModel()).containsKey("viajes");
+    assertThat(mav.getModel().get("viajes")).isEqualTo(viajes);
+  }
+
+
+
 
   @Test
   public void enviarComentarioExitoso () {
