@@ -154,7 +154,7 @@ public class ControladorApiViaje {
   @ResponseBody
   public List<Viaje> obtenerMisViajes(HttpServletRequest request) {
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
-    Integer userId = usuario.getId();
+    String userId = usuario.getEmail();
     List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(userId);
     return viajes;
   }

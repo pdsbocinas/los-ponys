@@ -109,7 +109,7 @@ public class viajeControllerTest {
 
     when(httpServletRequest.getSession()).thenReturn(httpSession);
     when(httpSession.getAttribute("USER")).thenReturn(usuario);
-    when(servicioViaje.obtenerViajesPorUsuario(usuario.getId())).thenReturn(null);
+    when(servicioViaje.obtenerViajesPorUsuario(usuario.getEmail())).thenReturn(null);
 
 
     //ejecucion
@@ -143,7 +143,7 @@ public class viajeControllerTest {
 
     when(httpServletRequest.getSession()).thenReturn(httpSession);
     when(httpSession.getAttribute("USER")).thenReturn(usuario);
-    when(servicioViaje.obtenerViajesPorUsuario(usuario.getId())).thenReturn(viajes);
+    when(servicioViaje.obtenerViajesPorUsuario(usuario.getEmail())).thenReturn(viajes);
 
 
     //ejecucion
