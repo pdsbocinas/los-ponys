@@ -83,7 +83,7 @@ public class ServicioViajeImpl implements ServicioViaje {
     }
 
     @Override
-    public List<Viaje> obtenerViajesPorUsuario(Integer userId) {
+    public List<Viaje> obtenerViajesPorUsuario(String userId) {
         List<Viaje> viajes = viajeDao.obtenerViajesPorUsuario(userId);
         return viajes;
     }

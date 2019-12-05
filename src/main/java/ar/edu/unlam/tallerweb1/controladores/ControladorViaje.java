@@ -99,7 +99,7 @@ public class ControladorViaje {
       errors.put("errorLogin", "no hubo errores");
       String error = new ObjectMapper().writeValueAsString(errors);
       model.put("errorLogin", error);
-      List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(userId);
+      List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(email);
       model.put("viajes", viajes);
       return new ModelAndView("viajes/travel", model);
     } else {
