@@ -172,7 +172,7 @@ public class ControladorApiViaje {
 
   @RequestMapping(path = {"/api/viajes/comentarios/no-leido"}, method = RequestMethod.GET)
   @ResponseBody
-  public List<Comentario> obtenerComentariosNoLeidos(@RequestParam(value = "id") Integer userId, HttpServletRequest request) {
+  public List<Comentario> obtenerComentariosNoLeidos(@RequestParam(value = "id") Integer userId) {
     List<Comentario> comentarios = servicioComentario.obtenerComentariosNoLeidos(userId);
     return comentarios;
   }
