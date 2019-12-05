@@ -2,12 +2,17 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dao.UsuarioDao;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.maps.errors.ApiException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
 
 @Service("servicioRegistroUsuario")
 @Transactional
@@ -50,5 +55,18 @@ public class ServicioRegistroUsuarioImpl implements ServicioRegistroUsuario {
     public Usuario consultarUsuarioPorId(Integer id) {
         Usuario usuario = usuarioDao.consultarUsuarioPorId(id);
         return usuario;
+    }
+    @Override
+    public void setUsuarioAndErrors (HttpServletRequest request, ModelMap model) throws JsonProcessingException {
+        ObjectMapper usuarioJson = new ObjectMapper();
+
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("errorLogin", "no hubo errores");
+
+        String errorLogin = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(errors);
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+        model.put("usuario", usuarioJson.writerWithDefaultPrettyPrinter().writeValueAsString(usuario));
+        model.put("errorLogin", errorLogin);
     }
 }

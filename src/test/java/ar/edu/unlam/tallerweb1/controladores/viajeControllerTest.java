@@ -7,6 +7,7 @@ import com.google.maps.errors.ApiException;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class viajeControllerTest {
@@ -157,11 +157,13 @@ public class viajeControllerTest {
   }
 
   @Test
-  public void enviarComentarioExitoso () {
+  public void enviarComentarioExitoso () throws JsonProcessingException {
     ControladorViaje sut = new ControladorViaje();
 
     ComentarioDto comentarioDto = new ComentarioDto();
     Viaje viaje = new Viaje();
+    HttpServletRequest req = null;
+
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
     sut.setServicioViaje(servicioViaje);
 
@@ -171,11 +173,12 @@ public class viajeControllerTest {
     ServicioComentario servicioComentario = mock(ServicioComentario.class); //reemplaza el servicio real por uno falso
     sut.setServicioComentario(servicioComentario);
 
+
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(null);
     when(servicioRegistroUsuario.obtenerUsuarioPorMail(comentarioDto.getUsuario_email())).thenReturn(null);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
     //ejecucion
-    ModelAndView mav = sut.enviarComentario(comentarioDto);
+    ModelAndView mav = sut.enviarComentario(comentarioDto, req);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("viajes/comentar");
@@ -224,25 +227,28 @@ public class viajeControllerTest {
   }
 
   @Test
-  public void elegirFechaDeDestinoAUnDestinoConFechaCargada () {
+  public void elegirFechaDeDestinoAUnDestinoConFechaCargada () throws JsonProcessingException {
     ControladorViaje sut = new ControladorViaje();
 
     Viaje viaje = new Viaje();
     Destino destino = new Destino();
-
+    HttpServletRequest req = null;
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
     sut.setServicioViaje(servicioViaje);
 
     ServicioDestino servicioDestino = mock(ServicioDestino.class); //reemplaza el servicio real por uno falso
     sut.setServicioDestino(servicioDestino);
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
 
     when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(destino);
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
     destino.setFechaInicio(new Date());
 
     //ejecucion
-    ModelAndView mav = sut.elegirFechaDeUnDestino(destino.getId(),viaje.getId());
+    ModelAndView mav = sut.elegirFechaDeUnDestino(destino.getId(),viaje.getId(), req);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("destino/fecha");
@@ -251,24 +257,27 @@ public class viajeControllerTest {
 
 
   @Test
-  public void elegirFechaDeDestinoAUnDestinoSinFechaCargada () {
+  public void elegirFechaDeDestinoAUnDestinoSinFechaCargada () throws JsonProcessingException {
     ControladorViaje sut = new ControladorViaje();
 
     Viaje viaje = new Viaje();
     Destino destino = new Destino();
-
+    HttpServletRequest req = null;
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
     sut.setServicioViaje(servicioViaje);
 
     ServicioDestino servicioDestino = mock(ServicioDestino.class); //reemplaza el servicio real por uno falso
     sut.setServicioDestino(servicioDestino);
 
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
     when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(destino);
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
 
     //ejecucion
-    ModelAndView mav = sut.elegirFechaDeUnDestino(destino.getId(),viaje.getId());
+    ModelAndView mav = sut.elegirFechaDeUnDestino(destino.getId(),viaje.getId(), req);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("destino/fecha");
@@ -285,7 +294,7 @@ public class viajeControllerTest {
     Usuario usuario = new Usuario();
     List<Foto> fotos;
     ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-
+  HttpServletRequest req = null;
     usuarios.add(usuario);
     viaje.setUsuarios(usuarios);
     destino.setFechaInicio(new Date());
@@ -306,6 +315,9 @@ public class viajeControllerTest {
     HttpSession httpSession = mock(HttpSession.class);
     sut.setHttpSession(httpSession);
 
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
     when(httpServletRequest.getSession()).thenReturn(httpSession);
     when(httpSession.getAttribute("USER")).thenReturn(usuario);
 
@@ -313,7 +325,7 @@ public class viajeControllerTest {
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
     when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(destino);
     when(servicioFoto.obtenerFotosPorDestinoId(destino.getId())).thenReturn(null);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
 
 
     //ejecucion
@@ -334,7 +346,7 @@ public class viajeControllerTest {
     Usuario usuario = new Usuario();
     List<Foto> fotos;
     ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-
+  HttpServletRequest req = null;
     viaje.setUsuarios(usuarios);
     destino.setFechaInicio(new Date());
     destino.setFechaHasta(new Date());
@@ -354,6 +366,9 @@ public class viajeControllerTest {
     HttpSession httpSession = mock(HttpSession.class);
     sut.setHttpSession(httpSession);
 
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
     when(httpServletRequest.getSession()).thenReturn(httpSession);
     when(httpSession.getAttribute("USER")).thenReturn(usuario);
 
@@ -361,7 +376,7 @@ public class viajeControllerTest {
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
     when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(destino);
     when(servicioFoto.obtenerFotosPorDestinoId(destino.getId())).thenReturn(null);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
     //ejecucion
     ModelAndView mav = sut.vistaDeUnDestino(destino.getId(),viaje.getId(),httpServletRequest);
 
@@ -378,7 +393,7 @@ public class viajeControllerTest {
     Viaje viaje = new Viaje();
     Destino destino = new Destino();
     Usuario usuario = new Usuario();
-
+    HttpServletRequest req = null;
     String errorFotoPortada = null;
 
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
@@ -390,12 +405,15 @@ public class viajeControllerTest {
     ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
     sut.setServicioFoto(servicioFoto);
 
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
     when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
     when(servicioFoto.obtenerFotoDePortada(viaje.getId())).thenReturn(null);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
     //ejecucion
-    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada);
+    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada,req);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("viajes/mis-destinos");
@@ -411,7 +429,7 @@ public class viajeControllerTest {
     Foto foto = new Foto();
     foto.setName("nombreFoto");
     String errorFotoPortada = null;
-
+    HttpServletRequest req = null;
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
     sut.setServicioViaje(servicioViaje);
 
@@ -421,12 +439,15 @@ public class viajeControllerTest {
     ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
     sut.setServicioFoto(servicioFoto);
 
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
     when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
     when(servicioFoto.obtenerFotoDePortada(viaje.getId())).thenReturn(foto);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
     //ejecucion
-    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada);
+    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada, req);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("viajes/mis-destinos");
@@ -441,9 +462,9 @@ public class viajeControllerTest {
     Viaje viaje = new Viaje();
     Destino destino = new Destino();
     Usuario usuario = new Usuario();
-
+    HttpServletRequest request = null;
     String errorFotoPortada = null;
-
+    HttpServletRequest req = null;
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
     sut.setServicioViaje(servicioViaje);
 
@@ -453,12 +474,15 @@ public class viajeControllerTest {
     ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
     sut.setServicioFoto(servicioFoto);
 
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
     when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
     when(servicioFoto.obtenerFotoDePortada(viaje.getId())).thenReturn(null);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
     //ejecucion
-    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada);
+    ModelAndView mav = sut.vistaDelViaje(viaje.getId(),errorFotoPortada, request);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("viajes/mis-destinos");
@@ -467,23 +491,26 @@ public class viajeControllerTest {
 
 
   @Test
-  public void mostrarFotosDeLosDestinosParaElegirPortadaDeViajeSinFotosCargadas(){
+  public void mostrarFotosDeLosDestinosParaElegirPortadaDeViajeSinFotosCargadas() throws JsonProcessingException {
     ControladorViaje sut = new ControladorViaje();
     Foto foto = new Foto();
     Viaje viaje = new Viaje();
     List<Foto> fotos;
-
+    HttpServletRequest req = null;
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
     sut.setServicioViaje(servicioViaje);
 
     ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
     sut.setServicioFoto(servicioFoto);
 
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(null);
     when(servicioFoto.obtenerFotosDeDestinosDelViaje(viaje.getId())).thenReturn(null);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
     //ejecucion
-    ModelAndView mav = sut.mostrarTodasLasFotosDeLosDestinosDelViaje(viaje.getId());
+    ModelAndView mav = sut.mostrarTodasLasFotosDeLosDestinosDelViaje(viaje.getId(), req);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("viajes/elegirFotoDePortada");
@@ -492,23 +519,26 @@ public class viajeControllerTest {
   }
 
   @Test
-  public void mostrarFotosDeLosDestinosParaElegirPortadaDeViajeConFotosCargadas(){
+  public void mostrarFotosDeLosDestinosParaElegirPortadaDeViajeConFotosCargadas() throws JsonProcessingException {
     ControladorViaje sut = new ControladorViaje();
     Foto foto = new Foto();
     Viaje viaje = new Viaje();
     List<Foto> fotos = null;
-
+    HttpServletRequest req = null;
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
     sut.setServicioViaje(servicioViaje);
 
     ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
     sut.setServicioFoto(servicioFoto);
 
+    ServicioRegistroUsuario servicioRegistroUsuario = mock(ServicioRegistroUsuario.class);
+    sut.setServicioRegistroUsuario(servicioRegistroUsuario);
+
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(null);
     when(servicioFoto.obtenerFotosDeDestinosDelViaje(viaje.getId())).thenReturn(fotos);
-
+    doNothing().when(servicioRegistroUsuario).setUsuarioAndErrors(req,new ModelMap());
     //ejecucion
-    ModelAndView mav = sut.mostrarTodasLasFotosDeLosDestinosDelViaje(viaje.getId());
+    ModelAndView mav = sut.mostrarTodasLasFotosDeLosDestinosDelViaje(viaje.getId(), req);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("viajes/elegirFotoDePortada");

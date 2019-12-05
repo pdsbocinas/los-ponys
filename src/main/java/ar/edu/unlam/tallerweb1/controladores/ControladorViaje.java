@@ -81,18 +81,7 @@ public class ControladorViaje {
       this.httpSession = httpSession;
   }
 
-  public void setUsuarioAndErrors (HttpServletRequest request, ModelMap model) throws JsonProcessingException {
-    ObjectMapper usuarioJson = new ObjectMapper();
 
-    HashMap<String, String> errors = new HashMap<>();
-    errors.put("errorLogin", "no hubo errores");
-
-    String errorLogin = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(errors);
-
-    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
-    model.put("usuario", usuarioJson.writerWithDefaultPrettyPrinter().writeValueAsString(usuario));
-    model.put("errorLogin", errorLogin);
-  }
 
   @RequestMapping("/viajes")
   public ModelAndView homeViaje(HttpServletRequest request) throws JsonProcessingException {
@@ -159,7 +148,7 @@ public class ControladorViaje {
   @RequestMapping(path = {"/viajes/{id}"}, method = RequestMethod.GET)
   public ModelAndView crearViajeView(@PathVariable("id") Integer id, HttpServletRequest request) throws JsonProcessingException {
     ModelMap model = new ModelMap();
-    this.setUsuarioAndErrors(request, model);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, model);
     return new ModelAndView("viajes/create", model);
   }
 
@@ -169,7 +158,7 @@ public class ControladorViaje {
 
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
     ModelMap model = new ModelMap();
-    this.setUsuarioAndErrors(request, model);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, model);
 
     String origen = "";
     String destino = "";
@@ -202,7 +191,7 @@ public class ControladorViaje {
   public ModelAndView comentarViaje(@PathVariable("id") Long id, HttpServletRequest request) throws InterruptedException, ApiException, IOException {
 
     ModelMap modelo = new ModelMap();
-    this.setUsuarioAndErrors(request, modelo);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, modelo);
 
     modelo.put("id", id);
 
@@ -227,7 +216,7 @@ public class ControladorViaje {
   @ResponseBody
   public ModelAndView enviarComentario(@RequestBody ComentarioDto comentarioDto, HttpServletRequest request) throws JsonProcessingException {
     ModelMap modelo = new ModelMap();
-    this.setUsuarioAndErrors(request, modelo);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, modelo);
 
     Comentario comentario = servicioComentario.convertirComentarioDtoAComentario(comentarioDto);
     servicioComentario.guardarComentario(comentario);
@@ -255,7 +244,7 @@ public class ControladorViaje {
                                         @PathVariable("viaje_id") Long viaje_id,  HttpServletRequest request) throws JsonProcessingException {
 
     ModelMap modelo = new ModelMap();
-    this.setUsuarioAndErrors(request, modelo);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, modelo);
 
     Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
@@ -286,7 +275,7 @@ public class ControladorViaje {
                                        @PathVariable("viaje_id") Long viaje_id,
                                        HttpServletRequest request) throws JsonProcessingException {
     ModelMap modelo = new ModelMap();
-    this.setUsuarioAndErrors(request, modelo);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, modelo);
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
     setHttpServletRequest(request);
 
@@ -326,7 +315,7 @@ public class ControladorViaje {
                                      HttpServletRequest request) throws JsonProcessingException {
 
     ModelMap modelo = new ModelMap();
-    this.setUsuarioAndErrors(request, modelo);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, modelo);
 
     Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viajeId);
@@ -351,7 +340,7 @@ public class ControladorViaje {
                                                      @PathVariable("destino_id") Integer destino_id,
                                                      @PathVariable("viaje_id") Long viaje_id) throws ParseException, JsonProcessingException {
     ModelMap modelo = new ModelMap();
-    this.setUsuarioAndErrors(request, modelo);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, modelo);
 
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
 
@@ -397,7 +386,7 @@ public class ControladorViaje {
   public ModelAndView mostrarTodasLasFotosDeLosDestinosDelViaje(@PathVariable ("viajeId") Long viajeId, HttpServletRequest request) throws JsonProcessingException {
 
     ModelMap modelo = new ModelMap();
-    this.setUsuarioAndErrors(request, modelo);
+    servicioRegistroUsuario.setUsuarioAndErrors(request, modelo);
 
 //    Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
     List<Foto> fotos = servicioFoto.obtenerFotosDeDestinosDelViaje(viajeId);
@@ -429,23 +418,5 @@ public class ControladorViaje {
 
   }
 
-  public ViajeDto crearViaje(ViajeDto viajeDto) {
-    return viajeDto;
-  }
 
-  public ModelAndView enviarComentario(ComentarioDto comentarioDto) {
-    return new ModelAndView("");
-  }
-
-  public ModelAndView elegirFechaDeUnDestino(Integer id, Long id1) {
-    return new ModelAndView("");
-  }
-
-  public ModelAndView vistaDelViaje(Long id, String errorFotoPortada) {
-    return new ModelAndView("");
-  }
-
-  public ModelAndView mostrarTodasLasFotosDeLosDestinosDelViaje(Long id) {
-    return new ModelAndView("");
-  }
 }
