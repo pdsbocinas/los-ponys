@@ -34,10 +34,6 @@ public class Destino {
     @Column(name = "icon")
     private URL icon;
 
-     @ManyToOne
-     @JsonIgnore
-     private Viaje viaje;
-
     // @ManyToOne
     // @JsonIgnore
     // private Reserva reserva;
@@ -164,12 +160,5 @@ public class Destino {
     public void setPhotoReferences(String photoReferences) {
         this.photoReferences = photoReferences;
     }
-
-    public Viaje getViaje() {
-        return viaje;
-    }
-
-    public void setViaje(Viaje viaje) {
-        this.viaje = viaje;
-    }
+    
 }
