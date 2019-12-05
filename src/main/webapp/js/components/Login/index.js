@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Button from './components/button.jsx';
+import Button from './components/Button.jsx';
 import Form from './components/Form.jsx';
 import styled from 'styled-components'
 import axios from "axios";
@@ -38,7 +38,8 @@ class App extends React.Component {
       titulo: '',
       email: '',
       password: '',
-      reviews: []
+      reviews: [],
+      errors: []
     }
   }
 
@@ -68,7 +69,7 @@ class App extends React.Component {
       "email": this.state.email,
       "password": this.state.password
     }
-    console.log(data)
+
     if(titulo === "R"){
 
       this.props.validate;
@@ -90,17 +91,17 @@ class App extends React.Component {
     } else {
       axios
         .post(`${host}/validar-login2`, data)//Devuelve "correcto" o error
-        .then(response =>{
-          console.log("response login", response);
-          if(response.data == "correcto"){
-            return window.location.href = `LoginOK`;
-          }else{
-            return window.location.href = `LoginError`;
+        .then(async (response) =>{
+          const responseLogin = response.data;
+          if (responseLogin.errorLogin) {
+            return await this.setState({
+              errors: responseLogin
+            })
+          } else {
+            return window.location.href = 'home';
           }
-
-
         }).catch(error =>{
-        console.log(error)
+          console.log(error)
       })
     }
   }
@@ -128,9 +129,9 @@ class App extends React.Component {
   }
 
   render () {
-    const { active, reviews } = this.state;
-    console.log('id',id)
-    console.log('reviews', reviews, reviews.length)
+    const { active, reviews, errors } = this.state;
+    console.log("user", usuario);
+    console.log(errors)
     return (
       <>
         <Button
@@ -141,7 +142,9 @@ class App extends React.Component {
         {active === 'forms' && (
           <Wrapper>
             <Form
+              usuario={usuario}
               onSubmit={this.enviar}
+              errors={errors}
             />
           </Wrapper>
         )}

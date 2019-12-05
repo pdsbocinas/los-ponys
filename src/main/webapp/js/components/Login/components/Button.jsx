@@ -26,7 +26,6 @@ class Button extends React.Component {
   }
 
   onChangeActive = async (module) => {
-    console.log(module)
     await this.setState({
       active: module
     })

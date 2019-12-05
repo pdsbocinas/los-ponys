@@ -29,7 +29,7 @@ module.exports = {
       './js/components/Login/index.js'
     ],
     homeLogin: [
-      './js/components/Home/index.js',
+      // './js/components/Home/index.js',
       './js/components/Login/index.js'
     ],
     modal: [

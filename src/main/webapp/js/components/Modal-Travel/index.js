@@ -94,7 +94,6 @@ class App extends React.Component {
 
   render () {
     const { show, usuarios, privacidad } = this.state
-    console.log(privacidad)
     return (
       <>
         <div className="card" style={{ width: '18rem' }}>

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@Controller("/api")
 @PropertySource(value = {"classpath:application.properties"})
 public class ControladorApiViaje {
 
@@ -48,21 +48,27 @@ public class ControladorApiViaje {
   public void setServicioViaje(ServicioViaje servicioViaje) {
     this.servicioViaje = servicioViaje;
   }
+
   public void setServicioDestino(ServicioDestino servicioDestino) {
     this.servicioDestino = servicioDestino;
   }
+
   public void setServicioFoto(ServicioFoto servicioFoto) {
     this.servicioFoto = servicioFoto;
   }
+
   public void setServicioRegistroUsuario(ServicioRegistroUsuario servicioRegistroUsuario) {
     this.servicioRegistroUsuario = servicioRegistroUsuario;
   }
+
   public void setServicioEmail(ServicioEmail servicioEmail) {
     this.servicioEmail = servicioEmail;
   }
+
   public void setServicioComentario(ServicioComentario servicioComentario) {
     this.servicioComentario = servicioComentario;
   }
+
   public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
     this.httpServletRequest = httpServletRequest;
   }

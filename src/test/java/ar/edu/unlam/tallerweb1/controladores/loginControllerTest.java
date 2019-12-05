@@ -6,6 +6,7 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
 import ar.edu.unlam.tallerweb1.servicios.ServicioLoginImpl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
@@ -34,7 +35,8 @@ public class loginControllerTest {
         when(servicioLogin.consultarUsuario(usuario)).thenReturn(null);
 
         //ejecucion
-        ModelAndView mav = sut.validarLogin(usuario, request);
+        ModelAndView mav = null;
+        mav = sut.validarLogin(usuario, request);
 
         assertThat(mav.getViewName()).isEqualTo("login");
         assertThat(mav.getModel()).containsKey("error");
@@ -49,7 +51,7 @@ public class loginControllerTest {
     }
 
     @Test
-    public void validarLoginSiUsuarioNoExisteDeberiaReedirigirALogin(){
+    public void validarLoginSiUsuarioNoExisteDeberiaReedirigirALogin() throws JsonProcessingException {
         //preparacion
         Usuario usuario = new Usuario();
         HttpServletRequest request = null;

@@ -1,3 +1,4 @@
+<%@ tag import="org.json.simple.JSONObject" %>
 <%@ tag description="Overall Page template" pageEncoding="UTF-8"%>
 <%@ attribute name="header" fragment="true" %>
 <%@ attribute name="footer" fragment="true" %>
@@ -31,11 +32,13 @@
                                 <li class="nav-item active">
                                     <div id="login"></div>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="${contextPath}/viajes" title="viaje">
-                                        <img src="<c:url value="/images/003-backpack.svg"/>" width="30" height="auto" alt="crear viaje">
-                                    </a>
-                                </li>
+                                <c:if test="${not empty usuario}">
+                                    <li class="nav-item">
+                                        <a href="${contextPath}/viajes" title="viaje">
+                                            <img src="<c:url value="/images/003-backpack.svg"/>" width="30" height="auto" alt="crear viaje">
+                                        </a>
+                                    </li>
+                                </c:if>
                             </ul>
                         </div>
                     </div>
@@ -52,21 +55,27 @@
             </div>
             <!--jsp:invoke fragment="footer"/-->
         </footer>
+
         <script>
             <%--var mensaje = "[[${error}]]";--%>
-            var email = "${email}";
-            var duplicado = "${duplicado}";
-            var registroError = "${error1}";
-            var registroExito = "${exito}";
-            var errorLogin = "${errorLogin}";
-            var login = "${login}";
+            <%--var email = "${email}";--%>
+            <%--var duplicado = "${duplicado}";--%>
+            <%--var registroError = "${error1}";--%>
+            <%--var registroExito = "${exito}";--%>
+            <%--var errorLogin = "${errorLogin}";--%>
+            <%--var login = "${login}";--%>
+            <%--var id = "${id}";--%>
+
             var id = "${id}";
-            var notFound = "${notFound}"
-            var registroExito = "${exito}";
+            <%--var notFound = "${notFound}"--%>
+            <%--var registroExito = "${exito}";--%>
+            var usuario = ${usuario};
+            var errorLogin = ${errorLogin};
+
         </script>
         <c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
-        <c:set var="homeLogin"><ex:getManifestAssets value="homeLogin.js"/></c:set>
+        <c:set var="login"><ex:getManifestAssets value="login.js"/></c:set>
         <script src="<c:url value="${commons}"/>"></script>
-        <script src="<c:url value="${homeLogin}"/>"></script>
+        <script src="<c:url value="${login}"/>"></script>
     </body>
 </html>
