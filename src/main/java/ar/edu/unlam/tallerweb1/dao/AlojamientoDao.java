@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.dao;
 
 import ar.edu.unlam.tallerweb1.modelo.Alojamiento;
+import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import com.google.maps.errors.ApiException;
 
 import java.io.IOException;
@@ -14,4 +15,8 @@ public interface AlojamientoDao {
   Alojamiento obtenerAlojamientoPorId(Integer id);
   void guardarAlojamientos(String ciudad) throws InterruptedException, ApiException, IOException;
   void guardarAlojamientosEnLabase(List<Alojamiento> alojamientos);
+
+  List<Reserva> obtenerReservasPorUsuario(Integer userId);
+
+  void borrarReservas(List<Reserva> reservas);
 }

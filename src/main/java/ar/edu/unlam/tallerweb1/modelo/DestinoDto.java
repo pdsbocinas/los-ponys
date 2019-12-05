@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import com.google.maps.model.Photo;
+
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +38,7 @@ public class DestinoDto {
 
   private List<String> destinos;
 
+  public List<Photo> photos;
 
   public List<String> getDestinos() {
     return destinos;
@@ -116,5 +119,13 @@ public class DestinoDto {
 
   public void setFechaHasta(Date fechaHasta) {
     this.fechaHasta = fechaHasta;
+  }
+
+  public List<Photo> getPhotos() {
+    return photos;
+  }
+
+  public void setPhotos(List<Photo> photos) {
+    this.photos = photos;
   }
 }

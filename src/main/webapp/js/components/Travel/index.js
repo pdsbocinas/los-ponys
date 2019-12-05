@@ -26,7 +26,8 @@ class App extends React.Component {
     destination: [],
     keyword: '',
     loading: true,
-    destinationSelected: []
+    destinationSelected: [],
+    destinationSaved: []
   }
 
   delete = (nombre) =>{
@@ -90,7 +91,7 @@ class App extends React.Component {
       .then(async v => {
         const data = v.data
         await this.setState({
-          destinationSelected: data
+          destinationSaved: data
         })
       })
       .catch(e => {
@@ -158,7 +159,7 @@ class App extends React.Component {
   }
 
   render () {
-    const { destination, keyword, destinationSelected } = this.state;
+    const { destination, keyword, destinationSelected, destinationSaved } = this.state;
     console.log(usuario)
     return (
       <Container>
@@ -191,6 +192,13 @@ class App extends React.Component {
               </li>
             ))}
           </ul>
+        )}
+        {destinationSaved.length !== 0 && (
+          <List
+            items={destinationSaved}
+            delete={(nombre)=>this.delete(nombre)}
+            onSelect={this.update}
+          />
         )}
         <List
           items={destinationSelected}

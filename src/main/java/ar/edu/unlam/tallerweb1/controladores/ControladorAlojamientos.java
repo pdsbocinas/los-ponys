@@ -5,6 +5,8 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioAlojamiento;
 import ar.edu.unlam.tallerweb1.servicios.ServicioDestino;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistroUsuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.maps.errors.ApiException;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -34,12 +37,25 @@ public class ControladorAlojamientos {
   @Inject
   private ServicioDestino servicioDestino;
 
+  @Inject
+  private ServicioRegistroUsuario servicioRegistroUsuario;
+
   public void setServicioRegistroUsuario(ServicioRegistroUsuario servicioRegistroUsuario) {
     this.servicioRegistroUsuario = servicioRegistroUsuario;
   }
 
-  @Inject
-  private ServicioRegistroUsuario servicioRegistroUsuario;
+  public void setUsuarioAndErrors (HttpServletRequest request, ModelMap model) throws JsonProcessingException {
+    ObjectMapper usuarioJson = new ObjectMapper();
+
+    HashMap<String, String> errors = new HashMap<>();
+    errors.put("errorLogin", "no hubo errores");
+
+    String errorLogin = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(errors);
+
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+    model.put("usuario", usuarioJson.writerWithDefaultPrettyPrinter().writeValueAsString(usuario));
+    model.put("errorLogin", errorLogin);
+  }
 
   @RequestMapping(path = "/api/alojamientos", method = RequestMethod.GET)
   @ResponseBody
@@ -61,8 +77,9 @@ public class ControladorAlojamientos {
   }
 
   @RequestMapping(path = {"/alojamientos"}, method = RequestMethod.GET)
-  public ModelAndView alojamientoView (HttpServletRequest request) {
-    ModelMap modelos = new ModelMap();
+  public ModelAndView alojamientoView (HttpServletRequest request) throws JsonProcessingException {
+    ModelMap model = new ModelMap();
+    this.setUsuarioAndErrors(request, model);
     return new ModelAndView("alojamientos/index");
   }
 
@@ -71,6 +88,7 @@ public class ControladorAlojamientos {
                                               @PathVariable("destino_id") Integer destino_id,
                                               HttpServletRequest request) throws InterruptedException, ApiException, IOException {
     ModelMap modelo = new ModelMap();
+    this.setUsuarioAndErrors(request, modelo);
     Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
     String ciudad = "hoteles en " + destino.getCiudad();
     servicioAlojamiento.guardarAlojamientos(ciudad);
@@ -79,8 +97,9 @@ public class ControladorAlojamientos {
   }
 
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/alojamiento/{id}"}, method = RequestMethod.GET)
-  public ModelAndView alojamientoView (@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @PathVariable("id") Integer id, @ModelAttribute("reservaDto") ReservaDto reservaDto, HttpServletRequest request) {
+  public ModelAndView alojamientoView (@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @PathVariable("id") Integer id, @ModelAttribute("reservaDto") ReservaDto reservaDto, HttpServletRequest request) throws JsonProcessingException {
     ModelMap modelos = new ModelMap();
+    this.setUsuarioAndErrors(request, modelos);
     modelos.put("reservaDto", new ReservaDto());
     HttpSession session = request.getSession();
     modelos.put("usuario", session.getAttribute("USER"));
@@ -90,11 +109,13 @@ public class ControladorAlojamientos {
   }
 
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/alojamiento/confirm-alojamiento"}, method = RequestMethod.GET)
-  public ModelAndView crearReservaParaAlojamiento(@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) {
+  public ModelAndView crearReservaParaAlojamiento(@PathVariable("viaje_id") Long viaje_id,@PathVariable("destino_id") Integer destino_id, @ModelAttribute("reservaDto") ReservaDto reservaDto, BindingResult result, ModelMap model, HttpServletRequest request) throws JsonProcessingException {
 
     HttpSession session = request.getSession();
     BindingResult r = result;
+    ModelMap modelo = new ModelMap();
 
+    this.setUsuarioAndErrors(request, modelo);
     Integer user_id = reservaDto.getUser_id();
     Integer alojamiento_id = reservaDto.getAlojamiento_id();
     Date checkin = reservaDto.getCheckin();
@@ -113,7 +134,6 @@ public class ControladorAlojamientos {
     } catch (Exception e) {
       return new ModelAndView("error");
     }
-    ModelMap modelo = new ModelMap();
     modelo.put("reserva", reserva);
 
     return new ModelAndView("alojamientos/confirm", modelo);

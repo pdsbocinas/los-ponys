@@ -32,5 +32,8 @@
         </div>
     </jsp:body>
 </t:base>
+<script>
+  var usuario = ${usuario};
+</script>
 </body>
 </html>

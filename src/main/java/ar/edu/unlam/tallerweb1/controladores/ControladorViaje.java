@@ -47,6 +47,9 @@ public class ControladorViaje {
   @Inject
   private ServicioFoto servicioFoto;
 
+  @Inject
+  private ServicioAlojamiento servicioAlojamiento;
+
   @Value("${datasource.apiKey}")
   private String apiKey;
   private HttpServletRequest httpServletRequest;
@@ -129,20 +132,27 @@ public class ControladorViaje {
     List<Comentario> comentarios = servicioComentario.obtenerComentariosPorViajeId(v.getId());
     List<Mail> mails = servicioEmail.obtenerEmailsPorUsuario(userId);
     List<Foto> fotos = servicioFoto.obtenerFotosDeDestinosDelViaje(v.getId());
+    List<Reserva> reservas = servicioAlojamiento.obtenerReservasPorUsuario(userId);
 
-    if (comentarios.size() != 0) {
-      servicioComentario.borrarComentarios(comentarios);
+    if (v != null) {
+      if (comentarios.size() != 0) {
+        servicioComentario.borrarComentarios(comentarios);
+      }
+
+      if (fotos.size() != 0) {
+        servicioFoto.borrarFotos(fotos);
+      }
+
+      if (mails.size() != 0) {
+        servicioEmail.borrarEmails(mails);
+      }
+
+      if (reservas.size() != 0) {
+        servicioAlojamiento.borrarReservas(reservas);
+      }
+      servicioViaje.borrarViaje(v);
     }
 
-    if (fotos.size() != 0) {
-      servicioFoto.borrarFotos(fotos);
-    }
-
-    if (mails.size() != 0) {
-      servicioEmail.borrarEmails(mails);
-    }
-
-    servicioViaje.borrarViaje(v);
     return new ModelAndView("redirect:/viajes");
   }
 

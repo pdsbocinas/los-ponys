@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.dao.UsuarioDao;
 import ar.edu.unlam.tallerweb1.dao.ViajeDao;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import com.google.maps.errors.ApiException;
+import com.google.maps.model.Photo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,6 +97,12 @@ public class ServicioViajeImpl implements ServicioViaje {
     public void guardarDestinos(Long id, List<DestinoDto> destinos) {
         Viaje viaje = viajeDao.obtenerViajePorId(id);
         List<Destino> listaDestinos = new ArrayList<>();
+        List<Destino> destinosActuales = destinoDao.obtenerDestinosDeViajes(id);
+
+        for (Destino destino : destinosActuales) {
+            listaDestinos.add(destino);
+        }
+
         for (DestinoDto destinoDto : destinos) {
             Destino destino = new Destino();
 
@@ -106,6 +113,11 @@ public class ServicioViajeImpl implements ServicioViaje {
                 destino.setCiudad(destinoDto.getCiudad());
             }
 
+            if (destinoDto.photos != null) {
+                for (Photo photo : destinoDto.photos) {
+                    destino.setPhotoReferences(photo.photoReference);
+                }
+            }
             destino.setPlaceId(destinoDto.getPlaceId());
             destino.setFechaInicio(destinoDto.getFechaInicio());
             destino.setFechaFin(destinoDto.getFechaHasta());

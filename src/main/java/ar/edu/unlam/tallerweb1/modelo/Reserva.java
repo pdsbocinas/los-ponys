@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,12 +14,12 @@ public class Reserva {
   @Column(name = "id", unique = true, nullable = false)
   private Integer id;
 
-  @OneToOne
-  @JsonIgnore
+  @OneToOne(orphanRemoval = true)
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Alojamiento alojamiento;
 
-  @OneToOne
-  @JsonIgnore
+  @OneToOne(orphanRemoval = true)
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private Usuario usuario;
 
   @Column(name = "checkin")

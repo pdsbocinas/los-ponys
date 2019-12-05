@@ -8,6 +8,7 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.PlaceDetailsRequest;
 import com.google.maps.TextSearchRequest;
 import com.google.maps.errors.ApiException;
+import com.google.maps.model.Photo;
 import com.google.maps.model.PlaceDetails;
 import com.google.maps.model.PlacesSearchResponse;
 import com.google.maps.model.PlacesSearchResult;
@@ -71,6 +72,11 @@ public class DestinoDaoImpl implements DestinoDao {
       dest.setCiudad(place.formattedAddress);
       //dest.setRegion(place.adrAddress);
       dest.setIcon(place.icon);
+      if (place.photos != null) {
+        for (Photo photo : place.photos) {
+          dest.setPhotoReferences(photo.photoReference);
+        }
+      }
       dest.setPlaceId(place.placeId);
       dest.setLat(place.geometry.location.lat);
       dest.setLng(place.geometry.location.lng);
