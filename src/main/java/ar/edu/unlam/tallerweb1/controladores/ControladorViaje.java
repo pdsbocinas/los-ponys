@@ -261,8 +261,7 @@ public class ControladorViaje {
                                        HttpServletRequest request) {
     ModelMap modelo = new ModelMap();
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
-    setHttpServletRequest(request);
-    Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("USER");
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
     List<Usuario> usuarios = viaje.getUsuarios();
     for (Usuario u: usuarios
          ) {
@@ -340,7 +339,7 @@ public class ControladorViaje {
     Date fechaHastaFormateada = sdf.parse(fechaHasta);
 
     String mensajeGuardarFecha = servicioViaje.validaFecha(destino,destinos,viaje,fechaDesdeFormateada,fechaHastaFormateada);
-    if(mensajeGuardarFecha!= "Ok"){
+    if(mensajeGuardarFecha != "Ok"){
       modelo.put("error", mensajeGuardarFecha);
       return new ModelAndView("/destino/fecha", modelo);
     }
