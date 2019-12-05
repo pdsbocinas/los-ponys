@@ -30,7 +30,7 @@ public class Viaje {
     @Column(name = "fechaFin")
     private Date fechaFin;
 
-    @OneToMany(cascade = javax.persistence.CascadeType.PERSIST)
+    @OneToMany(cascade = javax.persistence.CascadeType.PERSIST, fetch = FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Destino> destinos = new ArrayList<>();
 
@@ -38,8 +38,10 @@ public class Viaje {
     @Cascade(CascadeType.ALL)
     private List<Comentario> comentarios = new ArrayList<>();*/
 
-    @ManyToMany(cascade = javax.persistence.CascadeType.REMOVE)
-    @Cascade(CascadeType.REMOVE)
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Cascade(CascadeType.ALL)
+    @JoinTable(name = "viaje_usuario")
     private List<Usuario> usuarios;
 
     @Column(name = "privacidad")
