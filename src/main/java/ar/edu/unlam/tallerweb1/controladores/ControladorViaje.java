@@ -286,15 +286,14 @@ public class ControladorViaje {
                                        @PathVariable("viaje_id") Long viaje_id,
                                        HttpServletRequest request) throws JsonProcessingException {
     ModelMap modelo = new ModelMap();
-    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
-
     this.setUsuarioAndErrors(request, modelo);
-
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
-
     setHttpServletRequest(request);
 
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+
     List<Usuario> usuarios = viaje.getUsuarios();
+
     for (Usuario u: usuarios
          ) {
       if (usuario.getId() == u.getId()){
@@ -374,7 +373,7 @@ public class ControladorViaje {
     Date fechaHastaFormateada = sdf.parse(fechaHasta);
 
     String mensajeGuardarFecha = servicioViaje.validaFecha(destino,destinos,viaje,fechaDesdeFormateada,fechaHastaFormateada);
-    if(mensajeGuardarFecha!= "Ok"){
+    if(mensajeGuardarFecha != "Ok"){
       modelo.put("error", mensajeGuardarFecha);
       return new ModelAndView("/destino/fecha", modelo);
     }

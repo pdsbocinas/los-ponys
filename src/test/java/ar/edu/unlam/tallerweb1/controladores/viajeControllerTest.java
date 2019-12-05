@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -274,16 +275,21 @@ public class viajeControllerTest {
     assertThat(mav.getModel()).doesNotContainKey("fechaIncio");
   }
 
-/* NO SE COMO MOCKEAR HTTPSERVLETREQUEST
+
   @Test
-  public void vistaDeUnDestino () {
+  public void vistaDeUnDestinoParaUnUsuarioQuePerteneceAlViaje () throws JsonProcessingException {
     ControladorViaje sut = new ControladorViaje();
 
     Viaje viaje = new Viaje();
     Destino destino = new Destino();
-    HttpServletRequest request = null;
     Usuario usuario = new Usuario();
     List<Foto> fotos;
+    ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+
+    usuarios.add(usuario);
+    viaje.setUsuarios(usuarios);
+    destino.setFechaInicio(new Date());
+    destino.setFechaHasta(new Date());
 
     ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
     sut.setServicioViaje(servicioViaje);
@@ -294,6 +300,15 @@ public class viajeControllerTest {
     ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
     sut.setServicioFoto(servicioFoto);
 
+    HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+    sut.setHttpServletRequest(httpServletRequest);
+
+    HttpSession httpSession = mock(HttpSession.class);
+    sut.setHttpSession(httpSession);
+
+    when(httpServletRequest.getSession()).thenReturn(httpSession);
+    when(httpSession.getAttribute("USER")).thenReturn(usuario);
+
 
     when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
     when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(destino);
@@ -302,14 +317,59 @@ public class viajeControllerTest {
 
 
     //ejecucion
-    ModelAndView mav = sut.vistaDeUnDestino(destino.getId(),viaje.getId(),request);
+    ModelAndView mav = sut.vistaDeUnDestino(destino.getId(),viaje.getId(),httpServletRequest);
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("destino/vista");
-    //assertThat(mav.getModel()).containsKey("fechaInicio");
+    assertThat(mav.getModel()).containsKey("permisoUsuario");
+    assertThat(mav.getModel().get("permisoUsuario")).isEqualTo(true);
   }
-*/
 
+  @Test
+  public void vistaDeUnDestinoParaUnUsuarioQueNoPerteneceAlViaje () throws JsonProcessingException {
+    ControladorViaje sut = new ControladorViaje();
+
+    Viaje viaje = new Viaje();
+    Destino destino = new Destino();
+    Usuario usuario = new Usuario();
+    List<Foto> fotos;
+    ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+
+    viaje.setUsuarios(usuarios);
+    destino.setFechaInicio(new Date());
+    destino.setFechaHasta(new Date());
+
+    ServicioViaje servicioViaje = mock(ServicioViaje.class); //reemplaza el servicio real por uno falso
+    sut.setServicioViaje(servicioViaje);
+
+    ServicioDestino servicioDestino = mock(ServicioDestino.class); //reemplaza el servicio real por uno falso
+    sut.setServicioDestino(servicioDestino);
+
+    ServicioFoto servicioFoto = mock(ServicioFoto.class); //reemplaza el servicio real por uno falso
+    sut.setServicioFoto(servicioFoto);
+
+    HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+    sut.setHttpServletRequest(httpServletRequest);
+
+    HttpSession httpSession = mock(HttpSession.class);
+    sut.setHttpSession(httpSession);
+
+    when(httpServletRequest.getSession()).thenReturn(httpSession);
+    when(httpSession.getAttribute("USER")).thenReturn(usuario);
+
+
+    when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
+    when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(destino);
+    when(servicioFoto.obtenerFotosPorDestinoId(destino.getId())).thenReturn(null);
+
+    //ejecucion
+    ModelAndView mav = sut.vistaDeUnDestino(destino.getId(),viaje.getId(),httpServletRequest);
+
+    //verificacion
+    assertThat(mav.getViewName()).isEqualTo("destino/vista");
+    assertThat(mav.getModel()).doesNotContainKey("permisoUsuario");
+
+  }
 
   @Test
   public void vistaDeUnViaje () throws JsonProcessingException {
@@ -499,15 +559,20 @@ public class viajeControllerTest {
   }
 
 
- /* @Test
+/*  @Test
   public void validaUnaFechaCorrecta() throws ParseException {
     ControladorViaje sut = new ControladorViaje();
     Viaje viaje = new Viaje();
     Destino destino = new Destino();
-    ArrayList<Destino> destinos = new ArrayList<Destino>();
+    ArrayList<Destino> destinos = new ArrayList<>();
+    destinos.add(destino);
     Date inicio = new Date();
     Date fin = new Date();
-    HttpServletRequest req = null;
+
+    String fechaInicioString = "2019-10-10";
+    String fechaFinString = "2019-11-10";
+    destino.setFechaInicio(inicio);
+    destino.setFechaHasta(fin);
 
     ServicioViaje servicioViaje = mock(ServicioViaje.class);
     sut.setServicioViaje(servicioViaje);
@@ -518,24 +583,21 @@ public class viajeControllerTest {
     HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
     sut.setHttpServletRequest(httpServletRequest);
 
-
-    when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(null);
-    when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(null);
-    when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(null);
-    when(httpServletRequest.getParameter("fechaInicio")).thenReturn(null);
-    when(httpServletRequest.getParameter("fechaHasta")).thenReturn(null);
+    when(servicioViaje.obtenerViajePorId(viaje.getId())).thenReturn(viaje);
+    when(servicioDestino.obtenerDestinoPorId(destino.getId())).thenReturn(destino);
+    when(servicioViaje.obtenerDestinosPorViaje(viaje.getId())).thenReturn(destinos);
+    when(httpServletRequest.getParameter("fechaInicio")).thenReturn(fechaInicioString);
+    when(httpServletRequest.getParameter("fechaHasta")).thenReturn(fechaFinString);
     when(servicioViaje.validaFecha(destino,destinos,viaje,inicio,fin)).thenReturn("Ok");
 
-
-
     //ejecucion
-    ModelAndView mav = controladorViaje.guardarFechasDeDestinoPorViaje(req,destino.getId(),viaje.getId());
+    ModelAndView mav = sut.guardarFechasDeDestinoPorViaje(httpServletRequest,destino.getId(),viaje.getId());
 
     //verificacion
     assertThat(mav.getViewName()).isEqualTo("/destino/vista");
     assertThat(mav.getModel()).containsKey("error");
-  }
-*/
+  }*/
+
 }
 
 

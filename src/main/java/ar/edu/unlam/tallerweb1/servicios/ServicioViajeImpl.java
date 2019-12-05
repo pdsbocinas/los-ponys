@@ -149,10 +149,11 @@ public class ServicioViajeImpl implements ServicioViaje {
         v5.proximaValidacion(null);
         try {
             v1.validar(inicio, fin);
+            return "Ok";
         } catch (Exception e) {
             return e.getMessage();
         }
-        return "Ok";
+
     }
 
 }
