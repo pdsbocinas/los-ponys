@@ -28,9 +28,8 @@ module.exports = {
     login: [
       './js/components/Login/index.js'
     ],
-    homeLogin: [
+    home: [
       './js/components/Home/index.js',
-      './js/components/Login/index.js'
     ],
     modal: [
       './js/components/Modal-Travel/index.js'

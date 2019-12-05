@@ -1,6 +1,9 @@
 package ar.edu.unlam.tallerweb1.dao;
 
 import ar.edu.unlam.tallerweb1.modelo.Alojamiento;
+import ar.edu.unlam.tallerweb1.modelo.Foto;
+import ar.edu.unlam.tallerweb1.modelo.Reserva;
+import ar.edu.unlam.tallerweb1.modelo.Viaje;
 import com.google.maps.GeoApiContext;
 import com.google.maps.TextSearchRequest;
 import com.google.maps.errors.ApiException;
@@ -151,5 +154,23 @@ public class AlojamientoDaoImpl implements AlojamientoDao {
   public boolean getRandomBoolean() {
     Random random = new Random();
     return random.nextBoolean();
+  }
+
+  @Override
+  public List<Reserva> obtenerReservasPorUsuario(Integer userId) {
+    Session session = sessionFactory.getCurrentSession();
+    Criteria cr = session.createCriteria(Reserva.class)
+        .createAlias("usuario", "user")
+        .add(Restrictions.eq("user.id", userId));
+    List<Reserva> results = cr.list();
+    return results;
+  }
+
+  @Override
+  public void borrarReservas(List<Reserva> reservas) {
+    Session session = sessionFactory.getCurrentSession();
+    for (Reserva reserva : reservas) {
+      session.delete(reserva);
+    }
   }
 }

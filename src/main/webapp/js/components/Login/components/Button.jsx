@@ -26,7 +26,6 @@ class Button extends React.Component {
   }
 
   onChangeActive = async (module) => {
-    console.log(module)
     await this.setState({
       active: module
     })
@@ -34,10 +33,10 @@ class Button extends React.Component {
   }
 
   render() {
-    const { cant, id } = this.props
+    const { cant, id, usuario } = this.props
     return (
       <>
-        { id !== '' && (
+        { usuario.email !== null && (
           <a style={{ position: 'relative' }} onClick={() => this.onChangeActive('review')}>
             <img src={`${host}/images/020-review.svg`} width="32" height="auto" />
             {cant !== 0 && (

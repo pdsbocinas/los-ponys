@@ -28,8 +28,8 @@ class App extends React.Component{
     this.state = {
       isLoginOpen: true,
       isRegisterOpen: false,
-      notFound: notFound || '',
-      exitoso: registroExito || '',
+      // notFound: notFound || '',
+      // exitoso: registroExito || '',
       session:{
         login: false,
         username: '',
@@ -131,54 +131,54 @@ class App extends React.Component{
 
   componentDidMount() {
 
-    if(typeof(duplicado) != "undefined"){
-      if(duplicado =="duplicado"){
-        this.setState({
-          registro: "duplicado"
-        })
-      }
-    }
-    if(typeof(registroError) != "undefined" && registroError != ""){
-      this.setState({
-        registroUsuario: {
-          mensaje: registroError,
-          status: "danger"
-        }
-      })
-
-    } else if (typeof(registroExito) != "undefined" && registroExito != ""){
-      this.setState({
-        registroUsuario: {
-          mensaje: registroExito,
-          status: "success"
-        }
-      })
-    }
-
-    if(typeof(errorLogin) != "undefined" && errorLogin != ""){
-      this.setState({
-        session: {
-          login: false,
-          username: '',
-          email: '',
-          error: errorLogin
-        }
-      })
-    }
-
-    if(typeof(login) != "undefined" && login == "true"){
-      this.setState({
-        session: {
-          id: id,
-          login: true,
-          username: 'Un nombre',
-          email: email,
-          error: ''
-        }
-      })
-      //this.obtenerMisViajes()
-      // getViajes()
-    }
+    // if(typeof(duplicado) != "undefined"){
+    //   if(duplicado =="duplicado"){
+    //     this.setState({
+    //       registro: "duplicado"
+    //     })
+    //   }
+    // }
+    // if(typeof(registroError) != "undefined" && registroError != ""){
+    //   this.setState({
+    //     registroUsuario: {
+    //       mensaje: registroError,
+    //       status: "danger"
+    //     }
+    //   })
+    //
+    // } else if (typeof(registroExito) != "undefined" && registroExito != ""){
+    //   this.setState({
+    //     registroUsuario: {
+    //       mensaje: registroExito,
+    //       status: "success"
+    //     }
+    //   })
+    // }
+    //
+    // if(typeof(errorLogin) != "undefined" && errorLogin != ""){
+    //   this.setState({
+    //     session: {
+    //       login: false,
+    //       username: '',
+    //       email: '',
+    //       error: errorLogin
+    //     }
+    //   })
+    // }
+    //
+    // if(typeof(login) != "undefined" && login == "true"){
+    //   this.setState({
+    //     session: {
+    //       id: id,
+    //       login: true,
+    //       username: 'Un nombre',
+    //       email: email,
+    //       error: ''
+    //     }
+    //   })
+    //   //this.obtenerMisViajes()
+    //   // getViajes()
+    // }
 
     this.obtenerViajes()
   }
@@ -189,14 +189,15 @@ class App extends React.Component{
   }
 
   render(){
-    const { notFound } = this.state
+    // const { notFound } = this.state
+    console.log("home.js", usuario)
     return(
       <div className="">
         <Banner>
           <img src={`${host}/images/image-home.jpg`} width="100%" height="auto" />
           <div style={{ position: 'absolute' }}>
             <h2 className={"display-4 text-white"}>Viajá. Compartí. Recomendá</h2>
-            {this.state.session.login == true ?<a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a>: <p className={"text-white"}>Para crear un Viaje debes iniciar sessión o registrarte</p>}
+            {usuario.email !== null ? <a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a> : <p className={"text-white"}>Para crear un Viaje debes iniciar sessión o registrarte</p>}
            {/*<a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a>*/}
           </div>
         </Banner>
@@ -211,14 +212,14 @@ class App extends React.Component{
                   usuario={viaje && viaje.usuarios.length !== 0 ? viaje.usuarios[0].email : ''}
                   boton={"Ver"}
                   action ={"viajes/"+ viaje.id +"/comentar"}
-                  login={this.state.session.login}
+                  login={usuario.email !== null}
                 />
               </div>
               )
             )}
           </div>
         </div>
-        {errorLogin.length !== 0 || notFound.length !== 0 && (
+{/*        {errorLogin.length !== 0 || notFound.length !== 0 && (
           <CustomToast>
             <Toast.Header>
               <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
@@ -226,7 +227,7 @@ class App extends React.Component{
             </Toast.Header>
             <Toast.Body>{errorLogin || notFound}</Toast.Body>
           </CustomToast>
-        )}
+        )}*/}
         {/* {this.state.session.login==true?<h2>Bienvenido {this.state.session.email}</h2>:<h2>Por Favor inicia sesion</h2>}
                 {this.state.session.login==true?
                   <button

@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.modelo.Alojamiento;
+import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import com.google.maps.errors.ApiException;
 
 import java.io.IOException;
@@ -14,4 +15,8 @@ public interface ServicioAlojamiento {
   Alojamiento obtenerAlojamientoPorId(Integer id);
 
   void guardarAlojamientos(String ciudad) throws InterruptedException, ApiException, IOException;
+
+  void borrarReservas(List<Reserva> reservas);
+
+  List<Reserva> obtenerReservasPorUsuario(Integer userId);
 }

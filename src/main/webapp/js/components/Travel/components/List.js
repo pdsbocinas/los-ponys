@@ -28,6 +28,7 @@ const List = props => {
                     <div className="card" style={{width: '18rem', maxHeight: '320px'}}>
                       {/*<img src={s.icon} className="card-img-top" alt={s.name || s.nombre}/>*/}
                       <div className="card-body">
+                        <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${s.photoReferences !== null ? s.photoReferences : s.photos && s.photos[0].photoReference}&key=AIzaSyD8feo0IzBJZWjmAEhc2PIPRvBqWhBk2Jg`} width="100%" height="auto" className="card-img-top" alt={s.nombre} />
                         <h5 className="card-title">{s.ciudad || s.name}</h5>
                         {/*<h5 className="card-title">{s.name || s.nombre}</h5>*/}
                         {/*<p className="card-text">{s.formattedAddress || s.ciudad}</p>*/}

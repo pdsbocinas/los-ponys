@@ -26,7 +26,8 @@ class App extends React.Component {
     destination: [],
     keyword: '',
     loading: true,
-    destinationSelected: []
+    destinationSelected: [],
+    destinationSaved: []
   }
 
   delete = (nombre) =>{
@@ -59,9 +60,6 @@ class App extends React.Component {
 
    console.log("destino",destino)
 
-    //const destinoBuscado = destino[0]
-    //console.log("destino buscado")
-    //console.log(destinoBuscado)
     return;
     const pageURL = window.location.href;
     const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
@@ -93,7 +91,7 @@ class App extends React.Component {
       .then(async v => {
         const data = v.data
         await this.setState({
-          destinationSelected: data
+          destinationSaved: data
         })
       })
       .catch(e => {
@@ -161,7 +159,8 @@ class App extends React.Component {
   }
 
   render () {
-    const { destination, keyword, destinationSelected } = this.state;
+    const { destination, keyword, destinationSelected, destinationSaved } = this.state;
+    console.log(usuario)
     return (
       <Container>
         <Title>Agrega destinos a tu viaje</Title>
@@ -193,6 +192,13 @@ class App extends React.Component {
               </li>
             ))}
           </ul>
+        )}
+        {destinationSaved.length !== 0 && (
+          <List
+            items={destinationSaved}
+            delete={(nombre)=>this.delete(nombre)}
+            onSelect={this.update}
+          />
         )}
         <List
           items={destinationSelected}

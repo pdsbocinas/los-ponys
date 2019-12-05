@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.dao.AlojamientoDao;
 import ar.edu.unlam.tallerweb1.modelo.Alojamiento;
+import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import com.google.maps.errors.ApiException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +42,15 @@ public class ServicioAlojamientoImpl implements ServicioAlojamiento {
   @Override
   public void guardarAlojamientos(String ciudad) throws InterruptedException, ApiException, IOException {
     alojamientoDao.guardarAlojamientos(ciudad);
+  }
+
+  @Override
+  public List<Reserva> obtenerReservasPorUsuario(Integer userId) {
+    return alojamientoDao.obtenerReservasPorUsuario(userId);
+  }
+
+  @Override
+  public void borrarReservas(List<Reserva> reservas) {
+    alojamientoDao.borrarReservas(reservas);
   }
 }

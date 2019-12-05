@@ -26,11 +26,9 @@
   var viaje_fechaFin = "${viaje_fechaFin}";
   var viaje_titulo = "${viaje_titulo}";
   var viajeFotoPortada = "${viajeFotoPortada}";
-
+  var usuario = ${usuario};
 </script>
-<c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
 <c:set var="posteo"><ex:getManifestAssets value="posteo.js"/></c:set>
-<script src="<c:url value="${commons}"/>"></script>
 <script src="<c:url value="${posteo}"/>"></script>
 </body>
 </html>

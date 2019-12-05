@@ -14,7 +14,7 @@
     <jsp:body>
         <p>Reserva Exitosa</p>
         <strong>Numero de reserva: </strong><p>${reserva.getId()}</p>
-        <a href="${pageContext}/home">Volver a la home</a>
+        <a href="${pageContext}">Volver a la home</a>
     </jsp:body>
 </t:base>
 </body>

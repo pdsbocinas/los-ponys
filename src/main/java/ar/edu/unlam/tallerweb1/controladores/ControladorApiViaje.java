@@ -2,6 +2,8 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
@@ -11,15 +13,17 @@ import com.google.maps.model.PlacesSearchResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
-@Controller
+@Controller("/api")
 @PropertySource(value = {"classpath:application.properties"})
 public class ControladorApiViaje {
 
@@ -48,24 +52,31 @@ public class ControladorApiViaje {
   public void setServicioViaje(ServicioViaje servicioViaje) {
     this.servicioViaje = servicioViaje;
   }
+
   public void setServicioDestino(ServicioDestino servicioDestino) {
     this.servicioDestino = servicioDestino;
   }
+
   public void setServicioFoto(ServicioFoto servicioFoto) {
     this.servicioFoto = servicioFoto;
   }
+
   public void setServicioRegistroUsuario(ServicioRegistroUsuario servicioRegistroUsuario) {
     this.servicioRegistroUsuario = servicioRegistroUsuario;
   }
+
   public void setServicioEmail(ServicioEmail servicioEmail) {
     this.servicioEmail = servicioEmail;
   }
+
   public void setServicioComentario(ServicioComentario servicioComentario) {
     this.servicioComentario = servicioComentario;
   }
+
   public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
     this.httpServletRequest = httpServletRequest;
   }
+
 
   @RequestMapping(path = {"/api/destinos"}, method = RequestMethod.GET)
   @ResponseBody
@@ -166,7 +177,7 @@ public class ControladorApiViaje {
 
   @RequestMapping(path = {"/api/viajes/comentarios/no-leido"}, method = RequestMethod.GET)
   @ResponseBody
-  public List<Comentario> obtenerComentariosNoLeidos(@RequestParam(value = "id") Integer userId, HttpServletRequest request) {
+  public List<Comentario> obtenerComentariosNoLeidos(@RequestParam(value = "id") Integer userId) {
     List<Comentario> comentarios = servicioComentario.obtenerComentariosNoLeidos(userId);
     return comentarios;
   }
