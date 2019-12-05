@@ -1,5 +1,8 @@
 package ar.edu.unlam.tallerweb1.modelo;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 public class Usuario {
@@ -11,6 +14,12 @@ public class Usuario {
 	private String email;
 
 	private String password;
+
+	@ManyToMany
+	List<Viaje> viajes = new LinkedList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  List<Mail> mails = new ArrayList<>();
 
 	@Enumerated(EnumType.ORDINAL)
 	private Rol rol;

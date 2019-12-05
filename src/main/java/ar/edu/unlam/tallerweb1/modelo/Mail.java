@@ -24,7 +24,7 @@ public class Mail {
     @Column
     private String contenido;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne
     private Usuario usuario;
 
     public Long getId() {

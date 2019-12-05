@@ -38,9 +38,8 @@ public class Viaje {
     @Cascade(CascadeType.ALL)
     private List<Comentario> comentarios = new ArrayList<>();*/
 
-    @ManyToMany(fetch=FetchType.EAGER)
-    @Cascade(CascadeType.PERSIST)
-    @JoinTable(name = "viaje_usuario")
+    @ManyToMany(cascade = javax.persistence.CascadeType.REMOVE)
+    @Cascade(CascadeType.REMOVE)
     private List<Usuario> usuarios;
 
     @Column(name = "privacidad")
