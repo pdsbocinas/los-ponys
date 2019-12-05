@@ -154,7 +154,7 @@ public class viajeControllerTest {
     assertThat(mav.getModel()).containsKey("viajes");
     assertThat(mav.getModel().get("viajes")).isEqualTo(viajes);
   }
-  
+
   @Test
   public void enviarComentarioExitoso () {
     ControladorViaje sut = new ControladorViaje();

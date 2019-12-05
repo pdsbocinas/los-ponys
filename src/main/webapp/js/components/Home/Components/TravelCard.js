@@ -8,7 +8,7 @@ const TravelCard = ({ titulo, fechaInicio, fechaFin, action, usuario ,boton, log
       <div className="card-text">Hasta: <strong>{new Date(fechaFin).toLocaleDateString()}</strong></div>
         <div className="card-text">Creado por: <strong>{usuario}</strong></div>
       <div className="row justify-content-end">
-        {login?<a href={action} className="btn btn-primary">{boton}</a>:
+        {login ? <a href={action} className="btn btn-primary">{boton}</a>:
           <span className="badge badge-pill badge-danger">Logueate para ver más</span>}
 
       </div>

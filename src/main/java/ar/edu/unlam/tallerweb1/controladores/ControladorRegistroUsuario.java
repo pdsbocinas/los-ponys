@@ -45,12 +45,11 @@ public class ControladorRegistroUsuario {
     ra.addFlashAttribute("flashAttr", "flashAttrVal");
 
     if(servicioRegistroUsuario.consultarUsuarioPorMail(usuario)){
-
       usuarioDto.setId(0);
       model.put("email","");
       HttpSession session = request.getSession();
       session.setAttribute("ERROR", "duplicado");
-      return "duplicado";
+      return "El mail ya existe";
     }
 
     usuario.setPassword(usuarioDto.getPassword());
@@ -74,9 +73,4 @@ public class ControladorRegistroUsuario {
     return new ModelAndView("redirect:/home");
   }
 
-  @RequestMapping("/registroDuplicado")
-  public ModelAndView registroDuplicado(RedirectAttributes ra) {
-    ra.addFlashAttribute("error","El mail ya existe!!!!");
-    return new ModelAndView("redirect:/home");
-  }
 }

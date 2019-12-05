@@ -59,9 +59,6 @@ class App extends React.Component {
 
    console.log("destino",destino)
 
-    //const destinoBuscado = destino[0]
-    //console.log("destino buscado")
-    //console.log(destinoBuscado)
     return;
     const pageURL = window.location.href;
     const lastURLSegmentId = pageURL.substr(pageURL.lastIndexOf('/') + 1);
@@ -162,6 +159,7 @@ class App extends React.Component {
 
   render () {
     const { destination, keyword, destinationSelected } = this.state;
+    console.log(usuario)
     return (
       <Container>
         <Title>Agrega destinos a tu viaje</Title>

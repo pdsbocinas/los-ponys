@@ -3,12 +3,8 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.maps.GeoApiContext;
-import com.google.maps.TextSearchRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.PlacesSearchResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -26,8 +22,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @PropertySource(value = {"classpath:application.properties"})
@@ -82,28 +78,46 @@ public class ControladorViaje {
       this.httpSession = httpSession;
   }
 
+  public void setUsuarioAndErrors (HttpServletRequest request, ModelMap model) throws JsonProcessingException {
+    ObjectMapper usuarioJson = new ObjectMapper();
+
+    HashMap<String, String> errors = new HashMap<>();
+    errors.put("errorLogin", "no hubo errores");
+
+    String errorLogin = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(errors);
+
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+    model.put("usuario", usuarioJson.writerWithDefaultPrettyPrinter().writeValueAsString(usuario));
+    model.put("errorLogin", errorLogin);
+  }
+
   @RequestMapping("/viajes")
   public ModelAndView homeViaje(HttpServletRequest request) throws JsonProcessingException {
-    ModelMap modelos = new ModelMap();
+    ModelMap model = new ModelMap();
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
-    // Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("USER");
-    ObjectMapper destinosJson = new ObjectMapper();
+    HashMap<String, String> errors = new HashMap<>();
+    ObjectMapper usuarioJson = new ObjectMapper();
 
     if (usuario != null) {
       Integer userId = usuario.getId();
       String email = usuario.getEmail();
-      modelos.put("usuarioJson", destinosJson.writeValueAsString(usuario));
-      modelos.put("user_id", userId);
-      modelos.put("email", email);
+      model.put("usuario", usuarioJson.writeValueAsString(usuario));
+      model.put("user_id", userId);
+      model.put("email", email);
+      errors.put("errorLogin", "no hubo errores");
+      String error = new ObjectMapper().writeValueAsString(errors);
+      model.put("errorLogin", error);
       List<Viaje> viajes = servicioViaje.obtenerViajesPorUsuario(userId);
-      modelos.put("viajes", viajes);
-      return new ModelAndView("viajes/travel", modelos);
+      model.put("viajes", viajes);
+      return new ModelAndView("viajes/travel", model);
     } else {
-      modelos.put("user", null);
-      modelos.put("notFound", "Por favor logueate o registrate");
+      model.put("user", null);
+      errors.put("errorLogin", "hubo un error");
+      String error = new ObjectMapper().writeValueAsString(errors);
+      model.put("errorLogin", error);
     }
 
-    return new ModelAndView("redirect:/home", modelos);
+    return new ModelAndView("redirect:/home", model);
   }
 
   @RequestMapping(path = "/eliminar-viaje", method = RequestMethod.POST)
@@ -115,22 +129,37 @@ public class ControladorViaje {
     List<Comentario> comentarios = servicioComentario.obtenerComentariosPorViajeId(v.getId());
     List<Mail> mails = servicioEmail.obtenerEmailsPorUsuario(userId);
     List<Foto> fotos = servicioFoto.obtenerFotosDeDestinosDelViaje(v.getId());
-    servicioFoto.borrarFotos(fotos);
-    servicioEmail.borrarEmails(mails);
-    servicioComentario.borrarComentarios(comentarios);
+
+    if (comentarios.size() != 0) {
+      servicioComentario.borrarComentarios(comentarios);
+    }
+
+    if (fotos.size() != 0) {
+      servicioFoto.borrarFotos(fotos);
+    }
+
+    if (mails.size() != 0) {
+      servicioEmail.borrarEmails(mails);
+    }
+
     servicioViaje.borrarViaje(v);
-    return new ModelAndView("redirect:/home");
+    return new ModelAndView("redirect:/viajes");
   }
 
   @RequestMapping(path = {"/viajes/{id}"}, method = RequestMethod.GET)
-  public ModelAndView crearViajeView(@PathVariable("id") Integer id, HttpServletRequest request) {
-    return new ModelAndView("viajes/create");
+  public ModelAndView crearViajeView(@PathVariable("id") Integer id, HttpServletRequest request) throws JsonProcessingException {
+    ModelMap model = new ModelMap();
+    this.setUsuarioAndErrors(request, model);
+    return new ModelAndView("viajes/create", model);
   }
 
   @RequestMapping(path = {"/viajes/{viaje_id}/recorridos"}, method = RequestMethod.GET)
-  public ModelAndView crearRecorrido(@PathVariable("viaje_id") Long viaje_id) {
-    ModelMap modelo = new ModelMap();
+  public ModelAndView crearRecorrido(@PathVariable("viaje_id") Long viaje_id, HttpServletRequest request) throws JsonProcessingException {
+
+
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
+    ModelMap model = new ModelMap();
+    this.setUsuarioAndErrors(request, model);
 
     String origen = "";
     String destino = "";
@@ -150,12 +179,12 @@ public class ControladorViaje {
           destino = destinos.get(i - 1).getPlaceId();
         }
       }
-      modelo.put("waypoint", waypoint);
+      model.put("waypoint", waypoint);
     }
 
-    modelo.put("origen", origen);
-    modelo.put("destino", destino);
-    return new ModelAndView("viajes/recorridos", modelo);
+    model.put("origen", origen);
+    model.put("destino", destino);
+    return new ModelAndView("viajes/recorridos", model);
   }
 
   @RequestMapping(path = {"/viajes/{id}/comentar"}, method = RequestMethod.GET)
@@ -163,11 +192,12 @@ public class ControladorViaje {
   public ModelAndView comentarViaje(@PathVariable("id") Long id, HttpServletRequest request) throws InterruptedException, ApiException, IOException {
 
     ModelMap modelo = new ModelMap();
+    this.setUsuarioAndErrors(request, modelo);
+
     modelo.put("id", id);
 
-    Viaje viaje = servicioViaje.obtenerViajePorId(id);
-
     Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+    Viaje viaje = servicioViaje.obtenerViajePorId(id);
 
     if (usuario != null) {
       modelo.put("usuario_email", usuario.getEmail());
@@ -185,25 +215,13 @@ public class ControladorViaje {
 
   @RequestMapping(path = {"/viajes/comentar/enviar-comentario"}, method = RequestMethod.POST)
   @ResponseBody
-  public ModelAndView enviarComentario(@RequestBody ComentarioDto comentarioDto) {
-    ModelMap modelos = new ModelMap();
-    Comentario comentario = new Comentario();
-    /*Long viaje_id = comentarioDto.getViaje_id();
-    String email_usuario = comentarioDto.getUsuario_email();
-    String comment = comentarioDto.getTexto();
-    String estado = "no leido";
+  public ModelAndView enviarComentario(@RequestBody ComentarioDto comentarioDto, HttpServletRequest request) throws JsonProcessingException {
+    ModelMap modelo = new ModelMap();
+    this.setUsuarioAndErrors(request, modelo);
 
-    // TODO meter todo esto en el servicio de guardar comentario
-    Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
-    Usuario usuario = servicioRegistroUsuario.obtenerUsuarioPorMail(email_usuario);
-
-    comentario.setTexto(comment);
-    comentario.setUsuario(usuario);
-    comentario.setViaje(viaje);
-    comentario.setEstado(estado);*/
-    comentario = servicioComentario.convertirComentarioDtoAComentario(comentarioDto);
+    Comentario comentario = servicioComentario.convertirComentarioDtoAComentario(comentarioDto);
     servicioComentario.guardarComentario(comentario);
-    return new ModelAndView("viajes/comentar");
+    return new ModelAndView("viajes/comentar", modelo);
   }
 
   @RequestMapping(path = {"/viajes/ver-comentarios"}, method = RequestMethod.GET)
@@ -224,13 +242,14 @@ public class ControladorViaje {
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/fecha"}, method = RequestMethod.GET)
   @ResponseBody
   public ModelAndView elegirFechaDeUnDestino(@PathVariable("destino_id") Integer destino_id,
-                                        @PathVariable("viaje_id") Long viaje_id) {
+                                        @PathVariable("viaje_id") Long viaje_id,  HttpServletRequest request) throws JsonProcessingException {
+
+    ModelMap modelo = new ModelMap();
+    this.setUsuarioAndErrors(request, modelo);
 
     Destino destino = servicioDestino.obtenerDestinoPorId(destino_id);
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-    ModelMap modelo = new ModelMap();
 
     modelo.put("viaje_id", viaje_id);
     modelo.put("destino_id", destino_id);
@@ -255,11 +274,16 @@ public class ControladorViaje {
   @ResponseBody
   public ModelAndView vistaDeUnDestino(@PathVariable("destino_id") Integer destino_id,
                                        @PathVariable("viaje_id") Long viaje_id,
-                                       HttpServletRequest request) {
+                                       HttpServletRequest request) throws JsonProcessingException {
     ModelMap modelo = new ModelMap();
+    Usuario usuario = (Usuario) request.getSession().getAttribute("USER");
+
+    this.setUsuarioAndErrors(request, modelo);
+
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
+
     setHttpServletRequest(request);
-    Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("USER");
+
     List<Usuario> usuarios = viaje.getUsuarios();
     for (Usuario u: usuarios
          ) {
@@ -289,9 +313,12 @@ public class ControladorViaje {
 
   @RequestMapping(path = {"/viajes/{viajeId}/destino"}, method = RequestMethod.GET)
   public ModelAndView vistaDelViaje (@PathVariable("viajeId") Long viajeId,
-                                                     @ModelAttribute("errorFotoPortada") String errorFotoPortada) throws JsonProcessingException {
+                                     @ModelAttribute("errorFotoPortada") String errorFotoPortada,
+                                     HttpServletRequest request) throws JsonProcessingException {
 
     ModelMap modelo = new ModelMap();
+    this.setUsuarioAndErrors(request, modelo);
+
     Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viajeId);
     Foto foto =  servicioFoto.obtenerFotoDePortada(viajeId);
@@ -311,9 +338,11 @@ public class ControladorViaje {
   }
 
   @RequestMapping(path = {"viajes/{viaje_id}/destino/{destino_id}/guardarFechas"}, method = RequestMethod.POST)
-  public ModelAndView guardarFechasDeDestinoPorViaje(HttpServletRequest req,
+  public ModelAndView guardarFechasDeDestinoPorViaje(HttpServletRequest request,
                                                      @PathVariable("destino_id") Integer destino_id,
-                                                     @PathVariable("viaje_id") Long viaje_id) throws ParseException {
+                                                     @PathVariable("viaje_id") Long viaje_id) throws ParseException, JsonProcessingException {
+    ModelMap modelo = new ModelMap();
+    this.setUsuarioAndErrors(request, modelo);
 
     Viaje viaje = servicioViaje.obtenerViajePorId(viaje_id);
 
@@ -322,10 +351,8 @@ public class ControladorViaje {
 
     List<Destino> destinos = servicioViaje.obtenerDestinosPorViaje(viaje_id);
 
-    String fechaDesde = req.getParameter("fechaInicio");
-    String fechaHasta = req.getParameter("fechaHasta");
-
-    ModelMap modelo = new ModelMap();
+    String fechaDesde = request.getParameter("fechaInicio");
+    String fechaHasta = request.getParameter("fechaHasta");
 
     modelo.put("ciudad", destino.getCiudad());
     modelo.put("fechaDesdeViaje", viaje.getFechaInicio());
@@ -358,11 +385,14 @@ public class ControladorViaje {
   }
 
   @RequestMapping("viajes/{viajeId}/fotodeportada")
-  public ModelAndView mostrarTodasLasFotosDeLosDestinosDelViaje(@PathVariable ("viajeId") Long viajeId) {
+  public ModelAndView mostrarTodasLasFotosDeLosDestinosDelViaje(@PathVariable ("viajeId") Long viajeId, HttpServletRequest request) throws JsonProcessingException {
 
-    Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
-    List<Foto> fotos = servicioFoto.obtenerFotosDeDestinosDelViaje(viajeId);
     ModelMap modelo = new ModelMap();
+    this.setUsuarioAndErrors(request, modelo);
+
+//    Viaje viaje = servicioViaje.obtenerViajePorId(viajeId);
+    List<Foto> fotos = servicioFoto.obtenerFotosDeDestinosDelViaje(viajeId);
+
     if(fotos != null){
       modelo.put("fotos", fotos);
     }else{
@@ -386,11 +416,27 @@ public class ControladorViaje {
       modelo.put("errorFotoPortada","No se pudo seleccionar la foto de portada");
     }
 
-    return new ModelAndView("redirect:/viajes/"+viajeId+"/destino",modelo);
+    return new ModelAndView("redirect:/viajes/" + viajeId + "/destino",modelo);
 
   }
 
   public ViajeDto crearViaje(ViajeDto viajeDto) {
     return viajeDto;
+  }
+
+  public ModelAndView enviarComentario(ComentarioDto comentarioDto) {
+    return new ModelAndView("");
+  }
+
+  public ModelAndView elegirFechaDeUnDestino(Integer id, Long id1) {
+    return new ModelAndView("");
+  }
+
+  public ModelAndView vistaDelViaje(Long id, String errorFotoPortada) {
+    return new ModelAndView("");
+  }
+
+  public ModelAndView mostrarTodasLasFotosDeLosDestinosDelViaje(Long id) {
+    return new ModelAndView("");
   }
 }

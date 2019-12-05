@@ -190,13 +190,14 @@ class App extends React.Component{
 
   render(){
     // const { notFound } = this.state
+    console.log("home.js", usuario)
     return(
       <div className="">
         <Banner>
           <img src={`${host}/images/image-home.jpg`} width="100%" height="auto" />
           <div style={{ position: 'absolute' }}>
             <h2 className={"display-4 text-white"}>Viajá. Compartí. Recomendá</h2>
-            {this.state.session.login == true ?<a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a>: <p className={"text-white"}>Para crear un Viaje debes iniciar sessión o registrarte</p>}
+            {usuario.email !== null ? <a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a> : <p className={"text-white"}>Para crear un Viaje debes iniciar sessión o registrarte</p>}
            {/*<a href="viajes" className={"btn btn-primary"}>Creá tu viaje!</a>*/}
           </div>
         </Banner>
@@ -211,7 +212,7 @@ class App extends React.Component{
                   usuario={viaje && viaje.usuarios.length !== 0 ? viaje.usuarios[0].email : ''}
                   boton={"Ver"}
                   action ={"viajes/"+ viaje.id +"/comentar"}
-                  login={this.state.session.login}
+                  login={usuario.email !== null}
                 />
               </div>
               )

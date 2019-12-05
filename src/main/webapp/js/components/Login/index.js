@@ -72,18 +72,15 @@ class App extends React.Component {
 
     if(titulo === "R"){
 
-      this.props.validate;
-
       axios
         .post(`${host}/guardarUsuario`, data)
-        .then(response =>{
-          console.log("response registro", response);
-          // return window.location.href = `/Los_Ponys_war/home`;
-          // return window.location.href = `registroOK`;
-          if(response.data == "correcto"){
+        .then(async (response) =>{
+          if (response.data === "El mail ya existe") {
+            return await this.setState({
+              errors: { errorLogin: response.data }
+            })
+          } else {
             return window.location.href = `registroOK`;
-          }else{
-            return window.location.href = `registroDuplicado`;
           }
         }).catch(error =>{
         console.log(error)
@@ -138,6 +135,7 @@ class App extends React.Component {
           onChangeActive={this.onChangeActive}
           cant={reviews.length}
           id={id}
+          usuario={usuario}
         />
         {active === 'forms' && (
           <Wrapper>
@@ -148,7 +146,7 @@ class App extends React.Component {
             />
           </Wrapper>
         )}
-        {active === 'review' && id !== '' && (
+        {active === 'review' && usuario.email !== null && (
           <Wrapper>
             {reviews.length !== 0 && (
               <>

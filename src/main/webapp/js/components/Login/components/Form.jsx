@@ -99,7 +99,7 @@ class Form extends React.Component {
     console.log("usuario", usuario.email)
     return(
       <>
-        {id !== '' ? (
+        {usuario.email !== null ? (
           <>
             <h3>Bienvenido {usuario.email}</h3>
             <button className={"btn btn-danger"} onClick={this.cerrarSesion}>
@@ -122,11 +122,6 @@ class Form extends React.Component {
             {errors.errorLogin && (
               <p>{errors.errorLogin}</p>
             )}
-            {/*{this.state.registroUsuario.mensaje!=""?<div className={"alert alert-" + this.state.registroUsuario.status } role="alert">*/}
-            {/*  {this.state.registroUsuario.mensaje}*/}
-            {/*</div>:""}*/}
-
-            {/*{this.state.session.error!=""?this.state.session.error:""}*/}
           </>
         )}
 

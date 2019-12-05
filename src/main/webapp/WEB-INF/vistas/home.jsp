@@ -30,5 +30,7 @@
 	<%--var notFound = "${notFound}"--%>
 	<%--var registroExito = "${exito}";--%>
 </script>
+<c:set var="home"><ex:getManifestAssets value="home.js"/></c:set>
+<script src="<c:url value="${home}"/>"></script>
 </body>
 </html>

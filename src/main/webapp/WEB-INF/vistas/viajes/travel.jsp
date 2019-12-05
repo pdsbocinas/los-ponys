@@ -45,11 +45,9 @@
 <script>
   var user_id = "${user_id}";
   var email = "${email}";
-  var usuario = ${usuarioJson};
+  var usuario = ${usuario};
 </script>
-<c:set var="commons"><ex:getManifestAssets value="commons.js"/></c:set>
 <c:set var="modal"><ex:getManifestAssets value="modal.js"/></c:set>
-<script src="<c:url value="${commons}"/>"></script>
 <script src="<c:url value="${modal}"/>"></script>
 </body>
 </html>
